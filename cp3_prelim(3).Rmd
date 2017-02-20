@@ -1,0 +1,31 @@
+---
+title: "CP3 Analysis"
+author: "Christopher D. Grady"
+date: \today
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, results='hide')
+#setwd("C:/Users/Christopher/Desktop/Africa/Cameroon/Report")
+#library(DataCombine)
+library(mosaic)
+library(plyr)
+library(dplyr)
+library(car)
+#library(data.table)
+cp3=read.csv("cp3_final_data.csv")
+cp3=cp3[,c(1:118,129:142)] #remove duplicate cols that are my named vars.
+load("cpdf.rda")
+```
+
+## Introduction
+- Survey in Cameroon
+- 67 PSUs, 1005 surveys
+- Info about project
+
+## Summary Statistics
+- For indices, demographics, etc...
+
+table(cpdf$)
+
