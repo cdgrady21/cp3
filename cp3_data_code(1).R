@@ -9,12 +9,13 @@ library(dplyr)
 library(car)
 #library(data.table)
 cp3=read.csv("cp3_final_data.csv")
-cp3=cp3[,c(1:118,129:142)] #remove duplicate cols that are my named vars.
+cp3=cp3[,c(1:118,129:142)] #remove duplicate cols that are my named vars during survey monitor.
 
 #########################################
 # Functions
 #########################################
-df=cp3
+df=cp3 # cp3 will be with descriptive responses, df will be with numbered responses
+test=df # the test df to mess with
 #yes/no
 yn.fun=function(var)
 {
@@ -23,7 +24,8 @@ yn.fun=function(var)
               'no'=0;
               'no_response'=NA")
 }
-#test$newvar=yn.fun(test$form.Attitudes.people_other_rel_in_comm5)
+test$newvar=yn.fun(test$form.Attitudes.people_other_rel_in_comm5)
+stopifnot(table(test$newvar)['1']==table(test$form.Attitudes.people_other_rel_in_comm5)['yes'])
 
 #frequency of things
 medfreq.fun=function(var)
@@ -173,3 +175,8 @@ table(cp3$form.End.survey_language)
 cpdf<-cp3
 cpdf<-as.data.frame(apply(cpdf,2,yn.fun))
 
+
+##############
+# Save workspace
+#############
+save.image("cp3data.Rdata")
