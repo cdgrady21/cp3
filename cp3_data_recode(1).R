@@ -10,15 +10,19 @@ library(car)
 library(reshape)
 #library(data.table)
 cp3=read.csv("cp3_final_data.csv")
-cp3=cp3[,c(1:118,129:142)] #remove duplicate cols that are my named vars during survey monitor.
+cp3=cp3[,c(2:118,130:142)] #remove duplicate cols that are my named vars during survey monitor.
 psu=read.csv("cp3_final_psus.csv")
 psu=psu[,-c(3,4,5)]
+psu<-lapply(psu,as.character)
 
 ############
 # Merge PSUs
 ###########
 cp3<-merge(cp3,psu,by=c("ï..number", "username"))
-
+#rename(cp3, c("ï..number"="int_num")) # plyr method
+names(cp3)[names(cp3)=="ï..number"]<-"int_num"
+cp3$int_num<-as.character(cp3$int_num)
+cp3$form.Demographiques_introduction.respondent_age<-as.character(cp3$form.Demographiques_introduction.respondent_age)
 
 #########################################
 # Functions
@@ -144,7 +148,7 @@ allcode.fun=function(var)
   if(length(grep("yes",levels(var)))>0){
     yn.fun(var)
   }
-  else if(length(grep("daily",levels(var)))>0){
+  else if(length(grep("at_least_once_a_week",levels(var)))>0){
     medfreq.fun(var)
   }
   else if(length(grep("every_day",levels(var)))>0){
@@ -190,7 +194,8 @@ stopifnot(class(test$newvar2) %in% "numeric")
 #########
 #test=as.data.frame(apply(df,2,allcode.fun)) #still cannot get the mass rescale function to work
 cpdf<-cp3
-cpdf<-as.data.frame(apply(cpdf,2,allcode.fun))
+# apply converts to matrix, resetting all values to character
+#cpdf<-as.data.frame(apply(cpdf,2,allcode.fun))
 #cpdf<-as.data.frame(apply(cpdf,2,yn.fun))
 #cpdf<-as.data.frame(apply(cpdf,2,medfreq.fun))
 #cpdf<-as.data.frame(apply(cpdf,2,agree.scale))
@@ -198,6 +203,8 @@ cpdf<-as.data.frame(apply(cpdf,2,allcode.fun))
 #cpdf<-as.data.frame(apply(cpdf,2,confreq.scale))
 #cpdf<-as.data.frame(apply(cpdf,2,vio.scale))
 #cpdf<-as.data.frame(apply(cpdf,2,radio_op.scale))
+
+cpdf<-lapply(cpdf,allcode.fun)
 
 stopifnot(nrow(cpdf)==nrow(cp3))
 typetest=sapply(cpdf,is.numeric)
@@ -214,86 +221,31 @@ scale.fun=function(var)
     reshape::rescaler(var,type="range")
   }
   else if (is.numeric(var)==F){
-    var
+    as.character(var)
   }
 }
 # test the fun on a numeric variable
-test$newvar=scale.fun(as.numeric(as.character(test$form.Attitudes.good_pol_transparency)))
+test$newvar=scale.fun(test$form.Attitudes.good_pol_transparency)
 tally(test$newvar); tally(test$form.Attitudes.good_pol_transparency)
 
 # skip non-numeric?
 test$newvar2<-scale.fun(test$form.Technologie.internet_access_locations)
 stopifnot(table(test$newvar2)==table(test$form.Technologie.internet_access_locations))
+tally(test$newvar2)
 
-# rescale all numerics to be 0-1
-cpdf<-as.data.frame(apply(cpdf,2,scale.fun))
-stopifnot()
+# rescale all numerics to be 0-1 on test, confirm same as non-scaled cpdf, then make cpdf from test.
+test<-as.data.frame(lapply(cpdf,scale.fun))
+typetest2=sapply(test,is.numeric)
+stopifnot(typetest2[59]==TRUE) # women.money should be numeric
+stopifnot(typetest==typetest2)
+stopifnot(table(test$form.Attitudes.women_money)['1']==table(cpdf$form.Attitudes.women_money)['3'])
 
-###########
-# Recode some vars for easy use
-##########
-cpdf$gender<-cpdf$form.Demographiques_introduction.respondent_sex
-cpdf$religion<-car::recode(cpdf$form.demographics_question_group.religion,
-                           "'islam'='islam';
-                           'christian'='christian';
-                           else='other'")
-cpdf$region<-cpdf$form.Demographiques_introduction.region
+# save cpdf
+cpdf<-test
 
-############
-# Add some new variables
-############
-cpdf$muslim<-ifelse(cpdf$religion=="islam", 1, 0)
-cpdf$christian<-ifelse(cpdf$religion=="christian", 1, 0)
-cpdf$female<-ifelse(cpdf$gender=="female", 1, 0)
-cpdf$male<-ifelse(cpdf$gender=="male", 1, 0)
-
-
-
-###########################
-# One-off Questions (to look at)
-###########################
-table(cp3$form.Confiance.personal_view_positive_change_ability)
-table(cp3$form.Attitudes.copy.1.of.dif_ppl_live_peace) # this is mis-labeled
-table(cp3$form.Attitudes.ethnic_divide_or_no)
-table(cp3$form.Attitudes.religious_divide_or_no)
-table(cp3$form.Attitudes.youth_involvement)
-# tech --> no recode functions probably.
-table(cp3$form.Technologie.tech_access)
-table(cp3$form.Technologie.mobile_service_provider)
-table(cp3$form.Technologie.personal_smartphone_os)
-table(cp3$form.Technologie.personal_tablet_os)
-table(cp3$form.Technologie.internet_access_locations)
-#form.Technologie.other_internet_access_point_specified # no responses
-# media listening
-table(cp3$form.radio_listener_group.dabalaye_opinion)
-table(cp3$form.radio_listener_group.Douniarou_opinion)
-table(cp3$form.watch_arewa24_frequency)
-table(cp3$form.arewa24_programs_watched)
-# Demographics
-table(cp3$form.End.survey_language)
-
-
-
-
-############
-# Aggregate Things
-###########
-#aggregate at psu level
-ag.df<-cpdf
-ag.df<-aggregate(ag.df[,c("muslim","christian","female","male")],
-                 by=list(name=ag.df$psu),mean,na.rm=T)
-
-
-ag.df2 <- cpdf %>% group_by(psu) %>%  summarise_each(funs(mean(., na.rm = TRUE)))
-stopifnot(mean(ag.df2$form.Attitudes.good_pol_transparency[ag.df2$name==1],na.rm=T)==
-            mean(ag.df$form.Attitudes.good_pol_transparency[ag.df$name==1],na.rm=T))
-
-
-table(good.df$exp_group,good.df$ethnic_marriage..multiple.choice.question.,exclude=c())
-
-testtab4a<-table(good.df$w19.trust_rel2..multiple.choice.question.)
-testtab4b<-table(ivr$w19.trust_rel2..multiple.choice.question.)
-stopifnot(testtab4b["1. completely"]==testtab4a['1']) # check nothing changed
+# get class of vars
+classOf<-lapply(cpdf,class)
+str(classOf)
 
 ##############
 # Save data/workspace
