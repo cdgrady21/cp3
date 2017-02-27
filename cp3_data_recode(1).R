@@ -142,7 +142,7 @@ radio_op.scale=function(var)
 test$newvar=radio_op.scale(test$form.radio_listener_group.opinion_of_chabab)
 stopifnot(table(test$newvar)['1']==table(test$form.radio_listener_group.opinion_of_chabab)['positive'])
 
-# Combining the functions --> doesn't work correctly.
+# Combining the functions
 allcode.fun=function(var)
 {
   if(length(grep("yes",levels(var)))>0){
