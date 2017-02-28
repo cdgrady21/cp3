@@ -1,4 +1,5 @@
-
+# Scan in Workspace
+load("cp3data.Rdata")
 
 ###########
 # Recode some vars for easy use
