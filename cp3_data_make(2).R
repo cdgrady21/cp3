@@ -1,4 +1,4 @@
-# Scan in Workspace
+# Scan in Workspace/load libraries
 load("cp3data.Rdata")
 
 ###########
@@ -20,6 +20,67 @@ cpdf$female<-ifelse(cpdf$gender=="female", 1, 0)
 cpdf$male<-ifelse(cpdf$gender=="male", 1, 0)
 
 
+#########################
+# Make Outcome Indices
+########################
+# social contact (0.76)
+cpdf$sc.index<-cpdf$form.Attitudes.person_from_another_ethnicity+
+  cpdf$form.Attitudes.person_from_another_religion+
+  cpdf$form.Attitudes.refugee_or_foreigner
+
+sc.index<-with(cpdf,data.frame(form.Attitudes.person_from_another_ethnicity,
+                                 form.Attitudes.person_from_another_religion,
+                                 form.Attitudes.refugee_or_foreigner))
+#require(psych)
+#alpha(sc.index)
+#summary(alpha(sc.index))
+
+
+#################
+# cultural understanding
+cult.vars<-c("form.Attitudes.tolerant_living_with_others_value",
+               "form.Attitudes.other_religions_respect",
+               'form.Attitudes.other_ethnicities_respect',
+               'form.Attitudes.other_regions_respect',
+               'form.Attitudes.political_leaders_respect',
+               'form.Attitudes.youth_proud_culture')
+
+cpdf$cult.index<-with(cpdf,form.Attitudes.tolerant_living_with_others_value+
+                        form.Attitudes.other_religions_respect+
+                        form.Attitudes.other_ethnicities_respect+
+                        form.Attitudes.other_regions_respect+
+                        form.Attitudes.political_leaders_respect+
+                        form.Attitudes.youth_proud_culture)
+
+cult.index<-with(cpdf, data.frame(form.Attitudes.tolerant_living_with_others_value,
+                   form.Attitudes.other_religions_respect,
+                   form.Attitudes.other_ethnicities_respect,
+                   form.Attitudes.other_regions_respect,
+                   form.Attitudes.political_leaders_respect,
+                   form.Attitudes.youth_proud_culture))
+#alpha(cult.index)
+
+
+##############
+# Women index
+wom.vars<-c(names(cpdf)['form.Attitudes.women_money',
+              'form.Attitudes.women_work_children_suffer',
+              'form.Attitudes.boy_edu_better',
+              'form.Attitudes.early_marriage_good'])
+cpdf$wom.index<-with(cpdf,form.Attitudes.women_money+
+                       form.Attitudes.women_work_children_suffer+
+                       form.Attitudes.boy_edu_better+
+                       form.Attitudes.early_marriage_good)
+
+cpdf$wom.index<-with(cpdf,paste(wom.vars,collapse="+"))
+
+
+#wom.index<-with(cpdf,data.frame(paste(wom.vars,collapse=",")))
+
+wom.index<-with(cpdf,data.frame(form.Attitudes.women_money,
+              form.Attitudes.women_work_children_suffer,
+              form.Attitudes.boy_edu_better,
+              form.Attitudes.early_marriage_good))
 
 ###########################
 # One-off Questions (to look at)
