@@ -63,19 +63,35 @@ cult.index<-with(cpdf, data.frame(form.Attitudes.tolerant_living_with_others_val
 
 ##############
 # Women index
-wom.vars<-c(names(cpdf)['form.Attitudes.women_money',
+wom.vars<-c('form.Attitudes.women_money',
               'form.Attitudes.women_work_children_suffer',
               'form.Attitudes.boy_edu_better',
-              'form.Attitudes.early_marriage_good'])
+              'form.Attitudes.early_marriage_good')
+#crappy way
 cpdf$wom.index<-with(cpdf,form.Attitudes.women_money+
-                       form.Attitudes.women_work_children_suffer+
-                       form.Attitudes.boy_edu_better+
-                       form.Attitudes.early_marriage_good)
+                      form.Attitudes.women_work_children_suffer+
+                     form.Attitudes.boy_edu_better+
+                    form.Attitudes.early_marriage_good)
+# much better way to make index
+cpdf$wom.index2<-with(cpdf,eval(parse(text=paste(wom.vars,collapse="+"))))
+# OR even easier
+cpdf$wom.index3<-rowSums(cpdf[,wom.vars])
 
-cpdf$wom.index<-with(cpdf,paste(wom.vars,collapse="+"))
+# check
+stopifnot(cpdf$wom.index==cpdf$wom.index2)
+stopifnot(cpdf$wom.index==cpdf$wom.index3)
+#it failed?
+#cpdf$int_num[cpdf$wom.index!=cpdf$wom.index2]
+#cpdf[cpdf$wom.index!=cpdf$wom.index2,wom.vars]
+#cpdf[cpdf$wom.index!=cpdf$wom.index2,c('wom.index',"wom.index2")]
 
+#cpdf$int_num[cpdf$wom.index!=cpdf$wom.index3]
+#cpdf[cpdf$wom.index!=cpdf$wom.index3,wom.vars]
+#cpdf[cpdf$wom.index!=cpdf$wom.index3,c('wom.index',"wom.index3")]
+##Nope, different rounding that is inconsequential.
 
-#wom.index<-with(cpdf,data.frame(paste(wom.vars,collapse=",")))
+# index alpha
+wom.index<-with(cpdf,data.frame(eval(parse(text=paste(wom.vars,collapse=",")))))
 
 wom.index<-with(cpdf,data.frame(form.Attitudes.women_money,
               form.Attitudes.women_work_children_suffer,
