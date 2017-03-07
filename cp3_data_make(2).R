@@ -19,6 +19,7 @@ cpdf$religion<-car::recode(cpdf$form.demographics_question_group.religion,
                            else='other'")
 cpdf$region<-cpdf$form.Demographiques_introduction.region
 
+
 ############
 # Add some new variables
 ############
@@ -26,6 +27,9 @@ cpdf$muslim<-ifelse(cpdf$religion=="islam", 1, 0)
 cpdf$christian<-ifelse(cpdf$religion=="christian", 1, 0)
 cpdf$female<-ifelse(cpdf$gender=="female", 1, 0)
 cpdf$male<-ifelse(cpdf$gender=="male", 1, 0)
+cpdf$french<-ifelse(cpdf$form.End.survey_language=="survey_lang_fr",1,0)
+cpdf$fulfulde<-ifelse(cpdf$form.End.survey_language=="survey_lang_ful",1,0)
+cpdf$other<-ifelse(cpdf$form.End.survey_language=="survey_lang_other",1,0)
 
 region.vars<-c('int_num','form.Demographiques_introduction.region_no',
                   'form.Demographiques_introduction.region_exno')
@@ -212,7 +216,21 @@ table(cp3$form.End.survey_language)
 # Aggregate Things?
 ###########
 #aggregate at psu level
-town.df<-aggregate(cpdf[,c("muslim","christian","female","male")],
+ag.vars<-c("muslim","christian","female","male","french","fulfulde","other")
+town.df<-aggregate(cpdf[,ag.vars],
                  by=list(name=cpdf$towns),mean,na.rm=T)
-region.df<-aggregate(cpdf[,c("muslim","christian","female","male")],
+region.df<-aggregate(cpdf[,ag.vars],
                    by=list(name=cpdf$form.Demographiques_introduction.region),mean,na.rm=T)
+
+
+##############
+# Save the workspace
+##############
+save.image('cp3_analysis_dat.Rdata')
+
+
+################
+# Look at some stuff
+################
+table(cpdf$form.demographics_question_group.primary_language_spoken,cpdf$form.End.survey_language)
+ # many people who said their main language was fulfulde did the survey in french.
