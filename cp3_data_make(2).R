@@ -3,6 +3,12 @@ load("cp3data.Rdata")
 library(mosaic)
 library(psych)
 
+##########
+# Make these "---" things NA like they should be
+##########
+cpdf[cpdf=="---"]<-NA
+cpdf<-droplevels(cpdf)
+
 ###########
 # Recode some vars for easy use
 ##########
@@ -21,6 +27,13 @@ cpdf$christian<-ifelse(cpdf$religion=="christian", 1, 0)
 cpdf$female<-ifelse(cpdf$gender=="female", 1, 0)
 cpdf$male<-ifelse(cpdf$gender=="male", 1, 0)
 
+region.vars<-c('int_num','form.Demographiques_introduction.region_no',
+                  'form.Demographiques_introduction.region_exno')
+cpdf[,region.vars]<-lapply(cpdf[,region.vars],as.character)
+cpdf$towns<-ifelse(is.na(cpdf$form.Demographiques_introduction.region_exno),
+                   cpdf$form.Demographiques_introduction.region_no,
+                   cpdf$form.Demographiques_introduction.region_exno)
+stopifnot(table(cpdf$form.Demographiques_introduction.region_exno[cpdf$towns=="Maga"])==31)
 
 #########################
 # Make Outcome Indices
@@ -30,9 +43,9 @@ cpdf$sc.index<-cpdf$form.Attitudes.person_from_another_ethnicity+
   cpdf$form.Attitudes.person_from_another_religion+
   cpdf$form.Attitudes.refugee_or_foreigner
 
-sc.index<-with(cpdf,data.frame(form.Attitudes.person_from_another_ethnicity,
-                                 form.Attitudes.person_from_another_religion,
-                                 form.Attitudes.refugee_or_foreigner))
+#sc.index<-with(cpdf,data.frame(form.Attitudes.person_from_another_ethnicity,
+#                                 form.Attitudes.person_from_another_religion,
+#                                 form.Attitudes.refugee_or_foreigner))
 #alpha(sc.index)
 #summary(alpha(sc.index))
 
@@ -53,12 +66,12 @@ cpdf$cult.index<-with(cpdf,form.Attitudes.tolerant_living_with_others_value+
                         form.Attitudes.political_leaders_respect+
                         form.Attitudes.youth_proud_culture)
 
-cult.index<-with(cpdf, data.frame(form.Attitudes.tolerant_living_with_others_value,
-                   form.Attitudes.other_religions_respect,
-                   form.Attitudes.other_ethnicities_respect,
-                   form.Attitudes.other_regions_respect,
-                   form.Attitudes.political_leaders_respect,
-                   form.Attitudes.youth_proud_culture))
+#cult.index<-with(cpdf, data.frame(form.Attitudes.tolerant_living_with_others_value,
+#                   form.Attitudes.other_religions_respect,
+#                   form.Attitudes.other_ethnicities_respect,
+#                   form.Attitudes.other_regions_respect,
+#                   form.Attitudes.political_leaders_respect,
+#                   form.Attitudes.youth_proud_culture))
 #alpha(cult.index)
 
 
@@ -93,7 +106,7 @@ cpdf$wom.index<-rowSums(cpdf[,wom.vars])
 
 # index alpha
 #wom.index<-with(cpdf,data.frame(eval(parse(text=paste(wom.vars,collapse=",")))))
-wom.index<-data.frame(cpdf[,wom.vars])
+#wom.index<-data.frame(cpdf[,wom.vars])
 
 #alpha(wom.index)
 
@@ -105,7 +118,7 @@ rel.vars<-c('form.Attitudes.one_valid_interpret',
             'form.Attitudes.other_rel_promte_peace',
             'form.Attitudes.dif_ppl_live_peace')
 cpdf$reltol.index<-rowSums(cpdf[,rel.vars])
-reltol.index<-data.frame(cpdf[,rel.vars])
+#reltol.index<-data.frame(cpdf[,rel.vars])
 #alpha(reltol.index)
 
 
@@ -116,7 +129,7 @@ pol.vars<-c('form.Attitudes.good_pol_transparency',
             'form.Attitudes.corruption_problem',
             'form.Attitudes.community_solve_problems')
 cpdf$pol.index<-rowSums(cpdf[,pol.vars])
-pol.index<-data.frame(cpdf[,pol.vars])
+#pol.index<-data.frame(cpdf[,pol.vars])
 #alpha(pol.index)
 
 
@@ -157,7 +170,7 @@ youth.vars<-c('form.Attitudes.old_people_get_it',
             'form.Attitudes.older_problem_solving_methods_best',
             'form.Attitudes.youth_involvement')
 cpdf$youth.index<-rowSums(cpdf[,youth.vars])
-youth.index<-data.frame(cpdf[,youth.vars])
+#youth.index<-data.frame(cpdf[,youth.vars])
 #alpha(youth.index)
 
 
@@ -168,15 +181,15 @@ vio.vars<-c('form.Attitudes.violence_justification_list.defend_religion',
               'form.Attitudes.violence_justification_list.vigilatante',
               'form.Attitudes.violence_justification_list.force_govt_change')
 cpdf$vio.index<-rowSums(cpdf[,vio.vars])
-vio.index<-data.frame(cpdf[,vio.vars])
+#vio.index<-data.frame(cpdf[,vio.vars])
 #alpha(vio.index)
 
 
 ###########################
 # One-off Questions (to look at)
 ###########################
-
-table(cp3$form.Attitudes.youth_involvement)
+# utilities
+form.Technologie.regular_access_to_electricity
 # tech --> no recode functions probably.
 table(cp3$form.Technologie.tech_access)
 table(cp3$form.Technologie.mobile_service_provider)
@@ -196,21 +209,10 @@ table(cp3$form.End.survey_language)
 
 
 ############
-# Aggregate Things
+# Aggregate Things?
 ###########
 #aggregate at psu level
-ag.df<-cpdf
-ag.df<-aggregate(ag.df[,c("muslim","christian","female","male")],
-                 by=list(name=ag.df$psu),mean,na.rm=T)
-
-
-ag.df2 <- cpdf %>% group_by(psu) %>%  summarise_each(funs(mean(., na.rm = TRUE)))
-stopifnot(mean(ag.df2$form.Attitudes.good_pol_transparency[ag.df2$name==1],na.rm=T)==
-            mean(ag.df$form.Attitudes.good_pol_transparency[ag.df$name==1],na.rm=T))
-
-
-table(good.df$exp_group,good.df$ethnic_marriage..multiple.choice.question.,exclude=c())
-
-testtab4a<-table(good.df$w19.trust_rel2..multiple.choice.question.)
-testtab4b<-table(ivr$w19.trust_rel2..multiple.choice.question.)
-stopifnot(testtab4b["1. completely"]==testtab4a['1']) # check nothing changed
+town.df<-aggregate(cpdf[,c("muslim","christian","female","male")],
+                 by=list(name=cpdf$towns),mean,na.rm=T)
+region.df<-aggregate(cpdf[,c("muslim","christian","female","male")],
+                   by=list(name=cpdf$form.Demographiques_introduction.region),mean,na.rm=T)
