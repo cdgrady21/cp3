@@ -119,15 +119,15 @@ stopifnot(table(test$newvar)['2']==table(test$form.Attitudes.person_from_another
 vio.scale=function(var)
 {
   car::recode(as.character(var),as.factor.result=F,
-              "'always'=3;
-              'sometimes'=2;
-              'rarely'=1;
-              'never'=0;
+              "'always'=0;
+              'sometimes'=1;
+              'rarely'=2;
+              'never'=3;
               'no_response'=NA;
               else=NA")
 }
 test$newvar=vio.scale(test$form.Attitudes.violence_justification_list.defend_religion)
-stopifnot(table(test$newvar)['2']==table(test$form.Attitudes.violence_justification_list.defend_religion)['sometimes'])
+stopifnot(table(test$newvar)['1']==table(test$form.Attitudes.violence_justification_list.defend_religion)['sometimes'])
 
 # media ops
 radio_op.scale=function(var)
@@ -204,11 +204,59 @@ cpdf<-cp3
 #cpdf<-as.data.frame(apply(cpdf,2,vio.scale))
 #cpdf<-as.data.frame(apply(cpdf,2,radio_op.scale))
 
-cpdf<-lapply(cpdf,allcode.fun)
+cpdf<-data.frame(lapply(cpdf,allcode.fun))
 
 stopifnot(nrow(cpdf)==nrow(cp3))
 typetest=sapply(cpdf,is.numeric)
 stopifnot(typetest[59]==TRUE) # women.money should be numeric
+
+
+###############
+# Reverse Scale Questions where Agreement is Bad/Negative
+##############
+test<-cpdf
+#women: women_work_children_suffer, boy_edu_better, early_marriage_good --> agree is bad
+# the vars
+recode.women<-c('form.Attitudes.women_work_children_suffer',
+                'form.Attitudes.boy_edu_better',
+                'form.Attitudes.early_marriage_good')
+
+#agree/disagree scale
+rev.scale=function(var)
+{
+  car::recode(as.character(var),as.factor.result=F,
+              "0=3;
+              1=2;
+              2=1;
+              3=0;
+              else=NA")
+}
+test$newvar=rev.scale(test$form.Attitudes.boy_edu_better)
+stopifnot(table(test$newvar)['3']==table(test$form.Attitudes.boy_edu_better)['0'])
+
+#
+test<-cpdf
+
+# do the recode for women
+test[,recode.women]<-lapply(cpdf[,recode.women],rev.scale)
+# affects these 3 vars and no others?
+stopifnot(table(test$form.Attitudes.boy_edu_better)['3']==table(cpdf$form.Attitudes.boy_edu_better)['0'])
+stopifnot(table(test$form.Attitudes.women_money)==table(cpdf$form.Attitudes.women_money))
+
+#
+cpdf<-test
+
+#other vars
+recode.vars<-c("form.Attitudes.ppl_not_vote","form.Attitudes.corruption_problem",
+               "form.Attitudes.violence_problem")
+# do the recode for other vars
+test[,recode.vars]<-lapply(cpdf[,recode.vars],rev.scale)
+# affects these 3 vars and no others?
+stopifnot(table(test$form.Attitudes.ppl_not_vote)['3']==table(cpdf$form.Attitudes.ppl_not_vote)['0'])
+stopifnot(table(test$form.Attitudes.women_money)==table(cpdf$form.Attitudes.women_money))
+
+#
+cpdf<-test
 
 #############
 # Re-scale the data: Chris: write rescale function that skips characters & factors 
@@ -224,14 +272,16 @@ scale.fun=function(var)
     as.character(var)
   }
 }
-# test the fun on a numeric variable
-test$newvar=scale.fun(test$form.Attitudes.good_pol_transparency)
-tally(test$newvar); tally(test$form.Attitudes.good_pol_transparency)
+## test the fun on a numeric variable
+#test$newvar=scale.fun(test$form.Attitudes.good_pol_transparency)
+#tally(test$newvar); tally(test$form.Attitudes.good_pol_transparency)
+# works
 
 # skip non-numeric?
 test$newvar2<-scale.fun(test$form.Technologie.internet_access_locations)
 stopifnot(table(test$newvar2)==table(test$form.Technologie.internet_access_locations))
 tally(test$newvar2)
+
 
 # rescale all numerics to be 0-1 on test, confirm same as non-scaled cpdf, then make cpdf from test.
 test<-as.data.frame(lapply(cpdf,scale.fun))

@@ -1,5 +1,7 @@
 # Scan in Workspace/load libraries
 load("cp3data.Rdata")
+library(mosaic)
+library(psych)
 
 ###########
 # Recode some vars for easy use
@@ -31,7 +33,6 @@ cpdf$sc.index<-cpdf$form.Attitudes.person_from_another_ethnicity+
 sc.index<-with(cpdf,data.frame(form.Attitudes.person_from_another_ethnicity,
                                  form.Attitudes.person_from_another_religion,
                                  form.Attitudes.refugee_or_foreigner))
-#require(psych)
 #alpha(sc.index)
 #summary(alpha(sc.index))
 
@@ -68,18 +69,18 @@ wom.vars<-c('form.Attitudes.women_money',
               'form.Attitudes.boy_edu_better',
               'form.Attitudes.early_marriage_good')
 #crappy way
-cpdf$wom.index<-with(cpdf,form.Attitudes.women_money+
-                      form.Attitudes.women_work_children_suffer+
-                     form.Attitudes.boy_edu_better+
-                    form.Attitudes.early_marriage_good)
-# much better way to make index
-cpdf$wom.index2<-with(cpdf,eval(parse(text=paste(wom.vars,collapse="+"))))
+#cpdf$wom.index<-with(cpdf,form.Attitudes.women_money+
+#                      form.Attitudes.women_work_children_suffer+
+#                     form.Attitudes.boy_edu_better+
+#                    form.Attitudes.early_marriage_good)
+## much better way to make index
+#cpdf$wom.index2<-with(cpdf,eval(parse(text=paste(wom.vars,collapse="+"))))
 # OR even easier
 cpdf$wom.index3<-rowSums(cpdf[,wom.vars])
 
 # check
-stopifnot(cpdf$wom.index==cpdf$wom.index2)
-stopifnot(cpdf$wom.index==cpdf$wom.index3)
+#stopifnot(cpdf$wom.index==cpdf$wom.index2)
+#stopifnot(cpdf$wom.index==cpdf$wom.index3)
 #it failed?
 #cpdf$int_num[cpdf$wom.index!=cpdf$wom.index2]
 #cpdf[cpdf$wom.index!=cpdf$wom.index2,wom.vars]
@@ -91,12 +92,14 @@ stopifnot(cpdf$wom.index==cpdf$wom.index3)
 ##Nope, different rounding that is inconsequential.
 
 # index alpha
-wom.index<-with(cpdf,data.frame(eval(parse(text=paste(wom.vars,collapse=",")))))
+#wom.index<-with(cpdf,data.frame(eval(parse(text=paste(wom.vars,collapse=",")))))
+wom.index<-data.frame(cpdf[,wom.vars])
 
 wom.index<-with(cpdf,data.frame(form.Attitudes.women_money,
               form.Attitudes.women_work_children_suffer,
               form.Attitudes.boy_edu_better,
               form.Attitudes.early_marriage_good))
+#alpha(wom.index)
 
 ###########################
 # One-off Questions (to look at)
