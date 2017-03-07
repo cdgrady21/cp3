@@ -166,7 +166,7 @@ allcode.fun=function(var)
   else if(length(grep("always",levels(var)))>0){
     vio.scale(var)
   }
-  else if(length(grep("positive",levels(var)))>0){
+  else if(length(grep("very_positive",levels(var)))>0){
     radio_op.scale(var)
   }
   else
@@ -218,8 +218,7 @@ test<-cpdf
 #women: women_work_children_suffer, boy_edu_better, early_marriage_good --> agree is bad
 # the vars
 recode.women<-c('form.Attitudes.women_work_children_suffer',
-                'form.Attitudes.boy_edu_better',
-                'form.Attitudes.early_marriage_good')
+                'form.Attitudes.boy_edu_better')
 
 #agree/disagree scale
 rev.scale=function(var)
