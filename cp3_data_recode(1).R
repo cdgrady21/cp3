@@ -12,8 +12,16 @@ library(reshape)
 cp3=read.csv("cp3_final_data.csv")
 cp3=cp3[,c(2:118,130:142)] #remove duplicate cols that are my named vars during survey monitor.
 psu=read.csv("cp3_final_psus.csv")
-psu=psu[,-c(3,4,5)]
+psu=psu[,-c(3,4,5)] # remove things don't need
 psu<-lapply(psu,as.character)
+
+# from cp3, remove region/town vars because "final_psus" has it fixed for typos, etc...
+f.vars<-c('form.Demographiques_introduction.region',
+          'form.Demographiques_introduction.region_no',
+          'form.Demographiques_introduction.region_exno')
+cp3<-subset(cp3, select=-c(form.Demographiques_introduction.region,
+                            form.Demographiques_introduction.region_no,
+                            form.Demographiques_introduction.region_exno))
 
 ############
 # Merge PSUs

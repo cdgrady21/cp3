@@ -193,7 +193,7 @@ cpdf$vio.index<-rowSums(cpdf[,vio.vars])
 # One-off Questions (to look at)
 ###########################
 # utilities
-form.Technologie.regular_access_to_electricity
+table(cp3$form.Technologie.regular_access_to_electricity)
 # tech --> no recode functions probably.
 table(cp3$form.Technologie.tech_access)
 table(cp3$form.Technologie.mobile_service_provider)

@@ -1,0 +1,24 @@
+---
+title: "Cameroon Peace Promotion Project"
+author: "Christopher D. Grady & Rebecca Chapman"
+date: \today
+output:
+  word_document:
+    toc: yes
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Scan in Workspace/load libraries
+load("cp3_analysis_dat.Rdata")
+library(mosaic)
+library(survey)
+```
+
+# Overview
