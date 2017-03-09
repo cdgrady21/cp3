@@ -18,6 +18,7 @@ cpdf$religion<-car::recode(cpdf$form.demographics_question_group.religion,
                            'christian'='christian';
                            else='other'")
 cpdf$region<-cpdf$form.Demographiques_introduction.region
+cpdf$age<-as.numeric(as.character(cpdf$form.Demographiques_introduction.respondent_age))
 
 
 ############
@@ -30,6 +31,8 @@ cpdf$male<-ifelse(cpdf$gender=="male", 1, 0)
 cpdf$french<-ifelse(cpdf$form.End.survey_language=="survey_lang_fr",1,0)
 cpdf$fulfulde<-ifelse(cpdf$form.End.survey_language=="survey_lang_ful",1,0)
 cpdf$other<-ifelse(cpdf$form.End.survey_language=="survey_lang_other",1,0)
+cpdf$youth<-ifelse(cpdf$age<30,1,0)
+cpdf$adult<-ifelse(cpdf$age<=30,0,1)
 
 region.vars<-c('int_num','form.Demographiques_introduction.region_no',
                   'form.Demographiques_introduction.region_exno')

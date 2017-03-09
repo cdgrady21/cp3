@@ -5,6 +5,8 @@ library(survey)
 library(lmtest)
 library(sandwich)
 library(stats)
+library(ggplot2)
+library(reshape2)
 
 ###########
 # Survey Corrections
@@ -60,6 +62,39 @@ svylm.fun<-function(outcome,treatment,data=svy)
 }
 #svylm.fun(outcome='vio.index',treatment='gender')
 
+
+########
+# Table-making function
+#######
+plot.fun<-function(outcome,data)
+{
+  plot.vars<-c("gender", 'adult', 'religion', 'region', 
+               'form.End.survey_language',outcome)
+  df.plot<-data[,plot.vars]
+  require(reshape2)
+  mean.df<-reshape2::melt(df.plot,id.vars=outcome)
+  stopifnot(mean(cpdf[[outcome]][cpdf$religion %in% "christian"],na.rm=T)==
+              mean(mean.df[[outcome]][mean.df$value %in% 'christian'],na.rm=T))
+  return(head(mean.df))
+}
+plot.fun(outcome='vio.index',data=cpdf)
+
+plot.vars<-c("gender", 'adult', 'religion', 'region', 'form.End.survey_language','vio.index')
+df.plot<-cpdf[,plot.vars]
+require(reshape2)
+mean.df<-reshape2::melt(df.plot,id.vars="vio.index")
+stopifnot(mean(cpdf[['vio.index']][cpdf$religion %in% "christian"],na.rm=T)==
+            mean(mean.df$vio.index[mean.df$value %in% 'christian'],na.rm=T))
+
+
+qplot(gender, vio.index, data=cpdf, geom=c("boxplot", "jitter"), 
+      fill=gender, main="vio.index by gender",
+      xlab="", ylab="vio.index")
+
+
+
+
 ##################
-# Look at stuff sysematically
+# Look at stuff systematically
 #################
+
