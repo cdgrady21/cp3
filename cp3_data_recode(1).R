@@ -32,6 +32,8 @@ names(cp3)[names(cp3)=="ï..number"]<-"int_num"
 cp3$int_num<-as.character(cp3$int_num)
 cp3$form.Demographiques_introduction.respondent_age<-as.character(cp3$form.Demographiques_introduction.respondent_age)
 
+cp3<-cp3[cp3$psu!=99,]
+
 #########################################
 # Functions
 #########################################

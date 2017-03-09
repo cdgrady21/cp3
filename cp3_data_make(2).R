@@ -37,7 +37,9 @@ cpdf[,region.vars]<-lapply(cpdf[,region.vars],as.character)
 cpdf$towns<-ifelse(is.na(cpdf$form.Demographiques_introduction.region_exno),
                    cpdf$form.Demographiques_introduction.region_no,
                    cpdf$form.Demographiques_introduction.region_exno)
-stopifnot(table(cpdf$form.Demographiques_introduction.region_exno[cpdf$towns=="Maga"])==31)
+stopifnot(table(cpdf$form.Demographiques_introduction.region_exno[cpdf$towns=="Maga"])==30)
+#table(cpdf$towns,cpdf$form.Demographiques_introduction.region_no)
+#table(cpdf$towns,cpdf$form.Demographiques_introduction.region_exno)
 
 #########################
 # Make Outcome Indices
