@@ -86,6 +86,35 @@ mean.df<-reshape2::melt(df.plot,id.vars="vio.index")
 stopifnot(mean(cpdf[['vio.index']][cpdf$religion %in% "christian"],na.rm=T)==
             mean(mean.df$vio.index[mean.df$value %in% 'christian'],na.rm=T))
 
+ggplot(mean.df, aes(variable, vio.index)) +   
+  geom_bar(aes(fill = value), position = "dodge", stat="identity",
+           colour="black", # Use black outlines,
+           size=.3) +      # Thinner lines
+  xlab("Subsets") +
+  ylab("Vio index") +
+  scale_fill_hue(name="Subset", # Legend label, use darker colors
+                 breaks=c("female",'male',),
+                 labels=c("Female", "Adult", "Youth",
+                          "Christian", "Muslim", "Other Rel",
+                          "Extreme North","North",
+                          "French","Fulfulde","Other Lang") +
+  scale_y_continuous(limit=c(0,5)) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank()) +
+  theme(plot.title = element_text(size=18))
+
+
+ggplot(mean.df,aes(x=variable,y=vio.index,fill=factor(value)))+
+  geom_bar(stat="identity",position="dodge")+
+  scale_fill_discrete(name="Subsets",
+                      breaks=c(1, 2,3,4,5,6,7,8,9,10,11,12),
+                      labels=c("Male", "Female", "Adult", "Youth",
+                               "Christian", "Muslim", "Other Rel",
+                               "Extreme North","North",
+                               "French","Fulfulde","Other Lang"))+
+  xlab("Subset")+ylab("Mean Outcome Score")
+
+
 
 qplot(gender, vio.index, data=cpdf, geom=c("boxplot", "jitter"), 
       fill=gender, main="vio.index by gender",
