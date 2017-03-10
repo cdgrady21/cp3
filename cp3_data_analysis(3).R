@@ -74,32 +74,37 @@ meanse.fun<-function(outcome,vars,df)
   df1<-svyby(reformulate(outcome),
              reformulate(vars[1]),
              df,svymean,na.rm=TRUE)
-  names(df1)<-c('variable',outcome,'se')
+  df1$subset<-vars[1]
+  names(df1)<-c('variable',outcome,'se','subset')
   
   df2<-svyby(reformulate(outcome),
              reformulate(vars[2]),
              df,svymean,na.rm=TRUE)
-  names(df2)<-c('variable',outcome,'se')
+  df2$subset<-vars[2]
+  names(df2)<-c('variable',outcome,'se','subset')
   
   df3<-svyby(reformulate(outcome),
              reformulate(vars[3]),
              df,svymean,na.rm=TRUE)
-  names(df3)<-c('variable',outcome,'se')
+  df3$subset<-vars[3]
+  names(df3)<-c('variable',outcome,'se','subset')
   
   df4<-svyby(reformulate(outcome),
              reformulate(vars[4]),
              df,svymean,na.rm=TRUE)
-  names(df4)<-c('variable',outcome,'se')
+  df4$subset<-vars[4]
+  names(df4)<-c('variable',outcome,'se','subset')
   
   df5<-svyby(reformulate(outcome),
              reformulate(vars[5]),
              df,svymean,na.rm=TRUE)
-  names(df5)<-c('variable',outcome,'se')
+  df5$subset<-vars[5]
+  names(df5)<-c('variable',outcome,'se','subset')
   
   final<-rbind(df1,df2,df3,df4,df5)
   return(final)
 }
-#meanse.fun('vio.index',plot.vars,svy)
+#mean.df<-meanse.fun('vio.index',plot.vars,svy)
 
 
 ########
@@ -114,10 +119,24 @@ plot.fun<-function(outcome,data)
 }
 plot.fun(outcome='vio.index',data=svy)
 
-plot.vars<-c("gender", 'adult', 'religion', 'region', 'form.End.survey_language','vio.index')
 
 # Gosh darnit
-ggplot()
+plot.vars<-c("gender", 'adult', 'religion', 'region', 'form.End.survey_language','vio.index')
+df.test<-meanse.fun('vio.index',plot.vars,svy)
+mean.df<-reshape2::melt(df.test,id.vars=c('vio.index','se','subset'))[,-4] # drop redundant "variable" column.
+mean.df<-mean.df[]
+ggplot(df.test, aes(x=))
+
+
+means.barplot <- qplot(x=group, y=mean, fill=variable,
+                       data=means, geom="bar", stat="identity",
+                       position="dodge")
+
+
+head(svy[['variables']][,plot.vars])
+#head(df.test)  # need rownames to be colnames from svy df?
+levels(mean.df$variable)
+
 
 
 # my survey exp paper
@@ -160,8 +179,20 @@ ggplot(mean.df,aes(x=variable,y=vio.index,fill=factor(value)))+
 
 
 
-qplot(gender, vio.index, data=cpdf, geom=c("boxplot", "jitter"), 
-      fill=gender, main="vio.index by gender",
+
+
+
+
+
+#########################
+# Lost Items --> didnt work or dismissed
+df.plot<-svy[['variables']][plot.vars]
+require(reshape2)
+mean.df<-reshape2::melt(df.plot,id.vars='vio.index')
+stopifnot(mean(cpdf[['vio.index']][cpdf$religion %in% "christian"],na.rm=T)==
+            mean(mean.df$vio.index[mean.df$value %in% 'christian'],na.rm=T))
+qplot(variable, vio.index, data=mean.df, geom=c("boxplot", "jitter"), 
+      fill=variable, main="vio.index", ylim=c(3,4),
       xlab="", ylab="vio.index")
 
 
