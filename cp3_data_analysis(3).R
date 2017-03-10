@@ -25,7 +25,7 @@ svy <- as.svrepdesign(svy1,type="bootstrap", replicates=1000)
 ############
 # Functions
 ###########
-#lm function
+#lm functions
 lm.fun<-function(outcome,treatment,data=cpdf)
 {
   thelm=lm(reformulate(treatment,response=outcome),data=data)
@@ -40,6 +40,7 @@ lm.fun<-function(outcome,treatment,data=cpdf)
 #lm.fun(outcome='vio.index',treatment='gender')
 #lm.fun(outcome='vio.index',treatment='female+psu')
 
+
 psublock.fun<-function(outcome,treatment,dat)
 {
   df<-dat[!is.na(dat[outcome]),]
@@ -50,6 +51,7 @@ psublock.fun<-function(outcome,treatment,dat)
   return(done)
 }
 #psublock.fun(outcome='vio.index', treatment='female',dat=cpdf)
+
 
 #survey lm function
 svylm.fun<-function(outcome,treatment,data=svy)
@@ -62,6 +64,43 @@ svylm.fun<-function(outcome,treatment,data=svy)
 }
 #svylm.fun(outcome='vio.index',treatment='gender')
 
+####################################
+# # Easily get mean & Standard Error of survey vars
+## plot.vars will be fed into this.
+plot.vars<-c("gender", 'adult', 'religion', 'region', 
+             'form.End.survey_language','vio.index')
+meanse.fun<-function(outcome,vars,df)
+{
+  df1<-svyby(reformulate(outcome),
+             reformulate(vars[1]),
+             df,svymean,na.rm=TRUE)
+  names(df1)<-c('variable',outcome,'se')
+  
+  df2<-svyby(reformulate(outcome),
+             reformulate(vars[2]),
+             df,svymean,na.rm=TRUE)
+  names(df2)<-c('variable',outcome,'se')
+  
+  df3<-svyby(reformulate(outcome),
+             reformulate(vars[3]),
+             df,svymean,na.rm=TRUE)
+  names(df3)<-c('variable',outcome,'se')
+  
+  df4<-svyby(reformulate(outcome),
+             reformulate(vars[4]),
+             df,svymean,na.rm=TRUE)
+  names(df4)<-c('variable',outcome,'se')
+  
+  df5<-svyby(reformulate(outcome),
+             reformulate(vars[5]),
+             df,svymean,na.rm=TRUE)
+  names(df5)<-c('variable',outcome,'se')
+  
+  final<-rbind(df1,df2,df3,df4,df5)
+  return(final)
+}
+#meanse.fun('vio.index',plot.vars,svy)
+
 
 ########
 # Table-making function
@@ -70,40 +109,44 @@ plot.fun<-function(outcome,data)
 {
   plot.vars<-c("gender", 'adult', 'religion', 'region', 
                'form.End.survey_language',outcome)
-  df.plot<-data[,plot.vars]
-  require(reshape2)
-  mean.df<-reshape2::melt(df.plot,id.vars=outcome)
-  stopifnot(mean(cpdf[[outcome]][cpdf$religion %in% "christian"],na.rm=T)==
-              mean(mean.df[[outcome]][mean.df$value %in% 'christian'],na.rm=T))
-  return(head(mean.df))
+  df<-meanse.fun(outcome,plot.vars,data)
+  return(df)
 }
-plot.fun(outcome='vio.index',data=cpdf)
+plot.fun(outcome='vio.index',data=svy)
 
 plot.vars<-c("gender", 'adult', 'religion', 'region', 'form.End.survey_language','vio.index')
-df.plot<-cpdf[,plot.vars]
-require(reshape2)
-mean.df<-reshape2::melt(df.plot,id.vars="vio.index")
-stopifnot(mean(cpdf[['vio.index']][cpdf$religion %in% "christian"],na.rm=T)==
-            mean(mean.df$vio.index[mean.df$value %in% 'christian'],na.rm=T))
 
-ggplot(mean.df, aes(variable, vio.index)) +   
-  geom_bar(aes(fill = value), position = "dodge", stat="identity",
+# Gosh darnit
+ggplot()
+
+
+# my survey exp paper
+df_rand_exp <- summarySE(data, measurevar="rand_exp", groupvars=c("rand_tr","strata"), na.rm=T)
+df_rand_exp$rand_tr=as.factor(df_rand_exp$rand_tr)
+df_rand_exp$strata=revalue(df_rand_exp$strata, c("bf"="Ben Farmers", "bp"="Ben Pastoralists",
+                                                 "nf"="Nas Farmers", "np"="Nas Pastoralists"))
+
+ggplot(mean.df, aes(x=variable, y=vio.index, fill=value)) + 
+  geom_bar(position=position_dodge(), stat="identity",
            colour="black", # Use black outlines,
            size=.3) +      # Thinner lines
-  xlab("Subsets") +
-  ylab("Vio index") +
-  scale_fill_hue(name="Subset", # Legend label, use darker colors
-                 breaks=c("female",'male',),
-                 labels=c("Female", "Adult", "Youth",
-                          "Christian", "Muslim", "Other Rel",
-                          "Extreme North","North",
-                          "French","Fulfulde","Other Lang") +
-  scale_y_continuous(limit=c(0,5)) +
+  geom_errorbar(aes(ymin=rand_exp-se, ymax=rand_exp+se),
+                size=.3,    # Thinner lines
+                width=.2,
+                position=position_dodge(.9)) +
+  xlab("Strata") +
+  ylab("Percentage Would Live in Intergroup Community") +
+  scale_fill_hue(name="Condition", # Legend label, use darker colors
+                 breaks=c("5","25","50","75"),
+                 labels=c("5%", "25%","50%","75%")) +
+  ggtitle("Figure 4: Randomization Experiment") +
+  scale_y_continuous(limit=c(0,.8)) +
   theme_bw() +
   theme(panel.grid.major = element_blank()) +
   theme(plot.title = element_text(size=18))
 
 
+#stackoverflow
 ggplot(mean.df,aes(x=variable,y=vio.index,fill=factor(value)))+
   geom_bar(stat="identity",position="dodge")+
   scale_fill_discrete(name="Subsets",
@@ -113,6 +156,7 @@ ggplot(mean.df,aes(x=variable,y=vio.index,fill=factor(value)))+
                                "Extreme North","North",
                                "French","Fulfulde","Other Lang"))+
   xlab("Subset")+ylab("Mean Outcome Score")
+
 
 
 
