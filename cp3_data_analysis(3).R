@@ -162,19 +162,29 @@ plot.fun<-function(outcome,dat,title)
     theme(plot.title = element_text(size=18))
   
 }
-plot.fun(outcome="vio.index",
-         dat=svy,title="Violence Index by Group")
-plot.fun(outcome='form.Attitudes.corruption_problem',dat=svy,
-         title="Corruption Belief by Group")
+#plot.fun(outcome="vio.index",
+#         dat=svy,title="Violence Index by Group")
+#plot.fun(outcome='form.Attitudes.corruption_problem',dat=svy,
+#         title="Corruption Belief by Group")
 
+
+#####################
+# Save it!
+####################
+save.image('cp3_report_dat.Rdata')
 
 #########################
 # Lost Items --> didnt work or dismissed
-df.plot<-svy[['variables']][plot.vars]
-require(reshape2)
-mean.df<-reshape2::melt(df.plot,id.vars='vio.index')
-stopifnot(mean(cpdf[['vio.index']][cpdf$religion %in% "christian"],na.rm=T)==
-            mean(mean.df$vio.index[mean.df$value %in% 'christian'],na.rm=T))
-qplot(variable, vio.index, data=mean.df, geom=c("boxplot", "jitter"), 
-      fill=variable, main="vio.index", ylim=c(3,4),
-      xlab="", ylab="vio.index")
+#df.plot<-svy[['variables']][plot.vars]
+#require(reshape2)
+#mean.df<-reshape2::melt(df.plot,id.vars='vio.index')
+#stopifnot(mean(cpdf[['vio.index']][cpdf$religion %in% "christian"],na.rm=T)==
+#            mean(mean.df$vio.index[mean.df$value %in% 'christian'],na.rm=T))
+#qplot(variable, vio.index, data=mean.df, geom=c("boxplot", "jitter"), 
+#      fill=variable, main="vio.index", ylim=c(3,4),
+#      xlab="", ylab="vio.index")
+
+#qplot(towns,vio.index,data=cpdf[!is.na(cpdf$vio.index),],geom=c("boxplot","jitter"))
+
+ggplot(data=cpdf, aes(x=towns, y=vio.index)) +
+  geom_bar(stat="identity")

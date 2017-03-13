@@ -19,6 +19,60 @@ knitr::opts_chunk$set(echo = TRUE)
 load("cp3_analysis_dat.Rdata")
 library(mosaic)
 library(survey)
+library(lmtest)
+library(sandwich)
+library(stats)
+library(ggplot2)
+library(reshape2)
 ```
 
 # Overview
+
+# Social Contact
+
+```{r sc}
+plot.fun(outcome='sc.index',dat=svy,title='Social Contact Index by Group')
+```
+
+# Cultural Understanding
+
+```{r cultural}
+plot.fun(outcome='cult.index',dat=svy,title='Cultural Understanding Index by Group')
+```
+
+# Support for Women's Empowerment
+
+Higher scores good.
+
+```{r cultural}
+plot.fun(outcome='wom.index',dat=svy,title="Women's Empowerment Index by Group")
+
+plot.fun(outcome='form.Attitudes.women_money',dat=svy,
+         title="Women Should Have a Say in How Her Household Spends Money")
+plot.fun(outcome='form.Attitudes.women_work_children_suffer',dat=svy,
+         title="Women Work Children Suffer")
+plot.fun(outcome='form.Attitudes.boy_edu_better',dat=svy,
+         title="Education Boys Better")
+plot.fun(outcome='form.Attitudes.early_marriage_good',dat=svy,
+         title="Early Marriage Good")
+```
+
+# Religious Tolerance
+
+Higher scores good.
+
+```{r tol}
+plot.fun(outcome='reltol.index',dat=svy,title='Religious Tolerance Index by Group')
+```
+
+
+# Violence
+
+Higher scores good, lower scores bad.
+
+```{r tol}
+plot.fun(outcome='vio.index',dat=svy,title='Violence Index by Group')
+```
+
+
+# Youth
