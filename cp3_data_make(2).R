@@ -60,7 +60,7 @@ cpdf$sc.index<-cpdf$form.Attitudes.person_from_another_ethnicity+
 
 
 #################
-# cultural understanding
+# cultural understanding (0.81)
 cult.vars<-c("form.Attitudes.tolerant_living_with_others_value",
                "form.Attitudes.other_religions_respect",
                'form.Attitudes.other_ethnicities_respect',

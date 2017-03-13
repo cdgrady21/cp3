@@ -63,6 +63,16 @@ Higher scores good.
 
 ```{r tol}
 plot.fun(outcome='reltol.index',dat=svy,title='Religious Tolerance Index by Group')
+
+plot.fun(outcome='form.Attitudes.one_valid_interpret',dat=svy,
+         title='More than One Valid Interpretation of Religious Teaching')
+plot.fun(outcome='form.Attitudes.my_rel_promotes_peace',dat=svy,
+         title='My Religion Promotes Peace')
+plot.fun(outcome='form.Attitudes.other_rel_promte_peace',dat=svy,
+         title='Other Religions Promote Peace')
+plot.fun(outcome='form.Attitudes.dif_ppl_live_peace',dat=svy,
+         title='People of Different Religions Live Peacefully')
+
 ```
 
 
