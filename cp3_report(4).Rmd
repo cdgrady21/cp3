@@ -16,7 +16,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 
 # Scan in Workspace/load libraries
-load("cp3_analysis_dat.Rdata")
+load("cp3_report_dat.Rdata")
 library(mosaic)
 library(survey)
 library(lmtest)
