@@ -64,12 +64,13 @@ psublock.fun<-function(outcome,treatment,dat)
 svylm.fun<-function(outcome,treatment,data=svy)
 {
   thelm=svyglm(reformulate(treatment,response=outcome),design=data)
-  thecoef<-coef(thelm)[2]
-  pvals<-summary(thelm)$coefficients[2,4]
-  theci<-confint(thelm)[2,]
-  return(cbind(thecoef,pvals,theci[1],theci[2]))
+  thecoef<-coef(thelm)
+  pvals<-summary(thelm)$coefficients[,4]
+  theci<-confint(thelm)
+  return(cbind(thecoef,pvals,theci[,1],theci[,2]))
 }
-#svylm.fun(outcome='vio.index',treatment='gender')
+#svylm.fun(outcome='vio.index',treatment='gender*region')
+
 
 ####################################
 # # Easily get mean & Standard Error of survey vars
@@ -166,6 +167,55 @@ plot.fun<-function(outcome,dat,title)
 #         dat=svy,title="Violence Index by Group")
 #plot.fun(outcome='form.Attitudes.corruption_problem',dat=svy,
 #         title="Corruption Belief by Group")
+
+
+
+######################
+# ggplot saved because takes a long time to run.
+######################
+# social contact
+sc.plot<-plot.fun(outcome='sc.index',dat=svy,title='Social Contact Index by Group')
+sc.gen.lm<-svylm.fun(outcome='sc.index',treatment='gender',data=svy)
+
+#cultural understanding
+cult.plot<-plot.fun(outcome='cult.index',dat=svy,title='Cultural Understanding Index by Group')
+
+# women
+wom.plot<-plot.fun(outcome='wom.index',dat=svy,title="Women's Empowerment Index by Group")
+wom.rel.lm<-svylm.fun(outcome='wom.index',treatment='religion',data=svy)
+
+wom_money.plot<-plot.fun(outcome='form.Attitudes.women_money',dat=svy,
+                         title="Women Should Have a Say in How Her Household Spends Money")
+wom_work.plot<-plot.fun(outcome='form.Attitudes.women_work_children_suffer',dat=svy,
+                        title="Women Work Children Suffer")
+eduboys.plot<-plot.fun(outcome='form.Attitudes.boy_edu_better',dat=svy,
+                       title="Education Boys Better")
+earlymarriage.plot<-plot.fun(outcome='form.Attitudes.early_marriage_good',dat=svy,
+                             title="Early Marriage Good")
+
+# Rel Tol
+reltol.plot<-plot.fun(outcome='reltol.index',dat=svy,title='Religious Tolerance Index by Group')
+
+valid.plot<-plot.fun(outcome='form.Attitudes.one_valid_interpret',dat=svy,
+                     title='More than One Valid Interpretation of Religious Teaching')
+myrel_peace.plot<-plot.fun(outcome='form.Attitudes.my_rel_promotes_peace',dat=svy,
+                           title='My Religion Promotes Peace')
+otherrel_peace.plot<-plot.fun(outcome='form.Attitudes.other_rel_promte_peace',dat=svy,
+                              title='Other Religions Promote Peace')
+diffrel_peace.plot<-plot.fun(outcome='form.Attitudes.dif_ppl_live_peace',dat=svy,
+                             title='People of Different Religions Live Peacefully')
+
+# Political/Civic
+pol_trans.plot<-plot.fun(outcome='form.Attitudes.good_pol_transparency',
+                         dat=svy,title='Good Political Transparency')
+dont_vote.plot<-plot.fun(outcome='form.Attitudes.ppl_not_vote',
+                         dat=svy,title="People Don't Vote")
+corruption.plot<-plot.fun(outcome='form.Attitudes.corruption_problem',
+                         dat=svy,title='Corruption a Problem')
+comm_solve.plot<-plot.fun(outcome='form.Attitudes.community_solve_problems',
+                          dat=svy,title='Community Solves Problems')
+
+
 
 
 #####################

@@ -30,17 +30,19 @@ library(reshape2)
 
 # Social Contact
 
-Here is where we 
+Here is where we write things.  Higher scores --> more social contact.
 
 ```{r sc}
-sc.plot<-plot.fun(outcome='sc.index',dat=svy,title='Social Contact Index by Group')
-svylm.fun(outcome='sc.index',treatment='gender',data=svy)
+sc.plot
+sc.gen.lm
 ```
 
 # Cultural Understanding
 
+Higher scores --> more understanding.
+
 ```{r cultural}
-plot.fun(outcome='cult.index',dat=svy,title='Cultural Understanding Index by Group')
+cult.plot
 ```
 
 # Support for Women's Empowerment
@@ -48,17 +50,13 @@ plot.fun(outcome='cult.index',dat=svy,title='Cultural Understanding Index by Gro
 Higher scores good.
 
 ```{r cultural}
-wom.plot<-plot.fun(outcome='wom.index',dat=svy,title="Women's Empowerment Index by Group")
-svylm.fun(outcome='wom.index',treatment='religion',data=svy)
+wom.plot
+wom.rel.lm
 
-plot.fun(outcome='form.Attitudes.women_money',dat=svy,
-         title="Women Should Have a Say in How Her Household Spends Money")
-plot.fun(outcome='form.Attitudes.women_work_children_suffer',dat=svy,
-         title="Women Work Children Suffer")
-eduboys.plot<-plot.fun(outcome='form.Attitudes.boy_edu_better',dat=svy,
-         title="Education Boys Better")
-earlymarriage.plot<-plot.fun(outcome='form.Attitudes.early_marriage_good',dat=svy,
-         title="Early Marriage Good")
+wom_money.plot
+wom_work.plot
+eduboys.plot
+earlymarriage.plot
 ```
 
 # Religious Tolerance
@@ -66,19 +64,22 @@ earlymarriage.plot<-plot.fun(outcome='form.Attitudes.early_marriage_good',dat=sv
 Higher scores good.
 
 ```{r tol}
-plot.fun(outcome='reltol.index',dat=svy,title='Religious Tolerance Index by Group')
+reltol.plot
 
-plot.fun(outcome='form.Attitudes.one_valid_interpret',dat=svy,
-         title='More than One Valid Interpretation of Religious Teaching')
-plot.fun(outcome='form.Attitudes.my_rel_promotes_peace',dat=svy,
-         title='My Religion Promotes Peace')
-plot.fun(outcome='form.Attitudes.other_rel_promte_peace',dat=svy,
-         title='Other Religions Promote Peace')
-plot.fun(outcome='form.Attitudes.dif_ppl_live_peace',dat=svy,
-         title='People of Different Religions Live Peacefully')
-
+valid.plot
+myrel_peace.plot
+otherrel_peace.plot
+diffrel_peace.plot
 ```
 
+# Political/Civic Engagement
+
+Does not form a reliable index.
+
+```{r civic}
+
+
+```
 
 # Violence
 
@@ -86,7 +87,11 @@ Higher scores good, lower scores bad.
 
 ```{r tol}
 plot.fun(outcome='vio.index',dat=svy,title='Violence Index by Group')
+
+
 ```
 
 
 # Youth
+
+
