@@ -30,8 +30,11 @@ library(reshape2)
 
 # Social Contact
 
+Here is where we 
+
 ```{r sc}
-plot.fun(outcome='sc.index',dat=svy,title='Social Contact Index by Group')
+sc.plot<-plot.fun(outcome='sc.index',dat=svy,title='Social Contact Index by Group')
+svylm.fun(outcome='sc.index',treatment='gender',data=svy)
 ```
 
 # Cultural Understanding
@@ -45,15 +48,16 @@ plot.fun(outcome='cult.index',dat=svy,title='Cultural Understanding Index by Gro
 Higher scores good.
 
 ```{r cultural}
-plot.fun(outcome='wom.index',dat=svy,title="Women's Empowerment Index by Group")
+wom.plot<-plot.fun(outcome='wom.index',dat=svy,title="Women's Empowerment Index by Group")
+svylm.fun(outcome='wom.index',treatment='religion',data=svy)
 
 plot.fun(outcome='form.Attitudes.women_money',dat=svy,
          title="Women Should Have a Say in How Her Household Spends Money")
 plot.fun(outcome='form.Attitudes.women_work_children_suffer',dat=svy,
          title="Women Work Children Suffer")
-plot.fun(outcome='form.Attitudes.boy_edu_better',dat=svy,
+eduboys.plot<-plot.fun(outcome='form.Attitudes.boy_edu_better',dat=svy,
          title="Education Boys Better")
-plot.fun(outcome='form.Attitudes.early_marriage_good',dat=svy,
+earlymarriage.plot<-plot.fun(outcome='form.Attitudes.early_marriage_good',dat=svy,
          title="Early Marriage Good")
 ```
 
