@@ -244,7 +244,7 @@ cpdf$camtel<-ifelse(grepl("Camtel",cpdf$form.Technologie.mobile_service_provider
                     ,1,0)
 cpdf$orange<-ifelse(grepl("orange",cpdf$form.Technologie.mobile_service_provider)
                     ,1,0)
-cpdf$Nextel<-ifelse(grepl("Nextel",cpdf$form.Technologie.mobile_service_provider)
+cpdf$nextel<-ifelse(grepl("Nextel",cpdf$form.Technologie.mobile_service_provider)
                     ,1,0)
 cpdf$otherMSP<-ifelse(grepl("other",cpdf$form.Technologie.mobile_service_provider)
                     ,1,0)
@@ -299,8 +299,6 @@ cpdf$other<-ifelse(grepl("other", cpdf$form.arewa24_programs_watched),1,0)
 
 # Demographics
 table(cp3$form.End.survey_language)
-
-
 
 
 ############

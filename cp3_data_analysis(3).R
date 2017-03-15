@@ -286,6 +286,44 @@ computer.plot<-plot.fun(outcome='computer',dat=svy,title='Computer Ownership by 
 tablet.plot<-plot.fun(outcome='tablet',dat=svy,title='Tablet Ownership by Group')
 
 # Mobile Service Providers
+mtn.plot<-plot.fun(outcome='mtn',dat=svy,title='MTN Use by Group')
+camtel.plot<-plot.fun(outcome='camtel',dat=svy,title='Camtel Use by Group')
+orange.plot<-plot.fun(outcome='orange',dat=svy,title='Orange Use by Group')
+nextel.plot<-plot.fun(outcome='nextel',dat=svy,title='Nextel Use by Group')
+otherMSP.plot<-plot.fun(outcome='otherMSP',dat=svy,title='Other MSP Use by Group')
+
+# OS
+android.plot<-plot.fun(outcome='android',dat=svy,title='Android OS by Group')
+blackberry.plot<-plot.fun(outcome='blackberry',dat=svy,title='Blackberry OS by Group')
+ios.plot<-plot.fun(outcome='ios',dat=svy,title='iOS by Group')
+windows.plot<-plot.fun(outcome='windows',dat=svy,title='Windows OS by Group')
+
+# Internet Use
+int.plot<-plot.fun(outcome='form.Technologie.access_to_internet',data=svy,title="Internet Access")
+int_friend_rel.plot<-plot.fun(outcome='int_friend_rel',dat=svy,title="Internet at Friend/Relative's House")
+int_cafe.plot<-plot.fun(outcome='int_cafe',dat=svy,title='Internet at Internet Cafe')
+int_mobile.plot<-plot.fun(outcome='int_mobile',dat=svy,title='Internet on Mobile Phone')
+int_tablet.plot<-plot.fun(outcome='int_tablet',dat=svy,title='Internet on Tablet')
+int_other.plot<-plot.fun(outcome='int_other',dat=svy,title='Internet Some Other Way')
+
+# Media/Radio Listening
+don_derkeen.plot<-plot.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',
+                         dat=svy,title='Listen to Douniarou Derkeen')
+dd_freq.plot<-plot.fun(outcome='form.radio_listener_group.frequecy_Douniarou',
+                           dat=svy,title='Listen to Douniarou Derkeen Frequency')
+dd_op.plot<-plot.fun(outcome='form.radio_listener_group.Douniarou_opinion',
+                       dat=svy,title='Douniarou Derkeen Opinion')
+
+# Arewa24 Plots
+alawar.plot<-plot.fun(outcome='alawar',data=svy,title="Watch Alawar Yara")
+waiwaye.plot<-plot.fun(outcome='waiwaye',data=svy,title="Watch Waiwaye")
+dadin.plot<-plot.fun(outcome='dadin_kowa',data=svy,title="Watch Dadin Kowa")
+hhh.plot<-plot.fun(outcome='hhh',data=svy,title="Watch Hausa Hip Hop")
+kundin.plot<-plot.fun(outcome='kundin',data=svy,title="Watch Kundin Kannywood")
+tauraruwa.plot<-plot.fun(outcome='tauraruwa',data=svy,title="Watch Tauraruwa")
+gari.plot<-plot.fun(outcome='gari',data=svy,title="Watch Gari Ya Waye")
+matasa.plot<-plot.fun(outcome='matasa',data=svy,title="Watch Matasa")
+other.plot<-plot.fun(outcome='other',data=svy,title="Watch Other A24 Program")
 
 
 #####################
@@ -306,5 +344,5 @@ save.image('cp3_report_dat.Rdata')
 
 #qplot(towns,vio.index,data=cpdf[!is.na(cpdf$vio.index),],geom=c("boxplot","jitter"))
 
-ggplot(data=cpdf, aes(x=towns, y=vio.index)) +
-  geom_bar(stat="identity")
+#ggplot(data=cpdf, aes(x=towns, y=vio.index)) +
+#  geom_bar(stat="identity")
