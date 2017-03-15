@@ -135,8 +135,8 @@ plot.fun<-function(outcome,dat,title)
   mean.df$subset<-factor(mean.df$subset, levels(mean.df$subset)[c(3,1,4,5,2)])
   
   # calculate ymin and ymax for error bars
-  miner<-mean.df[[outcome]]-mean.df$se
-  maxer<-mean.df[[outcome]]+mean.df$se
+  miner<-mean.df[[outcome]]-(mean.df$se)
+  maxer<-mean.df[[outcome]]+(mean.df$se)
 
   # Make the plot
   ggplot(mean.df, aes(x=subset, y=mean.df[[outcome]], fill=value)) + 
@@ -182,14 +182,20 @@ cult.plot<-plot.fun(outcome='cult.index',dat=svy,title='Cultural Understanding I
 
 # women
 wom.plot<-plot.fun(outcome='wom.index',dat=svy,title="Women's Empowerment Index by Group")
-wom.rel.lm<-svylm.fun(outcome='wom.index',treatment='religion',data=svy)
+wom.rel.lm<-svylm.fun(outcome='wom.index',treatment='region',data=svy)
 
 wom_money.plot<-plot.fun(outcome='form.Attitudes.women_money',dat=svy,
                          title="Women Should Have a Say in How Her Household Spends Money")
+wom_money.lm<-svylm.fun(outcome='form.Attitudes.women_money',treatment='region',data=svy)
+
 wom_work.plot<-plot.fun(outcome='form.Attitudes.women_work_children_suffer',dat=svy,
                         title="Women Work Children Suffer")
+wom_work.lm<-svylm.fun(outcome='form.Attitudes.women_work_children_suffer',treatment='gender')
+
 eduboys.plot<-plot.fun(outcome='form.Attitudes.boy_edu_better',dat=svy,
                        title="Education Boys Better")
+wom_money.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='region',data=svy)
+
 earlymarriage.plot<-plot.fun(outcome='form.Attitudes.early_marriage_good',dat=svy,
                              title="Early Marriage Good")
 
@@ -299,11 +305,11 @@ ios.plot<-plot.fun(outcome='ios',dat=svy,title='iOS by Group')
 windows.plot<-plot.fun(outcome='windows',dat=svy,title='Windows OS by Group')
 
 # Internet Use
-int.plot<-plot.fun(outcome='form.Technologie.access_to_internet',data=svy,title="Internet Access")
+int.plot<-plot.fun(outcome='form.Technologie.access_to_internet',dat=svy,title="Internet Access")
 int_friend_rel.plot<-plot.fun(outcome='int_friend_rel',dat=svy,title="Internet at Friend/Relative's House")
 int_cafe.plot<-plot.fun(outcome='int_cafe',dat=svy,title='Internet at Internet Cafe')
 int_mobile.plot<-plot.fun(outcome='int_mobile',dat=svy,title='Internet on Mobile Phone')
-int_tablet.plot<-plot.fun(outcome='int_tablet',dat=svy,title='Internet on Tablet')
+#int_tablet.plot<-plot.fun(outcome='int_tablet',dat=svy,title='Internet on Tablet') # 0 said this
 int_other.plot<-plot.fun(outcome='int_other',dat=svy,title='Internet Some Other Way')
 
 # Media/Radio Listening
@@ -315,15 +321,15 @@ dd_op.plot<-plot.fun(outcome='form.radio_listener_group.Douniarou_opinion',
                        dat=svy,title='Douniarou Derkeen Opinion')
 
 # Arewa24 Plots
-alawar.plot<-plot.fun(outcome='alawar',data=svy,title="Watch Alawar Yara")
-waiwaye.plot<-plot.fun(outcome='waiwaye',data=svy,title="Watch Waiwaye")
-dadin.plot<-plot.fun(outcome='dadin_kowa',data=svy,title="Watch Dadin Kowa")
-hhh.plot<-plot.fun(outcome='hhh',data=svy,title="Watch Hausa Hip Hop")
-kundin.plot<-plot.fun(outcome='kundin',data=svy,title="Watch Kundin Kannywood")
-tauraruwa.plot<-plot.fun(outcome='tauraruwa',data=svy,title="Watch Tauraruwa")
-gari.plot<-plot.fun(outcome='gari',data=svy,title="Watch Gari Ya Waye")
-matasa.plot<-plot.fun(outcome='matasa',data=svy,title="Watch Matasa")
-other.plot<-plot.fun(outcome='other',data=svy,title="Watch Other A24 Program")
+alawar.plot<-plot.fun(outcome='alawar',dat=svy,title="Watch Alawar Yara")
+waiwaye.plot<-plot.fun(outcome='waiwaye',dat=svy,title="Watch Waiwaye")
+dadin.plot<-plot.fun(outcome='dadin_kowa',dat=svy,title="Watch Dadin Kowa")
+hhh.plot<-plot.fun(outcome='hhh',dat=svy,title="Watch Hausa Hip Hop")
+kundin.plot<-plot.fun(outcome='kundin',dat=svy,title="Watch Kundin Kannywood")
+tauraruwa.plot<-plot.fun(outcome='tauraruwa',dat=svy,title="Watch Tauraruwa")
+gari.plot<-plot.fun(outcome='gari',dat=svy,title="Watch Gari Ya Waye")
+matasa.plot<-plot.fun(outcome='matasa',dat=svy,title="Watch Matasa")
+other.plot<-plot.fun(outcome='other',dat=svy,title="Watch Other A24 Program")
 
 
 #####################

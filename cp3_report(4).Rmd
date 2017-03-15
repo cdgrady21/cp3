@@ -28,7 +28,9 @@ library(reshape2)
 
 # Overview
 
-# Social Contact
+# Attitudes
+
+## Social Contact
 
 Here is where we write things.  Higher scores --> more social contact.
 
@@ -37,7 +39,7 @@ sc.plot
 sc.gen.lm
 ```
 
-# Cultural Understanding
+## Cultural Understanding
 
 Higher scores --> more understanding.
 
@@ -45,21 +47,49 @@ Higher scores --> more understanding.
 cult.plot
 ```
 
-# Support for Women's Empowerment
+## Support for Women's Empowerment
 
-Higher scores good.
+### Index
 
-```{r cultural}
+Higher scores good.  Alpha only 0.59, not strong enough to consider all questions together.  Women score higher than men.  
+
+```{r women}
 wom.plot
-wom.rel.lm
+```
 
+### Women Household Finances
+
+Women higher than men.  Other languages higher than French or Fulfulde.
+
+```{r wom_money}
 wom_money.plot
+```
+
+### Women Work for Pay
+
+"When women work for pay, the children suffer".  Women score higher than men.  Non-French/Fulfulde score lower than French/Fulfulde.
+
+```{r wom_work}
 wom_work.plot
+```
+
+### Education of Boys and Girls
+
+"Education More Important for a boy than a girl."  No statistical differences.
+
+```{r eduboys}
 eduboys.plot
+```
+
+### Early/Child Marriage
+
+"Early marriage is good for girls."  No meaningful statistical differences.  Other religion significantly worse, but few people from that religion.
+
+```{r earlymarriage}
 earlymarriage.plot
 ```
 
-# Religious Tolerance
+## Religious Tolerance
 
 Higher scores good.
 
@@ -72,7 +102,7 @@ otherrel_peace.plot
 diffrel_peace.plot
 ```
 
-# Political/Civic Engagement
+## Political/Civic Engagement
 
 Does not form a reliable index.
 
@@ -84,11 +114,11 @@ comm_solve.plot
 
 ```
 
-# Rando exp 
+## Rando exp 
 
 No plot.  Just didn't work.  Virtually everyone said yes in all conditions.
 
-# Rel/Ethnic Feelings
+## Rel/Ethnic Feelings
 
 Write stuff here.  These also really didn't work, since almost everyone says they overcome problems and don't vote based on ethnicity.
 
@@ -98,7 +128,7 @@ ethnic_divide.plot
 religious_divide.plot
 ```
 
-# Anti-Violence Empowerment
+## Anti-Violence Empowerment
 
 ```{r anti-vio empow}
 pos_change.plot
@@ -106,13 +136,13 @@ violence_problem.plot
 violence_problem.plot
 ```
 
-# Justice System
+## Justice System
 
 ```{r justice system}
 legal_recourse.plot
 ```
 
-# Youth-Old
+## Youth-Old
 
 ```{r youth-old}
 youth.plot
@@ -125,7 +155,7 @@ youth_involved.plot
 
 
 
-# Violence
+## Violence
 
 Higher scores good, lower scores bad.
 
@@ -138,7 +168,110 @@ gov_change.plot
 ```
 
 
+# Media Access
 
+## Utilities
+
+```{r electricity}
+electricity.plot
+```
+
+## Phones/Tech Access
+
+### Mobile phones
+
+Youth more than adults.  North more than Ex north.  Muslim more than Chrstian.  Fulfulde more than French, both _way_ more than other language.
+
+```{r mobile}
+mobile.plot
+```
+
+### Smartphones
+
+French way more, men way more, North way more.  Christian more. Adults more.
+
+```{r smartph}
+smartphone.plot
+```
+
+### Computers
+
+Only 53 people have access to a computer.  Males more likely than women to have access.  French speaking more likely than other languages.
+
+```{r comp}
+computer.plot
+#tally(cpdf$computer) # 53 
+```
+
+### Tablets
+
+Only 14 people have tablets, so these numbers mean little.  Men more than women.  French more than other languages.
+
+```{r comp}
+tablet.plot
+#tally(cpdf$tablet)
+```
+
+## Mobile Service Providers
+
+```{r msp}
+mtn.plot
+camtel.plot
+orange.plot
+nextel.plot
+otherMSP.plot
+```
+
+## OS
+
+```{r OS}
+android.plot
+blackberry.plot
+ios.plot
+windows.plot
+```
+
+## Internet Use
+
+Zero people used the internet on tablets.
+
+```{r internet}
+int.plot
+int_friend_rel.plot
+int_cafe.plot
+int_mobile.plot
+int_tablet.plot
+int_other.plot
+```
+
+## Media/Radio Listening
+
+Only 9 people listened to Dabalaye.  Only 3 people listened to Chabab.  0 people listened to Dandal_Kura.
+
+```{r radio programs}
+don_derkeen.plot
+dd_freq.plot
+dd_op.plot
+```
+
+## Arewa24 Plots
+
+```{r arewa}
+alawar.plot
+waiwaye.plot
+dadin.plot
+hhh.plot
+kundin.plot
+tauraruwa.plot
+gari.plot
+matasa.plot
+other.plot
+```
+
+
+# Conclusion
+ 
+Sum up findings here.
 
 # Super Caveat
 
