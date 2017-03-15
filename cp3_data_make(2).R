@@ -154,12 +154,35 @@ tally(cpdf$form.Attitudes.people_other_rel_in_comm5)
 # Rel/Ethnic Feelings
 tally(cpdf$form.Attitudes.copy.1.of.dif_ppl_live_peace)
 tally(cpdf$form.Attitudes.ethnic_divide_or_no)
-tally(cpdf$form.Attitudes.ethnic_divide_or_no)
+tally(cpdf$form.Attitudes.religious_divide_or_no)
 
+levels(cpdf$form.Attitudes.copy.1.of.dif_ppl_live_peace)
+cpdf$vote_ethnic<-cpdf$form.Attitudes.copy.1.of.dif_ppl_live_peace
+levels(cpdf$vote_ethnic)<-c(1,0,NA)
+cpdf$vote_ethnic<-as.numeric(as.character(cpdf$vote_ethnic))
+tally(cpdf$vote_ethnic)
+
+levels(cpdf$form.Attitudes.ethnic_divide_or_no)
+cpdf$ethnic_divide<-cpdf$form.Attitudes.ethnic_divide_or_no
+levels(cpdf$ethnic_divide)<-c(1,NA,0)
+cpdf$ethnic_divide<-as.numeric(cpdf$ethnic_divide)
+tally(cpdf$ethnic_divide)
+
+levels(cpdf$form.Attitudes.religious_divide_or_no)
+cpdf$religious_divide<-cpdf$form.Attitudes.religious_divide_or_no
+levels(cpdf$religious_divide)<-c(NA,0,1)
+cpdf$religious_divide<-as.numeric(cpdf$religious_divide)
+tally(cpdf$religious_divide)
 
 ###########
 # Anti-Vio Empowerment
 tally(cpdf$form.Confiance.personal_view_positive_change_ability)
+cpdf$pos_change<-car::recode(cpdf$form.Confiance.personal_view_positive_change_ability,as.factor.result=F,
+                             "'individual_agency_positive_change'=1;
+                             'more_powerful_people_agency_positive_change'=0;
+                             else=NA")
+#tally(cpdf$pos_change)
+#class(cpdf$pos_change)
 tally(cpdf$form.Attitudes.violence_problem)
 tally(cpdf$form.Attitudes.pwr_against_violence)
 
@@ -198,19 +221,82 @@ cpdf$vio.index<-rowSums(cpdf[,vio.vars])
 # One-off Questions (to look at)
 ###########################
 # utilities
-table(cp3$form.Technologie.regular_access_to_electricity)
+table(cpdf$form.Technologie.regular_access_to_electricity)
 # tech --> no recode functions probably.
-table(cp3$form.Technologie.tech_access)
-table(cp3$form.Technologie.mobile_service_provider)
-table(cp3$form.Technologie.personal_smartphone_os)
-table(cp3$form.Technologie.personal_tablet_os)
-table(cp3$form.Technologie.internet_access_locations)
-#form.Technologie.other_internet_access_point_specified # no responses
+#table(cp3$form.Technologie.tech_access)
+#levels(cp3$form.Technologie.tech_access)
+# phone access
+cpdf$mobile<-ifelse(grepl("simple_mobile",cpdf$form.Technologie.tech_access)
+                    ,1,0)
+cpdf$smartphone<-ifelse(grepl("feature_or_smartphone",cpdf$form.Technologie.tech_access)
+                    ,1,0)
+cpdf$computer<-ifelse(grepl("computer",cpdf$form.Technologie.tech_access)
+                        ,1,0)
+cpdf$tablet<-ifelse(grepl("tablet",cpdf$form.Technologie.tech_access)
+                      ,1,0)
+
+# mobile service provider
+#table(cp3$form.Technologie.mobile_service_provider)
+#levels(cp3$form.Technologie.mobile_service_provider)
+cpdf$mtn<-ifelse(grepl("mtn",cpdf$form.Technologie.mobile_service_provider)
+                    ,1,0)
+cpdf$camtel<-ifelse(grepl("Camtel",cpdf$form.Technologie.mobile_service_provider)
+                    ,1,0)
+cpdf$orange<-ifelse(grepl("orange",cpdf$form.Technologie.mobile_service_provider)
+                    ,1,0)
+cpdf$Nextel<-ifelse(grepl("Nextel",cpdf$form.Technologie.mobile_service_provider)
+                    ,1,0)
+cpdf$otherMSP<-ifelse(grepl("other",cpdf$form.Technologie.mobile_service_provider)
+                    ,1,0)
+
+# OS
+#table(cp3$form.Technologie.personal_smartphone_os)
+#table(cp3$form.Technologie.personal_tablet_os)
+cpdf$android<-ifelse(grepl("android", cpdf$form.Technologie.personal_smartphone_os),1,0)
+cpdf$blackberry<-ifelse(grepl("blackberry", cpdf$form.Technologie.personal_smartphone_os),1,0)
+cpdf$ios<-ifelse(grepl("iOS", cpdf$form.Technologie.personal_smartphone_os),1,0)
+cpdf$windows<-ifelse(grepl("windows", cpdf$form.Technologie.personal_smartphone_os),1,0)
+
+# Internet
+tally(cpdf$form.Technologie.access_to_internet)
+#table(cp3$form.Technologie.internet_access_locations)
+#levels(cpdf$form.Technologie.internet_access_locations)
+cpdf$int_friend_rel<-ifelse(grepl("friend_or_relative", cpdf$form.Technologie.internet_access_locations),1,0)
+cpdf$int_cafe<-ifelse(grepl("internet_cafe", cpdf$form.Technologie.internet_access_locations),1,0)
+cpdf$int_mobile<-ifelse(grepl("mobie", cpdf$form.Technologie.internet_access_locations),1,0)
+cpdf$int_tablet<-ifelse(grepl("tablet", cpdf$form.Technologie.internet_access_locations),1,0)
+cpdf$int_other<-ifelse(grepl("Other", cpdf$form.Technologie.internet_access_locations),1,0)
+
+#cpdf$form.Technologie.other_internet_access_point_specified # no responses
+
 # media listening
-table(cp3$form.radio_listener_group.dabalaye_opinion)
-table(cp3$form.radio_listener_group.Douniarou_opinion)
-table(cp3$form.watch_arewa24_frequency)
-table(cp3$form.arewa24_programs_watched)
+table(cpdf$form.radio_listener_group.Dabalaye) # only 9 people listened to Dabalaye
+tally(cpdf$form.radio_listener_group.frequecy_dabalaye)
+##table(cpdf$form.radio_listener_group.dabalaye_opinion) # only 9 people listened to Dabalaye
+
+tally(cpdf$form.radio_listener_group.chabab_frequency) # only 3 people listened to Chabab
+tally(cpdf$form.radio_listener_group.opinion_of_chabab) # only 3 people listened to Chabab
+
+table(cpdf$form.radio_listener_group.Douniarou_Derkeen)
+tally(cpdf$form.radio_listener_group.frequecy_Douniarou)
+table(cpdf$form.radio_listener_group.Douniarou_opinion)
+
+tally(cpdf$form.radio_listener_group.Dandal_Kura) # 0 people.
+
+# A24
+tally(cpdf$form.watched_arewa24)
+table(cpdf$form.watch_arewa24_frequency)
+levels(cp3$form.arewa24_programs_watched)
+cpdf$alawar<-ifelse(grepl("alawar_yara", cpdf$form.arewa24_programs_watched),1,0)
+cpdf$waiwaye<-ifelse(grepl("waiwaye", cpdf$form.arewa24_programs_watched),1,0)
+cpdf$dadin_kowa<-ifelse(grepl("dadin_kowa", cpdf$form.arewa24_programs_watched),1,0)
+cpdf$hhh<-ifelse(grepl("h_hip_hop", cpdf$form.arewa24_programs_watched),1,0)
+cpdf$kundin<-ifelse(grepl("kundin", cpdf$form.arewa24_programs_watched),1,0)
+cpdf$tauraruwa<-ifelse(grepl("tauraruwa", cpdf$form.arewa24_programs_watched),1,0)
+cpdf$gari<-ifelse(grepl("gari_ya_waye", cpdf$form.arewa24_programs_watched),1,0)
+cpdf$matasa<-ifelse(grepl("matasa", cpdf$form.arewa24_programs_watched),1,0)
+cpdf$other<-ifelse(grepl("other", cpdf$form.arewa24_programs_watched),1,0)
+
 # Demographics
 table(cp3$form.End.survey_language)
 

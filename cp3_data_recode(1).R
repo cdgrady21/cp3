@@ -145,7 +145,7 @@ radio_op.scale=function(var)
   car::recode(as.character(var),as.factor.result=F,
               "'very_positive'=2;
               'positive'=1;
-              '---'=0;
+              '---'=NA;
               'no_response'=NA;
               else=NA")
 }
@@ -198,6 +198,8 @@ test$newvar2=allcode.fun(test$form.watched_arewa24)
 stopifnot(table(test$newvar2)['1']==table(test$form.watched_arewa24)['yes'])
 stopifnot(class(test$newvar2) %in% "numeric")
 
+test$newvar=allcode.fun(test$form.radio_listener_group.opinion_of_chabab)
+stopifnot(table(test$newvar)['1']==table(test$form.radio_listener_group.opinion_of_chabab)['positive'])
 
 ##########
 # Recoding all the questions

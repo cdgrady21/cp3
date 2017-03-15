@@ -217,6 +217,76 @@ comm_solve.plot<-plot.fun(outcome='form.Attitudes.community_solve_problems',
 
 
 
+# Rando exp --> Just didn't work.  Virtually everyone said yes in all conditions.
+tally(cpdf$form.Attitudes.people_other_rel_in_comm75)
+tally(cpdf$form.Attitudes.people_other_rel_in_comm50)
+tally(cpdf$form.Attitudes.people_other_rel_in_comm25)
+tally(cpdf$form.Attitudes.people_other_rel_in_comm5)
+
+
+# Rel/Ethnic Feelings
+vote_ethnic.plot<-plot.fun(outcome='vote_ethnic',
+                          dat=svy,title='Elect Same Ethnicity')
+#tally(cpdf$form.Attitudes.copy.1.of.dif_ppl_live_peace)
+ethnic_divide.plot<-plot.fun(outcome='ethnic_divide',
+                           dat=svy,title='Overcome Ethnic Divide')
+#tally(cp3$form.Attitudes.ethnic_divide_or_no)
+
+religious_divide.plot<-plot.fun(outcome='religious_divide',
+                             dat=svy,title='Overcome Religious Divide')
+#tally(cp3$form.Attitudes.ethnic_divide_or_no)
+
+
+# Anti-Violence Empowerment
+pos_change.plot<-plot.fun(outcome='pos_change',
+                                dat=svy,title='Can Affect Positive Change')
+#tally(cp3$form.Confiance.personal_view_positive_change_ability)
+violence_problem.plot<-plot.fun(outcome='form.Attitudes.violence_problem',
+                          dat=svy,title='Violence Not a Problem')
+violence_problem.plot<-plot.fun(outcome='form.Attitudes.pwr_against_violence',
+                                dat=svy,title='Power Against Violence')
+
+# Justice System
+legal_recourse.plot<-plot.fun(outcome='form.Attitudes.legal_recourse',
+                              dat=svy,title='Legal Recourse')
+
+# Youth-Old
+youth.plot<-plot.fun(outcome='youth.index',
+                              dat=svy,title='Youth Index by Group')
+old_respect.plot<-plot.fun(outcome='form.Attitudes.old_people_get_it',
+                     dat=svy,title='Older People Respect Youth')
+youth_respect.plot<-plot.fun(outcome='form.Attitudes.youth_listen',
+                           dat=svy,title='Youth People Respect Elders')
+elders_understand.plot<-plot.fun(outcome='form.Attitudes.old_people_get_world',
+                             dat=svy,title='Older People Understand World')
+elders_applicable.plot<-plot.fun(outcome='form.Attitudes.older_problem_solving_methods_best',
+                                 dat=svy,title='Elders Problem-Solving Applicable')
+youth_involved.plot<-plot.fun(outcome='form.Attitudes.youth_involvement',
+                                 dat=svy,title="Elders' Problem-Solving Applicable")
+
+
+# Violence
+vio.plot<-plot.fun(outcome='vio.index',dat=svy,title='Violence Index by Group')
+defend_rel.plot<-plot.fun(outcome='form.Attitudes.violence_justification_list.defend_religion',
+                          dat=svy,title='Justified to Defend Religion')
+maintain.culture.plot<-plot.fun(outcome='form.Attitudes.violence_justification_list.maintain_culture',
+                                dat=svy,title='Justified to Maintain Culture')
+criminals_justice.plot<-plot.fun(outcome='form.Attitudes.violence_justification_list.vigilatante',
+                                 dat=svy,title='Justified to Bring Criminals to Justice')
+gov_change.plot<-plot.fun(outcome='form.Attitudes.violence_justification_list.force_govt_change',
+                          dat=svy,title='Justified to Force Gov to Change')
+
+# Others
+electricity.plot<-plot.fun(outcome='form.Technologie.regular_access_to_electricity',
+                           dat=svy,title='Regular Access to Electricity')
+# Tech Access
+mobile.plot<-plot.fun(outcome='mobile',dat=svy,title='Mobile Phone Ownership by Group')
+smartphone.plot<-plot.fun(outcome='smartphone',dat=svy,title='Smartphone Ownership by Group')
+computer.plot<-plot.fun(outcome='computer',dat=svy,title='Computer Ownership by Group')
+tablet.plot<-plot.fun(outcome='tablet',dat=svy,title='Tablet Ownership by Group')
+
+# Mobile Service Providers
+
 
 #####################
 # Save it!

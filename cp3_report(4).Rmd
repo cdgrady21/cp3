@@ -77,21 +77,69 @@ diffrel_peace.plot
 Does not form a reliable index.
 
 ```{r civic}
-
+pol_trans.plot
+dont_vote.plot
+corruption.plot
+comm_solve.plot
 
 ```
+
+# Rando exp 
+
+No plot.  Just didn't work.  Virtually everyone said yes in all conditions.
+
+# Rel/Ethnic Feelings
+
+Write stuff here.  These also really didn't work, since almost everyone says they overcome problems and don't vote based on ethnicity.
+
+```{r rel/ethnic feelings}
+vote_ethnic.plot
+ethnic_divide.plot
+religious_divide.plot
+```
+
+# Anti-Violence Empowerment
+
+```{r anti-vio empow}
+pos_change.plot
+violence_problem.plot
+violence_problem.plot
+```
+
+# Justice System
+
+```{r justice system}
+legal_recourse.plot
+```
+
+# Youth-Old
+
+```{r youth-old}
+youth.plot
+old_respect.plot
+youth_respect.plot
+elders_understand.plot
+elders_applicable.plot
+youth_involved.plot
+```
+
+
 
 # Violence
 
 Higher scores good, lower scores bad.
 
 ```{r tol}
-plot.fun(outcome='vio.index',dat=svy,title='Violence Index by Group')
-
-
+vio.plot
+defend_rel.plot
+maintain.culture.plot
+criminals_justice.plot
+gov_change.plot
 ```
 
 
-# Youth
 
 
+# Super Caveat
+
+Mass Agreement Bias.  Almost everyone just agrees or says yes to every question.  This is a call for reverse coding and maybe also for more professional enumerators.  The data quality appears quite low.  OR the radio programs of PDEV really worked and these people are all super tolerant and stuff.  Well, they might be tolerant.  Or they might just know how to respond to surveys like this.
