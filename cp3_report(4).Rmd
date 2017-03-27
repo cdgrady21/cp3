@@ -30,13 +30,26 @@ library(reshape2)
 
 # Attitudes
 
+## Measurement
+
+We often combine individual questions into one index that summarizes the results of those individual questions.  This is done for questions that are intended to measure the same concept -- for instance, acceptance of violence as a means to achieve goals.  Individual questions can be combined into an index when they have _internal cosistency_; that is, when a high score on one question correlates to a high score on every other question in the index.  High internal consistency indicates that the questions are all measuring one cohesive concept.  The internal consistency of the index is measure by an alpha value, with higher values meaning more internal consistency.  When an index has a high alpha value (0.7 and above), we will generally report only the index score to avoid redundancy.
+
+We also report survey-corrected statistics.  In a survey, each respondent is not an independent data observation.  Respondents are embedded in a social context (their neighborhood) with other respondents.  Respondents in the same neighborhood tend to have similar attitudes, and so 100 respondents in one neighborhood tells us far less about an area than 100 respondents evenly spread throughout ten neighborhoods.  The 100 respondents from one neighborhood will more accurately reflect the attitudes of that particular neighborhood, but not the wider area we wish to describe.  
+
+In this study, we surveyed 70 neighborhoods within 12 towns, or departments, in the north and extreme north regions of Cameroon.  The number of neighborhoods surveyed per town was proportional to population, so that larger towns like Garoua (11 neighborhoods) have more representation than smaller towns like Maga (2 neighborhoods).
+
+We also report the error of our survey statistics based on bootstrap replicates.  When we conduct a survey, we randomly select respondents from each neighborhood to answer survey questions.  We know the survey responses could look a little different if random selection had generated different survey respondents.  
+
 ## Social Contact
 
-Here is where we write things.  Higher scores --> more social contact.
+An important cause and consequence of intergroup tolerance is intergroup social contact.  Intergroup contact has been shown in numerous studies to increase intergroup tolerance, and more tolerant people are also more likely to seek out intergroup tolerance.  Here we measure social contact with three questions, combined into an index (alpha = 0.76).  Higher scores indicates more 
+
+One our social contact Here, higher scores more social contact.
 
 ```{r sc}
 sc.plot
-sc.gen.lm
+#sc.gen.lm
+#sc.all.lm<-svylm.fun(outcome='sc.index',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
 
 ## Cultural Understanding
