@@ -28,17 +28,28 @@ library(reshape2)
 
 # Overview
 
-# Attitudes
+# Methodology
 
-## Measurement
+## Measurement Methodology
 
 We often combine individual questions into one index that summarizes the results of those individual questions.  This is done for questions that are intended to measure the same concept -- for instance, acceptance of violence as a means to achieve goals.  Individual questions can be combined into an index when they have _internal cosistency_; that is, when a high score on one question correlates to a high score on every other question in the index.  High internal consistency indicates that the questions are all measuring one cohesive concept.  The internal consistency of the index is measure by an alpha value, with higher values meaning more internal consistency.  When an index has a high alpha value (0.7 and above), we will generally report only the index score to avoid redundancy.
 
 We also report survey-corrected statistics.  In a survey, each respondent is not an independent data observation.  Respondents are embedded in a social context (their neighborhood) with other respondents.  Respondents in the same neighborhood tend to have similar attitudes, and so 100 respondents in one neighborhood tells us far less about an area than 100 respondents evenly spread throughout ten neighborhoods.  The 100 respondents from one neighborhood will more accurately reflect the attitudes of that particular neighborhood, but not the wider area we wish to describe.  
 
-In this study, we surveyed 70 neighborhoods within 12 towns, or departments, in the north and extreme north regions of Cameroon.  The number of neighborhoods surveyed per town was proportional to population, so that larger towns like Garoua (11 neighborhoods) have more representation than smaller towns like Maga (2 neighborhoods).
+In this study, we surveyed 70 neighborhoods within 12 towns, or departments, in the north and extreme north regions of Cameroon.  The number of neighborhoods surveyed per town was proportional to population, so that larger towns like Garoua (11 neighborhoods) have more representation than smaller towns like Maga (2 neighborhoods).  Each neighborhood was meant to have 15 survey respondents, but due to enumerator errors the PSU sizes range from `min(tally(cpdf$psu))` to `max(tally(cpdf$psu))`.  We account for that by weighting responses such that respondents in PSUs with greater than 15 respondents are downweighted proportionally and respondents in PSUs with fewer than 15 respondents are upweighted proportionally.  That method ensures that each PSU has equal weight when calculating the town characteristics.
 
-We also report the error of our survey statistics based on bootstrap replicates.  When we conduct a survey, we randomly select respondents from each neighborhood to answer survey questions.  We know the survey responses could look a little different if random selection had generated different survey respondents.  
+We also report the error of our survey statistics (i.e. means and medians) based on bootstrap replicates.  When we conduct a survey, we randomly select respondents from each neighborhood to answer survey questions.  We know the survey responses could look a little different if random selection had generated different survey respondents.  That difference is the error.  We simulate how the survey responses _might have_ looked if we conducted the survey again in the same neighborhood with a bootstrap procedure.  The bootstrap procedure is to create new hypothetical surveys by randomly selecting with replacement the respondents from our actual survey.  By conducting this bootstrapping procedure 1,000 times, we see what could have happened if we conducted 1,000 other surveys in the same locations.  That creates a distribution of possible survey statistics -- for example, a distribution of means.  We use that distribution to specify the standard error of the mean.
+
+For example, imagine that the average score on the violence index in our survevy is 0.7.  We could imagine finding a mean of 0.65 or 0.75 if we talked to different people in that neighborhood.  However, we could _not_ imagine finding a mean of 0.2.  No combination of people in the neighborhoods would yield so low an average.  Bootstrapping quantifies the other means we could find and with what probability we would find them.
+
+## Survey Sampling Methodology
+
+This survey was conducted using a stratified two-level cluster sample design.
+
+
+
+# Attitudes
+
 
 ## Social Contact
 

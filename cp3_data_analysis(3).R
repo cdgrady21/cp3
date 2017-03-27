@@ -22,11 +22,32 @@ test<-cpdf %>% dplyr::count(psu)
 names(test)<-c("psu","num_respondents")
 cpdf<-merge(cpdf,test,by="psu")
 cpdf$weights<-15/cpdf$num_respondents
+cpdf$fpc2<-80
+# number of PSUs per town from cp3_list in the sampling folder
+#Garoua    Gashiga     Guider      Kaele   Kousseri       Maga     Maroua    Meskine 
+#26          9         34         12         47          5         26         26 
+#Mokolo       Mora Tchatibali     Yagoua 
+#26         19         31         16
+cpdf$fpc1[cpdf$towns%in%garoua]<-26
+cpdf$fpc1[cpdf$towns%in%gashiga]<-9
+cpdf$fpc1[cpdf$towns%in%Guider]<-34
+cpdf$fpc1[cpdf$towns%in%Kaele]<-12
+cpdf$fpc1[cpdf$towns%in%Kousseri]<-47
+cpdf$fpc1[cpdf$towns%in%Maga]<-5
+cpdf$fpc1[cpdf$towns%in%Maroua]<-26
+cpdf$fpc1[cpdf$towns%in%Meskine]<-26
+cpdf$fpc1[cpdf$towns%in%Mokolo]<-26
+cpdf$fpc1[cpdf$towns%in%Mora]<-19
+cpdf$fpc1[cpdf$towns%in%Tchati-bali]<-31
+cpdf$fpc1[cpdf$towns%in%Yagoua]<-16
 
 svy1=svydesign(ids=~psu+survey,
-              strata=~region+towns,
-              weights=~weights,
+              strata=~towns,
+              #weights=~weights,
+              pps="brewer",
+              fpc=~fpc1+fpc2,
               data=cpdf)
+#don't use weights & pps+fpc at same time.
 svy <- as.svrepdesign(svy1,type="bootstrap", replicates=1000)
 
 ############
