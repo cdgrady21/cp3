@@ -44,9 +44,11 @@ For example, imagine that the average score on the violence index in our survevy
 
 ## Survey Sampling Methodology
 
-This survey was conducted using a stratified two-level cluster sample design.  The survey was stratified by department/town.
+This survey was conducted using a stratified two-level cluster sample design.  The survey was stratified by department/town; we have every department/town in our target area.  Within towns, we randomly select PSUs from a list obtained by workers on the ground.  Within PSUs, the enumerators mapped out 75 households and randomly selected 15 of them (1/5th) through a systematic sampling procedure.  And within selected households, enumerators randomly selected one respondent by assigning each household member a number and using a random number generator to select one number. 
 
+If a household did not consent to be surveyed, enumerators proceeded to the next non-selected household.  If a respondent did not consent, the enumerator also proceeded to the next non-selected household.
 
+In the next section, we summarize the findings of the survey, disaggregating answers by gender, age, region, religion, and the language spoken for the survey.
 
 # Attitudes
 
