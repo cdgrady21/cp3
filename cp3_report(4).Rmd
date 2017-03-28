@@ -44,7 +44,7 @@ For example, imagine that the average score on the violence index in our survevy
 
 ## Survey Sampling Methodology
 
-This survey was conducted using a stratified two-level cluster sample design.
+This survey was conducted using a stratified two-level cluster sample design.  The survey was stratified by department/town.
 
 
 

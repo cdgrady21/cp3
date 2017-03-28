@@ -18,6 +18,17 @@ cpdf<-as.data.frame(lapply(cpdf,scale.fun)) # already tested function in (1) scr
 ###########
 # Survey Corrections
 ###########
+# fix mistaken town
+## when psus not nested in towns
+#test<-unique(cpdf[,c("psu","towns")])
+#sort(table(test$psu))
+cpdf$towns[cpdf$psu%in%'10']<-"Meskine"
+cpdf$towns[cpdf$psu%in%'11']<-"Maroua"
+cpdf$towns[cpdf$psu%in%'12']<-"Maroua"
+cpdf$towns[cpdf$psu%in%'14']<-"Maroua"
+cpdf$towns[cpdf$psu%in%'8']<-"Meskine"
+
+
 test<-cpdf %>% dplyr::count(psu)
 names(test)<-c("psu","num_respondents")
 cpdf<-merge(cpdf,test,by="psu")
@@ -28,27 +39,35 @@ cpdf$fpc2<-80
 #26          9         34         12         47          5         26         26 
 #Mokolo       Mora Tchatibali     Yagoua 
 #26         19         31         16
-cpdf$fpc1[cpdf$towns%in%garoua]<-26
-cpdf$fpc1[cpdf$towns%in%gashiga]<-9
-cpdf$fpc1[cpdf$towns%in%Guider]<-34
-cpdf$fpc1[cpdf$towns%in%Kaele]<-12
-cpdf$fpc1[cpdf$towns%in%Kousseri]<-47
-cpdf$fpc1[cpdf$towns%in%Maga]<-5
-cpdf$fpc1[cpdf$towns%in%Maroua]<-26
-cpdf$fpc1[cpdf$towns%in%Meskine]<-26
-cpdf$fpc1[cpdf$towns%in%Mokolo]<-26
-cpdf$fpc1[cpdf$towns%in%Mora]<-19
-cpdf$fpc1[cpdf$towns%in%Tchati-bali]<-31
-cpdf$fpc1[cpdf$towns%in%Yagoua]<-16
+cpdf$fpc1[cpdf$towns%in%'garoua']<-26
+cpdf$fpc1[cpdf$towns%in%'gashiga']<-9
+cpdf$fpc1[cpdf$towns%in%'Guider']<-34
+cpdf$fpc1[cpdf$towns%in%'Kaele']<-12
+cpdf$fpc1[cpdf$towns%in%'Kousseri']<-47
+cpdf$fpc1[cpdf$towns%in%'Maga']<-5
+cpdf$fpc1[cpdf$towns%in%'Maroua']<-26
+cpdf$fpc1[cpdf$towns%in%'Meskine']<-26
+cpdf$fpc1[cpdf$towns%in%'Mokolo']<-26
+cpdf$fpc1[cpdf$towns%in%'Mora']<-19
+cpdf$fpc1[cpdf$towns%in%'Tchati-bali']<-31
+cpdf$fpc1[cpdf$towns%in%'Yagoua']<-16
 
 svy1=svydesign(ids=~psu+survey,
               strata=~towns,
-              #weights=~weights,
-              pps="brewer",
+              weights=~weights,
+              #pps="brewer",
               fpc=~fpc1+fpc2,
               data=cpdf)
-#don't use weights & pps+fpc at same time.
+#don't use weights & pps at same time.
 svy <- as.svrepdesign(svy1,type="bootstrap", replicates=1000)
+
+# svyby(~vio.index,~region,svy1,svymean,na.rm=TRUE)
+#big<-cpdf[cpdf$psu%in%c("30","56","17","59","28"),]
+#summary(big$vio.index[big$region%in%"exno"])
+#summary(big$vio.index[big$region%in%"no"])
+#small<-cpdf[cpdf$psu%in%c("26","27","55","20","24","52","16","21","23","29","46","49","50","54","18","19","44","62","41","53","58","61","64"),]
+#summary(small$vio.index[cpdf$region%in%"exno"])
+#summary(small$vio.index[cpdf$region%in%"no"])
 
 ############
 # Functions
