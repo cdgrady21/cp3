@@ -1,19 +1,19 @@
 ---
 title: "Cameroon Peace Promotion Project"
 author: "Christopher D. Grady & Rebecca Chapman"
-date: \today
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
-  word_document:
-    toc: yes
   pdf_document:
     number_sections: yes
     toc: yes
   html_document:
     toc: yes
+  word_document:
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F, include=T)
 
 # Scan in Workspace/load libraries
 load("cp3_report_dat.Rdata")
@@ -185,7 +185,7 @@ youth_involved.plot
 
 Higher scores good, lower scores bad.
 
-```{r tol}
+```{r vio}
 vio.plot
 defend_rel.plot
 maintain.culture.plot
@@ -233,7 +233,7 @@ computer.plot
 
 Only 14 people have tablets, so these numbers mean little.  Men more than women.  French more than other languages.
 
-```{r comp}
+```{r tab}
 tablet.plot
 #tally(cpdf$tablet)
 ```
@@ -266,7 +266,7 @@ int.plot
 int_friend_rel.plot
 int_cafe.plot
 int_mobile.plot
-int_tablet.plot
+#int_tablet.plot # no one uses this
 int_other.plot
 ```
 
