@@ -227,10 +227,11 @@ stopifnot(typetest[59]==TRUE) # women.money should be numeric
 # Reverse Scale Questions where Agreement is Bad/Negative
 ##############
 test<-cpdf
-#women: women_work_children_suffer, boy_edu_better, early_marriage_good --> agree is bad
+#women: women_work_children_suffer, boy_edu_better --> agree is bad
 # the vars
 recode.women<-c('form.Attitudes.women_work_children_suffer',
-                'form.Attitudes.boy_edu_better')
+                'form.Attitudes.boy_edu_better')#,
+                #'form.Attitudes.early_marriage_good') # turns out this should have said "early_marriage_bad"
 
 #agree/disagree scale
 rev.scale=function(var)

@@ -81,7 +81,7 @@ cpdf$cult.index<-with(cpdf,form.Attitudes.tolerant_living_with_others_value+
 #                   form.Attitudes.other_regions_respect,
 #                   form.Attitudes.political_leaders_respect,
 #                   form.Attitudes.youth_proud_culture))
-#alpha(cult.index)
+#psych::alpha(cult.index)
 
 
 ##############
@@ -114,10 +114,10 @@ cpdf$wom.index<-rowSums(cpdf[,wom.vars])
 ##Nope, different rounding that is inconsequential.
 
 # index alpha
-#wom.index<-with(cpdf,data.frame(eval(parse(text=paste(wom.vars,collapse=",")))))
+##wom.index<-with(cpdf,data.frame(eval(parse(text=paste(wom.vars,collapse=","))))) # bad way
 #wom.index<-data.frame(cpdf[,wom.vars])
 
-#alpha(wom.index)
+#psych::alpha(wom.index)
 
 
 ###############
