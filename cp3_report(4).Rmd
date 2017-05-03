@@ -64,7 +64,7 @@ This problem also does not detract from the usefulness of surveys as a tool to m
 
 ## Summarizing the Survey
 
-In the next section, we summarize the findings of the survey, disaggregating answers by gender, age, region, religion, and the language spoken for the survey.  We display a graph for each question group, disaggregating by (1) gender, (2) age, (3) region, (4) religion^[Though we display estimates for Christians, Muslims, and people from other religions, only 11 people responded with a religion other than Christianity or Islam.  As such, these estimates are extremely imprecise.], and (5) interview language.  The bars show the mean response of respondents in each group, and the error bars show the 95% confidence interval within which the mean _could_ be.
+In the next section, we summarize the findings of the survey, disaggregating answers by gender, age, region, religion, and the language spoken for the survey.  We display a graph for each question group, disaggregating by (1) gender, (2) age, (3) region, (4) religion^[Though we display estimates for Christians, Muslims, and people from other religions, only 11 people responded with a religion other than Christianity or Islam.  As such, these estimates are extremely imprecise.], and (5) interview language^[An important point about interview language: people answering the survey in a language other than French/Fulfulde are only in the extreme north.].  The bars show the mean response of respondents in each group, and the error bars show the 95% confidence interval within which the mean _could_ be.
 
 # Attitudes
 
@@ -156,18 +156,50 @@ We ask four questions to measure beliefs about an individual's religion and that
 
 All subsets of respondents score very highly on these measures of religious tolerance.  The average score on a 0-1 scale is `r round(mean(cpdf$reltol.index,na.rm=T),2)`, and all subsets analyzed score similarly high.  Overall there appears to be widespread religious tolerance in the north and extreme north regions of Cameroon.
 
-Though these questions for a reasonably strong index and "move together" (as the response to one question is more tolerant the likelihood of the others being tolerant increases strongly), the baseline values for these questions differ slightly by subgroup.   these questions measure distinct outcomes in themselves.
+Though these questions for a reasonably strong index and "move together" (as the response to one question is more tolerant the likelihood of the others being tolerant increases strongly), the baseline values for these questions differ slightly by subgroug.  Additionally, these questions measure distinct outcomes in themselves, even if those outcomes fit under the umbrella of religious tolerance.  Therefore, we briefly discuss responses to each question.
 
-```{r tol}
+```{r reltol}
 reltol.plot
 
 #summary(cpdf$reltol.index)/max(cpdf$reltol.index,na.rm=T)
 #reltol.all.lm<-svylm.fun(outcome='reltol.index',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
-valid.plot
-myrel_peace.plot
-otherrel_peace.plot
+
 diffrel_peace.plot
 ```
+
+### Valid Interpretations of Religion
+
+We asked respondents if they believed there was more than one valid interpretation of religion.  The measurement intent here is that more religiously tolerant people will agree with this statement and the less religiously tolerant will not.  The mean score is about `r mean(cpdf$form.Attitudes.one_valid_interpret,na.rm=T)` on a 0-1 scale, indicating overwhelming support for the idea of multiple valid interpretations of religion.  But there are three differences by subgroup.  First, respondents are far more supportive in the north than the extreme north.  Second, Muslims are more supportive of this than Christians.  And third, people who responded to the survey in another language were much more likely to agree.
+
+```{r valid}
+valid.plot
+#summary(cpdf$form.Attitudes.one_valid_interpret)/max(cpdf$form.Attitudes.one_valid_interpret,na.rm=T)
+#valid.all.lm<-svylm.fun(outcome='form.Attitudes.one_valid_interpret',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+
+#cpdf %>% dplyr::group_by(gender,adult,region,religion,form.End.survey_language) %>% #dplyr::summarise(mean(form.Attitudes.one_valid_interpret,na.rm=T)) %>% print(n=100)
+## Chris: ask Lula how to make this a loop so that I get separate things for gender, adult, region, etc...
+
+#cpdf %>% dplyr::group_by(region,form.End.survey_language) %>% #dplyr::summarise(mean(form.Attitudes.one_valid_interpret,na.rm=T)) %>% print(n=100)
+
+
+```
+
+### Religions Promote Peace and Tolerance
+
+We asked respondents if they believed their religion promoted peace and tolerance towards people of other religions.  The mean score is about `r mean(cpdf$form.Attitudes.my_rel_promotes_peace,na.rm=T)` on a 0-1 scale, indicating universal support; almost everyone strongly agreed with this statement.  There are no meaningful differences; everyone believes their religion is peaceful.
+
+```{r myrel}
+myrel_peace.plot
+```
+
+However, we also asked respondents if they believed other religions promoted peace and tolerance towards people of their religions.  The mean score is about `r mean(cpdf$form.Attitudes.other_rel_promte_peace,na.rm=T)` on a 0-1 scale, indicating widespread support but not universal support.  People in the north are more likely to agree than people in the extreme north, and people who speak a language other than French/Fulfulde are again more likely toa gree.  In an interesting religious difference, Muslims are slightly more likely to agree that other religions promote peace towards their religion than Christians.
+
+```{r myrel}
+otherrel_peace.plot
+#other.all.lm<-svylm.fun(outcome='form.Attitudes.other_rel_promte_peace',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+
 
 ## Political/Civic Engagement
 
