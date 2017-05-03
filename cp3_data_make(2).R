@@ -30,7 +30,7 @@ cpdf$female<-ifelse(cpdf$gender=="female", 1, 0)
 cpdf$male<-ifelse(cpdf$gender=="male", 1, 0)
 cpdf$french<-ifelse(cpdf$form.End.survey_language=="survey_lang_fr",1,0)
 cpdf$fulfulde<-ifelse(cpdf$form.End.survey_language=="survey_lang_ful",1,0)
-cpdf$other<-ifelse(cpdf$form.End.survey_language=="survey_lang_other",1,0)
+cpdf$other_lang<-ifelse(cpdf$form.End.survey_language=="survey_lang_other",1,0)
 cpdf$youth<-ifelse(cpdf$age<30,1,0)
 cpdf$adult<-ifelse(cpdf$age<=30,"Adult","Youth")
 
@@ -152,7 +152,7 @@ tally(cpdf$form.Attitudes.people_other_rel_in_comm5)
 
 ################
 # Rel/Ethnic Feelings
-tally(cpdf$form.Attitudes.copy.1.of.dif_ppl_live_peace)
+tally(cpdf$form.Attitudes.copy.1.of.dif_ppl_live_peace) # actually about voting for ethnic candidates
 tally(cpdf$form.Attitudes.ethnic_divide_or_no)
 tally(cpdf$form.Attitudes.religious_divide_or_no)
 
@@ -299,13 +299,27 @@ cpdf$other<-ifelse(grepl("other", cpdf$form.arewa24_programs_watched),1,0)
 
 # Demographics
 table(cp3$form.End.survey_language)
-
+table(cp3$form.demographics_question_group.respondent_highest_education_level)
+cpdf$education<-car::recode(cpdf$form.demographics_question_group.respondent_highest_education_level,
+                            as.factor.result=F,
+                            "'no_formal_education'=0;
+                            'primary_school'=1;
+                            'quranic_school'=2;
+                            'middle_school'=3;
+                            'vocational_school'=4;
+                            'high_school'=5;
+                            'university_higher_edu'=6;
+                            else=NA")
+#prop.table(table(cpdf$education,cpdf$region),margin=2) # ex.north looks  lil poorer
+ # employment
+ # languages
+ # ethnic group?
 
 ############
 # Aggregate Things?
 ###########
 #aggregate at psu level
-ag.vars<-c("muslim","christian","female","male","french","fulfulde","other")
+ag.vars<-c("muslim","christian","female","male","french","fulfulde","other_lang")
 town.df<-aggregate(cpdf[,ag.vars],
                  by=list(name=cpdf$towns),mean,na.rm=T)
 region.df<-aggregate(cpdf[,ag.vars],

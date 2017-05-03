@@ -371,6 +371,8 @@ gari.plot<-plot.fun(outcome='gari',dat=svy,title="Watch Gari Ya Waye")
 matasa.plot<-plot.fun(outcome='matasa',dat=svy,title="Watch Matasa")
 other.plot<-plot.fun(outcome='other',dat=svy,title="Watch Other A24 Program")
 
+# Other demographics
+
 
 #####################
 # Save it!
