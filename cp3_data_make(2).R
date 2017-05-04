@@ -158,20 +158,20 @@ tally(cpdf$form.Attitudes.religious_divide_or_no)
 
 levels(cpdf$form.Attitudes.copy.1.of.dif_ppl_live_peace)
 cpdf$vote_ethnic<-cpdf$form.Attitudes.copy.1.of.dif_ppl_live_peace
-levels(cpdf$vote_ethnic)<-c(1,0,NA)
+levels(cpdf$vote_ethnic)<-c(0,1,NA) # ethnicity not important as a 1
 cpdf$vote_ethnic<-as.numeric(as.character(cpdf$vote_ethnic))
 tally(cpdf$vote_ethnic)
 
 levels(cpdf$form.Attitudes.ethnic_divide_or_no)
 cpdf$ethnic_divide<-cpdf$form.Attitudes.ethnic_divide_or_no
-levels(cpdf$ethnic_divide)<-c(1,NA,0)
-cpdf$ethnic_divide<-as.numeric(cpdf$ethnic_divide)
+levels(cpdf$ethnic_divide)<-c(0,NA,1)
+cpdf$ethnic_divide<-as.numeric(as.character(cpdf$ethnic_divide))
 tally(cpdf$ethnic_divide)
 
 levels(cpdf$form.Attitudes.religious_divide_or_no)
 cpdf$religious_divide<-cpdf$form.Attitudes.religious_divide_or_no
-levels(cpdf$religious_divide)<-c(NA,0,1)
-cpdf$religious_divide<-as.numeric(cpdf$religious_divide)
+levels(cpdf$religious_divide)<-c(NA,1,0)
+cpdf$religious_divide<-as.numeric(as.character(cpdf$religious_divide))
 tally(cpdf$religious_divide)
 
 ###########
@@ -185,12 +185,16 @@ cpdf$pos_change<-car::recode(cpdf$form.Confiance.personal_view_positive_change_a
 #class(cpdf$pos_change)
 tally(cpdf$form.Attitudes.violence_problem)
 tally(cpdf$form.Attitudes.pwr_against_violence)
-
-
-################
 # Justice System
 tally(cpdf$form.Attitudes.legal_recourse)
-       
+
+emp.vars<- c('pos_change',
+             'form.Attitudes.violence_problem',
+             'form.Attitudes.pwr_against_violence',
+             'form.Attitudes.legal_recourse')
+cpdf$emp.index<-rowSums(cpdf[,emp.vars])
+#emp.index<-data.frame(cpdf[,emp.vars])
+#alpha(emp.index)
 
 ##############
 # Youth-Old (0.62)
@@ -214,7 +218,17 @@ vio.vars<-c('form.Attitudes.violence_justification_list.defend_religion',
               'form.Attitudes.violence_justification_list.force_govt_change')
 cpdf$vio.index<-rowSums(cpdf[,vio.vars])
 #vio.index<-data.frame(cpdf[,vio.vars])
-#alpha(vio.index)
+#psych::alpha(vio.index)
+
+########################
+# Confidence in Institutions
+#grep("confiance", names(cp3),ignore.case=T) # cols 40:45, but not 40 because that's efficacy
+conf.vars<-names(cpdf)[grep("confiance", names(cpdf),ignore.case=T)][-1] # remove the efficacy question
+cpdf$conf.index<-rowSums(cpdf[,conf.vars])
+cpdf[1:10,grep("conf.", names(cpdf),ignore.case=T)]
+
+#conf.index<-data.frame(cpdf[,conf.vars])
+#psych::alpha(conf.index)
 
 
 ###########################

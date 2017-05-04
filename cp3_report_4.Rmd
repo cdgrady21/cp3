@@ -1,0 +1,472 @@
+---
+title: "Cameroon Peace Promotion Project"
+author: 
+- Christopher D. Grady
+- cdgrady2@illinois.edu
+- University of Illinois
+- \& 
+- Rebecca Chapman
+- rchapman@equalaccess.org
+- Equal Access International
+
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+    pdf_document:
+      number_sections: yes
+      toc: yes
+---
+
+```{r data, include=FALSE}
+# Scan in Workspace/load libraries
+knitr::opts_chunk$set(echo = F, message=F)
+load("cp3_report_dat.Rdata")
+library(mosaic)
+library(survey)
+library(lmtest)
+library(sandwich)
+library(stats)
+library(ggplot2)
+library(reshape2)
+```
+
+# Overview
+
+Some executive summary.
+
+# Methodology
+
+## Measurement Methodology
+
+We often combine individual questions into one index that summarizes the results of those individual questions.  This is done for questions that are intended to measure the same concept -- for instance, acceptance of violence as a means to achieve goals.  Individual questions can be combined into an index when they have _internal cosistency_; that is, when a high score on one question correlates to a high score on every other question in the index.  High internal consistency indicates that the questions are all measuring one cohesive concept.  The internal consistency of the index is measure by an alpha value, with higher values meaning more internal consistency.  When an index has a high alpha value (0.7 and above), we will generally report only the index score to avoid redundancy.
+
+The survey questions mainly use modified Likert scales.  On our modified Likert scales, respondents are presented with a statement and asked the extent of their agreement or disagreement with that question.  The options we use are (1) strongly agree, (2) somewhat agree, (3) somewhat disagree, and (4) strongly disagree.  We do not enumerate a "don't know" option to respondents, since research shows that certain demographic groups are systematically more likely to use don't know responses, even when they are fairly certain of the answer (Krosnick 2002).  Primarily, introverted people and people from disadvantaged groups (i.e. people with low education, women, etc...).  Offering a "don't know" response systematically decreases the representation of these people in the survey and increases the representation of people who are not afraid to guess even when they do not know the answer.  These extroverted people tend to be older men, and so enumerating a "don't know" response results in a survey that overrepresents older men.  We instruct enumerators not to enumerate a "don't know" response and only utilize "don't know" if the respondent asserts that they cannot or do not wish to answer.
+
+We also report survey-corrected statistics.  In a survey, each respondent is not an independent data observation.  Respondents are embedded in a social context (their neighborhood) with other respondents.  Respondents in the same neighborhood tend to have similar attitudes, and so 100 respondents in one neighborhood tells us far less about an area than 100 respondents evenly spread throughout ten neighborhoods.  The 100 respondents from one neighborhood will more accurately reflect the attitudes of that particular neighborhood, but not the wider area we wish to describe.  
+
+In this study, we surveyed 70 neighborhoods within 12 towns, or departments, in the north and extreme north regions of Cameroon.  The number of neighborhoods surveyed per town was proportional to population, so that larger towns like Garoua (11 neighborhoods) have more representation than smaller towns like Maga (2 neighborhoods).  Each neighborhood was meant to have 15 survey respondents, but due to enumerator errors the PSU sizes range from `r min(tally(cpdf$psu))` to `r max(tally(cpdf$psu))`.  We account for that by weighting responses such that respondents in PSUs with greater than 15 respondents are downweighted proportionally and respondents in PSUs with fewer than 15 respondents are upweighted proportionally.  That method ensures that each PSU has equal weight when calculating the town characteristics.
+
+We also report the error of our survey statistics (i.e. means and medians) based on bootstrap replicates.  When we conduct a survey, we randomly select respondents from each neighborhood to answer survey questions.  We know the survey responses could look a little different if random selection had generated different survey respondents.  That difference is the error.  We simulate how the survey responses _might have_ looked if we conducted the survey again in the same neighborhood with a bootstrap procedure.  The bootstrap procedure is to create new hypothetical surveys by randomly selecting with replacement the respondents from our actual survey.  By conducting this bootstrapping procedure 1,000 times, we see what could have happened if we conducted 1,000 other surveys in the same locations.  That creates a distribution of possible survey statistics -- for example, a distribution of means.  We use that distribution to specify the standard error of the mean.
+
+For example, imagine that the average score on the violence index in our survevy is 0.7.  We could imagine finding a mean of 0.65 or 0.75 if we talked to different people in that neighborhood.  However, we could _not_ imagine finding a mean of 0.2.  No combination of people in the neighborhoods would yield so low an average.  Bootstrapping quantifies the other means we could find and with what probability we would find them.
+
+## Survey Sampling Methodology
+
+This survey was conducted using a stratified two-level cluster sample design.  The survey was stratified by department/town; we have every department/town in our target area.  Within towns, we randomly select PSUs from a list obtained by workers on the ground.  Within PSUs, the enumerators mapped out 75 households and randomly selected 15 of them (1/5th) through a systematic sampling procedure.  And within selected households, enumerators randomly selected one respondent by assigning each household member a number and using a random number generator to select one number. 
+
+<!--If a household did not consent to be surveyed, enumerators proceeded to the next non-selected household.  If a respondent did not consent, the enumerator also proceeded to the next non-selected household.  This is done to prevent a male-dominated sample, since often women in a household will defer to a male, but introduces its own biases.  Other women are better proxies for non-consenting women than men are, but consenting women are probably systematically different than non-consenting women.-->
+
+## Interpreting Survey Responses
+
+Surveys are an extremely useful tool for summarizing opinions, but survey responses can easily be misinterpreted.  Researchers must keep two main ideas in mind when analyzing survey responses.  First, asking questions is complicated and each respondent interprets survey questions based on their own experiences.  And second, at the individual-level, randomness enters into the responses to each question^[There are many other ways to think about responses to survey questions.  For example, we should keep in mind that the response scale given to respondents frames the acceptable responses.  A scale of TV watching that includes options (daily, weekly, monthly, yearly) will generate different responses than a scale that includes (daily, almost every day, a few times per week, weekly, monthly).  And previous questions influence subsequent questions by making certain ideas salient in the minds of respondents.].
+
+First, we must put ourselves in the mind of the respondent and think how the respondent is going to interpret the question they are asked.  This is true even of fairly straightforward questions.  What does it mean when someone asks you if other religions promote peace and tolerance towards your religion?  This depends on the mind of the respondent.  The response to this question could be affected by (1) which religions enter the respondent's mind, (2) if peace and tolerance are thought of in a positive sense (treat people well) or a negative sense (don't treat people badly), and (3) what the respondent thinks the enumerator wants to hear.  People carry many ideas around in their heads, and we cannot be sure precisely which idea influences their answers to a survey question.  We still learn a great deal from looking at response patterns to a question asking if other religions promote peace and tolerance towards the respondent's religion, but each respondent brings slightly different mental considerations to bear when answering questions.
+
+Problems of question interpretation do not detract from the usefulness of a survey, it just forces the survey researcher to think about the meaning of the question.  If large differences occur between subgroups in the population, it could be that subgroups have very different opinions about the same concept (the typical interpretation).  But it could also mean that one subgroup interprets the question in a very different way than another subgroup.  That is not the typical interpretation, but that is also extremely valuable information.  If respondents interpret the question differently when asked the same question, with the same wording, in the same survey context, we learn a great deal about their worldview and outlook.  It is important for survey researchers to theorize about _why_ a respondent answered the way they did.
+
+Second, we must keep in mind the "random noise" caveat.  Every survey response contains some element of randomness^[This is also true for interviews and focus groups.  Those methods mitigate the problem by extensive probing and respondent interaction.  Surveys tend to mitigate this problem by using an index and asking many questions to measure the same underlying concept.].  Some respondents have not thought about these topics or otherwise do not know what they think, and are being asked to form an opinion on the spot.  Their responses hint at their underlying opinion, but may only reflect their attitude that is currently most salient, not their strongest attitude^[for example, on a cold and rainy day people tend to give more pessimistic answers, whereas on a warm and sunny day people tend to give more optimistic answers (Schwartz cite)].  The goal of a good survey question is to minimize the amount that randomness influences responses and maximize the amount that the concept of interest influences responses, but no questions is perfect.
+
+This problem also does not detract from the usefulness of surveys as a tool to measure opinion.  Problems of randomness are overcome by large numbers of survey respondents.  Purely random responses will not show systematic preferences for  differences and will center around the mean response.  Think about a coin flip: if you flip a coin ten times and receive four heads and six tails, the evidence suggests the coin random.  But if you flip a coin 1,000 times and receive 400 heads and 600 tails, evidence suggests that the coin is rigged.  The underlying pattern shows through with large numberes.  Likewise, if we ask 10 people who they will vote for and 6 say candidate A and 4 say candidate B, evidence suggests that candidate A and candidate B have about an equal amount of support.  But if we ask 1,000 people and 400 say candidate A and 600 say candidate B, we should conclude that candidate B has much more support in the population^[This assumes random sampling; supporters of candidate A and candidate B must be equally likely to answer the survey.].  The increasing precision of large numbers is also the logic to using an index: individual questions have some measurement error, but even if the questions are 50% error and 50% concept measurement, that error is overwhelmed by the use of multiple questions to measure a single concept.  The error is by definition random, whereas the concept measurement is directed.
+
+## Summarizing the Survey
+
+In the next section, we summarize the findings of the survey, disaggregating answers by gender, age, region, religion, and the language spoken for the survey.  We display a graph for each question group, disaggregating by (1) gender, (2) age, (3) region, (4) religion^[Though we display estimates for Christians, Muslims, and people from other religions, only 11 people responded with a religion other than Christianity or Islam.  As such, these estimates are extremely imprecise.], and (5) interview language^[An important point about interview language: people answering the survey in a language other than French/Fulfulde are only in the extreme north.].  The bars show the mean response of respondents in each group, and the error bars show the 95% confidence interval within which the mean _could_ be.
+
+# Attitudes
+
+
+## Social Contact
+
+```{r sc}
+sc.plot
+#summary(cpdf$sc.index)/max(cpdf$sc.index,na.rm=T)
+#sc.gen.lm
+#sc.all.lm<-svylm.fun(outcome='sc.index',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+An important cause and consequence of intergroup tolerance is intergroup social contact.  Intergroup contact has been shown in numerous studies to increase intergroup tolerance, and more tolerant people are also more likely to seek out intergroup contact.  Here we measure social contact with three questions, combined into an index (alpha = 0.76).  The index is scaled from 0-1 and higher scores indicates more contact with outgroups.  The specific questions are about frequency of contact with (1) ethnic outgroups, (2) religious outgroups, and (3) foreigners.
+
+The mean score on the social context index is about 0.65, but there are some large differences The largest difference is between people in different regions, with people in the northern region reporting much more intergroup contact than people in the extreme northern region.  People who answered the survey in a language other than French or Fulfulde are also much less likely to report having intergroup contact.  The graph shows other differences, but these are small and either not statistically significant or not substantively meaningful.
+
+## Cultural Understanding
+
+```{r cultural}
+cult.plot
+#summary(cpdf$cult.index)/max(cpdf$cult.index,na.rm=T)
+#cult.y.lm<-svylm.fun(outcome='cult.index',treatment='adult',data=svy)
+#cult.r.lm<-svylm.fun(outcome='cult.index',treatment='religion',data=svy)
+#cult.all.lm<-svylm.fun(outcome='cult.index',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+#ycult.all.lm<-svylm.fun(outcome='form.Attitudes.youth_proud_culture',treatment='gender+adult+region+religion+form.End.survey_language',data=svy) # youth more on youth
+#ecult.all.lm<-svylm.fun(outcome='form.Attitudes.other_regions_respect',treatment='gender+adult+region+religion+form.End.survey_language',data=svy) # youth not more on other outcomes
+```
+
+A perceived lack of cultural understanding often feeds the us vs. them narrative that underlies intergroup conflict.  This survey measures both a respondent's feeling that living in harmony with different types of people is important in their culture, and the respondent's perception that various "others" understand and respect their culture.  Those others are (1) people from other religions, (2) people from other ethnicities, (3) people from other regions of Cameroon, (4) political leaders, and (5) youth.
+
+The mean score for this index is almost 0.9 out of 1, and the graph shows that there are not large differences in perceptions of cultural understanding between most subgroups in the data.  Young people and Muslims both score more highly on this index, but only by about .04 points on the 0-1 scale.  Overall, all of these subgroups agree equally that it is important to live peacefully with others and that others understand and respect their culture.
+
+
+## Support for Women's Empowerment
+
+### Index
+
+```{r women}
+wom.plot
+#wom.all.lm<-svylm.fun(outcome='wom.index',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+Women are often denied empowerment over their lives.  Women are often denied the education of their male counterparts, a say in decisions that affect their communities, or even a choice in their marriage partner. The women's empowerment index measures the extent to which respondents believe that women should have be empowered to the same extent as men.  It contains four questions: (1) A woman should have a say in how her household spends money; (2) When a mother works for pay the children suffer; (3) An education is more important for a boy than a girl; and (4) It is not in the best interest of a girl to be married before she is 16 years old.  All questions are coded so that higher scores indicate more support for women's empowerment.
+
+The mean score for the index is about [number] on a scale from 0-1, indicating a good amount of support for women's empowerment.  Women score higher than men.  Extreme north scores higher than north.  People speaking languages other than French or Fulfulde score lower.
+
+Unlike our previous indices, the alpha for the women's empowerment index is only 0.58.  This is not enough internal consistency of us to consider these questions as measuring the same concept.  Therefore we now turn to analyses of the individual questions in the women's empowerment index.
+
+### Women Household Finances
+
+```{r wom_money}
+wom_money.plot
+```
+
+The first question in the women's empowerment sequence asks if a woman should have a say in how her household spend money.  The average response is about 0.85 on a scale from 0-1, indicating that respondents tend to agree or strongly agree with this statement.  As expected, women score more highly than men.  People answering the survey in languages other than French or Fulfulde are also slightly more supportive of women having a say in household finances than people answering questions in French or Fulfulde.
+
+### Women Work for Pay
+
+```{r wom_work}
+wom_work.plot
+```
+
+The second question in the women's empowerment sequence asks if children suffer when women work for pay.  The responses have been re-scaled in the analysis so that a 1 means a pro-empowerment response (strongly disagree) and a 0 means an anti-empowerment response (strongly agree).  The mean score is about 0.73 on a scale from 0-1, indicating support for women, but less support than for the previous women's empowerment question.  However, this could easily be due to the reverse scaling of this question (making agreement normatively bad), and a persistent "agreement bias" wherein respondents are more likely to agree than disagree with survey statements.   Again, women score higher than men.  This time the non-French/Fulfulde speakers score lower than French/Fulfulde speakers^[Due to the relatively low number of non-French/Fulfulde speakers, there is much more random noise in the measurement of their opinions.]
+
+### Education of Boys and Girls
+
+```{r eduboys}
+eduboys.plot
+#eduboy.all.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+#eduboy.gen.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='gender',data=svy) # no gender diff unless control for other things.
+```
+
+The third question in the women's empowerment sequence asks respondents if education is more important for a boy than a girl.  Unlike previous questions, there are _no statistical differences_ between men and women.  Women score slightly higher, but differences this small occur frequently due to chance.  Differences appear by region and language spoken: people in the northern region and people answering the survey in Fulfulde are more likely to agree that education is more important for boys than girls.
+
+### Early/Child Marriage
+
+```{r earlymarriage}
+earlymarriage.plot
+#girlmarry.all.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='gender*adult+form.End.survey_language',data=svy)
+```
+
+<!--Chris: come back to this.-->
+The fourth and final question in our women's empowerment index asks respondents if "It is _not_ in the best interest of a girl to be married before she is 16 years old."  No meaningful statistical differences.  Other religion significantly worse, but few people from that religion.
+
+## Religious Tolerance
+
+```{r reltol}
+reltol.plot
+
+#summary(cpdf$reltol.index)/max(cpdf$reltol.index,na.rm=T)
+#reltol.all.lm<-svylm.fun(outcome='reltol.index',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+We ask four questions to measure beliefs about an individual's religion and that individual's perceptions of other religions.  Taken together, these four questions measure <!--"religious tolerance" -- something something...Chris/Rebecca: come up with a better summary name-->.  The individual questions are (1) There is more than one valid interpretation of religion, (2) My religion promotes peace and tolerance for members of other religions, (3) Other religions promote peace and tolerance for members of my religion, and (4) People of different religions live together peacefully in my community.  For each question, higher scores are normatively desirable and indicate more religious tolerance.  These four questions form an internally cohesive index with an alpha of 0.73.
+
+All subsets of respondents score very highly on these measures of religious tolerance.  The average score on a 0-1 scale is `r round(mean(cpdf$reltol.index,na.rm=T),2)`, and all subsets analyzed score similarly high.  Overall there appears to be widespread religious tolerance in the north and extreme north regions of Cameroon.
+
+Though these questions for a reasonably strong index and "move together" (as the response to one question is more tolerant the likelihood of the others being tolerant increases strongly), the baseline values for these questions differ slightly by subgroug.  Additionally, these questions measure distinct outcomes in themselves, even if those outcomes fit under the umbrella of religious tolerance.  Therefore, we briefly discuss responses to each question.
+
+### Valid Interpretations of Religion
+
+```{r valid}
+valid.plot
+#summary(cpdf$form.Attitudes.one_valid_interpret)/max(cpdf$form.Attitudes.one_valid_interpret,na.rm=T)
+#valid.all.lm<-svylm.fun(outcome='form.Attitudes.one_valid_interpret',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+
+#cpdf %>% dplyr::group_by(gender,adult,region,religion,form.End.survey_language) %>% #dplyr::summarise(mean(form.Attitudes.one_valid_interpret,na.rm=T)) %>% print(n=100)
+## Chris: ask Lula how to make this a loop so that I get separate things for gender, adult, region, etc...
+
+#cpdf %>% dplyr::group_by(region,form.End.survey_language) %>% #dplyr::summarise(mean(form.Attitudes.one_valid_interpret,na.rm=T)) %>% print(n=100)
+
+
+```
+
+We asked respondents if they believed there was more than one valid interpretation of religion.  The measurement intent here is that more religiously tolerant people will agree with this statement and the less religiously tolerant will not.  The mean score is about `r round(mean(cpdf$form.Attitudes.one_valid_interpret,na.rm=T),2)` on a 0-1 scale, indicating overwhelming support for the idea of multiple valid interpretations of religion.  But there are three differences by subgroup.  First, respondents are far more supportive in the north than the extreme north.  Second, Muslims are more supportive of this than Christians.  And third, people who responded to the survey in another language were much more likely to agree.
+
+### Religions Promote Peace and Tolerance
+
+```{r myrel}
+myrel_peace.plot
+```
+
+We asked respondents if they believed their religion promoted peace and tolerance towards people of other religions.  The mean score is about `r round(mean(cpdf$form.Attitudes.my_rel_promotes_peace,na.rm=T),2)` on a 0-1 scale, indicating universal support; almost everyone strongly agreed with this statement.  There are no meaningful differences; everyone believes their religion is peaceful.
+
+```{r otherrel}
+otherrel_peace.plot
+#other.all.lm<-svylm.fun(outcome='form.Attitudes.other_rel_promte_peace',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+However, we also asked respondents if they believed other religions promoted peace and tolerance towards people of their religions.  The mean score is about `r round(mean(cpdf$form.Attitudes.other_rel_promte_peace,na.rm=T),2)` on a 0-1 scale, indicating widespread support but not universal support.  People in the north are more likely to agree than people in the extreme north, and people who speak a language other than French/Fulfulde are again more likely toa gree.  In an interesting religious difference, Muslims are slightly more likely than Christians to agree that other religions promote peace towards their religion.
+
+### People of Different Religions Live Together Peacefully
+
+```{r diffpeace}
+diffrel_peace.plot
+#summary(cpdf$form.Attitudes.dif_ppl_live_peace)/max(cpdf$form.Attitudes.dif_ppl_live_peace,na.rm=T)
+#diff.all.lm<-svylm.fun(outcome='form.Attitudes.dif_ppl_live_peace',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+#cpdf %>% dplyr::group_by(region) %>% dplyr::summarise(mean(form.Attitudes.dif_ppl_live_peace,na.rm=T)) %>% print(n=100)
+```
+
+Respondents were also asked if people of different religions live together peacefully in their community, to which all subsets respondents overwhelingly agreed.  People in the northern region are slightly more likely to strongly agree than respondents in the extreme north, but the difference is between 0.97 and 0.94 on the 0-1 scale and so not substantively interesting.
+
+## Political/Civic Engagement
+
+We asked four questions about community and civic engagement.  (1) There is good political transparency in my community and citizens are informed of government actions; (2) People in my community do not vote and are not engaged in civic matters; (3) Corruption is a problem in my community; and (4) People in my community give their time or money to solve community problems, such as cleaning out gutters, building schools, wells, or bridges, etc. All questions are recoded from 0-1 so that 0 is a normatively undesirable response (i.e. strongly agree corruption is a problem or strongly disagree people give time and money to solve community problems) and 1 is a normatively desirable response.
+
+These questions do not form a reliable index (as scores on one increase the scores on the others do not increase).  Therefore, these cannot be treated as representing an underlying concept and we discuss each in turn.
+
+### Political Transparency
+
+```{r pol_transparency}
+pol_trans.plot
+#prop.table(table(cpdf$education,cpdf$form.End.survey_language),margin=2) # language signal for ses
+
+#transp.all.lm<-svylm.fun(outcome='form.Attitudes.good_pol_transparency',treatment='gender+adult+region+religion+form.End.survey_language+education',data=svy)
+#transp.all.lm<-svylm.fun(outcome='form.Attitudes.good_pol_transparency',treatment='gender+adult+region+religion+form.End.survey_language',data=svy) # other languages believe transparency even controlling for education, which they have a lot less of.
+
+```
+
+We asked respondents if they believed there was good political transparency in their communities.  The mean score is about `r round(mean(cpdf$form.Attitudes.good_pol_transparency,na.rm=T),2)` on a 0-1 scale, indicating only middling support for people in the community having good knowledge of government activities.  People in the extreme north are much more likely to believe political transparency is good in their communities than people in the north, and Muslims are much more likely than Christians to believe their communities have good political transparency<!--I could imagine something here about Christians in a majority Christian area vs. majority muslim area, but there towns are so religiously diverse we won't see that here.-->.  And people who answered the survey in French perceive less transparency than people who answered in Fulfulde, who perceive less transparency than people who answered in another language^[This mimics patterns of education: French-speakers are the most educated, then Fulfulde speakers, and speakers of another language are the least educated.  And the more educated a person, the less they believe there is good political transparency.  However, the effects of language here persist even when controlling for education level.
+
+
+### Voting and Civic Engagement
+
+```{r vote}
+dont_vote.plot
+#prop.table(table(cpdf$form.Attitudes.ppl_not_vote, cpdf$region),margin=2)
+#vote.all.lm<-svylm.fun(outcome='form.Attitudes.ppl_not_vote',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+We asked respondents if they believed people in their community do not vote and are not engaged in civic matters.  This question is scaled so that strong agreement is a 0 and strong disagreement a 1.  The mean score is about `r round(mean(cpdf$form.Attitudes.ppl_not_vote,na.rm=T),2)` on a 0-1 scale, indicating generally a belief that people are involved in civic matters, but some ambivalence on the part of many respondents.  The ambivalence is almost entirely from people in the northern region.  In the extreme north, about 66% of people strongly disagree that people do not vote and are not engaged civically.  But in the north only abotu 14% of people strongly disagree with that statement.  And we again see the pattern by language wherein French speakers are the most pessimistic about their community and non-French/Fulfulde speakers the most optimistic.
+
+### Corruption
+
+```{r corruption}
+corruption.plot
+```
+
+We asked respondents if they believed that corruption is a problem in their community.  This question is scaled so that strong agreement is a 0 and strong disagreement a 1.  The mean score is about `r round(mean(cpdf$form.Attitudes.corruption_problem,na.rm=T),2)` on a 0-1 scale, indicating that almost all respondents believe corruption to be a problem.  There are small differences in magnitude of concern about corruption, but agreement that corruption is a problem.  People in the extreme north perceive more corruption than people in the north, and Muslims perceive more corruption than Christians.
+
+### Community Problem Solving
+
+```{r comm_solve}
+comm_solve.plot
+#commprob.all.lm<-svylm.fun(outcome='form.Attitudes.community_solve_problems',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+We asked respondents if they people in their community donated time/money to solve community problems.  The mean score is about `r mean(cpdf$form.Attitudes.community_solve_problems,na.rm=T)` on a 0-1 scale, indicating that most respondents believe people in their communities help out in solving community problems.  There are many small differences by subgroup.  Males, young people, extreme northerners, and Muslims are most likely to perceive community cooperation.  And the familiar language pattern emerges again, with French speakers the least likely to perceive community cooperation, then Fulfulde speakers, and then people speaking some other language.
+
+## Other Religious and Ethnic Group Feelings
+
+```{r rel/ethnic feelings}
+vote_ethnic.plot
+ethnic_divide.plot
+religious_divide.plot
+
+#reldiv.all.lm<-svylm.fun(outcome='religious_divide',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+We asked three questions to measure attitudes related to religious and ethnic outgroups in society^[We also conducted a survey experiment, which was unsuccessful and is described in the appendix.].  These questions use binary response outcomes (yes or no) are not intended to be used as an index, so we report them individually.  The questions are: 
+
+- (1) In elections, people in Cameroon often vote for candidates from their own ethnic group. Which of the following statements is closer to your view? (1) It is normal to want to elect someone from your ethnic community, OR (2) Voters should place much less emphasis on ethnic considerations.
+
+- (2) Differences often exist between people living in the same village/neighborhood. Would you say that ethnic differences tend to divide people in your village/neighborhood, or do people in your village/neighborhood tend to overcome their ethnic differences?
+
+- (3) Would you say that that religious differences tend to divide people in your village/neighborhood, or do people in your village/neighborhood tend to overcome their ethnic differences?
+
+The first question measures their belief in using ethnicity as a reason to vote for a political candidate, and the next two reflect the respondent's perception about acceptance of ethnic and religious outgroups in their communities.
+
+For the first question, about `r paste(round(mean(cpdf$vote_ethnic,na.rm=T),2)*100)`\% of respondents do not believe ethnicity should be important when deciding an elected candidate.  This is roughly the same proportion for all subsets of the data, but Fulfulde speakers are ever so slightly more likely to believe ethnic voting is acceptable.  For the second question asking if people in the respondent's community overcome ethnic divides, about `r paste(round(mean(cpdf$ethnic_divide,na.rm=T),2)*100)`\% say yes, with no meaningful differences between subgroups.  
+
+For the final question asking if people in the respondent's community overcome religious divides, about `r paste(round(mean(cpdf$religious_divide,na.rm=T),2)*100)`\% of people say yes.  There are small but significant differences by subgroup.  Importantly, Christians are less likely to perceive religious differences as overcome than Muslims^[this is also true for people who are neither Christian or Muslim, but since these are only 2/11 people we should not place too much weight in this conclusion.].  Adults are also less likely to think their communities overcome religious differences than youth, as are northerners compared to extreme northerners.  However, even for the subgroups who are less likely to perceive religious divides as overcome, the vast majority of people in those subgroups _do_ perceive the divides as overcome.
+
+
+## Efficacy and Empowerment
+
+In many contexts, good people feel helpless against the violence and crime they perceive in their communities.  Empowering the good, tolerant, non-violent people is a major goal of any peace-building program, and this survey asks four questions to measure the empowerment people feel in changing their communities for the better:
+
+- I am going to read you two statements.  Please listen to both, and then tell me which one of them is closer to your view.  (1) As an individual citizen, I have the ability to create positive change in my community, (2) The ability to make positive changes in my community rests with those who have more power than I do
+- Violence and insecurity are a problem in my community. 
+- People in my community have the power to speak out against violence
+- I know how to seek legal recourse for myself or a loved one if a law is broken.
+
+These questions are not intended to measure separate concepts, not a single underlying psychological concept, and so are considered separately, not as an index.
+
+### Power to Affect Positive Change
+
+Other language higher.
+
+```{r pos change}
+pos_change.plot
+#poschange.all.lm<-svylm.fun(outcome='pos_change',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+### Violence a Problem and Power to Speak Against Violence
+
+```{r vio_change}
+violence_problem.plot
+power_against.plot
+
+```
+
+### Knowledge of Legal Assistance
+
+```{r recourse}
+legal_recourse.plot
+```
+
+## Youth-Old
+
+```{r youth-old}
+youth.plot
+old_respect.plot
+youth_respect.plot
+elders_understand.plot
+elders_applicable.plot
+youth_involved.plot
+```
+
+
+
+## Violence
+
+Higher scores good, lower scores bad.
+
+```{r vio}
+vio.plot
+defend_rel.plot
+maintain.culture.plot
+criminals_justice.plot
+gov_change.plot
+```
+
+## Institutional Confidence
+
+Alpha 0.77.  Higher scores = more confidence in institutions.  Lowest for justice system.
+
+```{r institutions}
+#psych::alpha(conf.index)
+```
+
+# Media Access
+
+## Utilities
+
+```{r electricity}
+electricity.plot
+```
+
+## Phones/Tech Access
+
+### Mobile phones
+
+Youth more than adults.  North more than Ex north.  Muslim more than Chrstian.  Fulfulde more than French, both _way_ more than other language.
+
+```{r mobile}
+mobile.plot
+```
+
+### Smartphones
+
+French way more, men way more, North way more.  Christian more. Adults more.
+
+```{r smartph}
+smartphone.plot
+```
+
+### Computers
+
+Only 53 people have access to a computer.  Males more likely than women to have access.  French speaking more likely than other languages.
+
+```{r comp}
+computer.plot
+#tally(cpdf$computer) # 53 
+```
+
+### Tablets
+
+Only 14 people have tablets, so these numbers mean little.  Men more than women.  French more than other languages.
+
+```{r tab}
+tablet.plot
+#tally(cpdf$tablet)
+```
+
+## Mobile Service Providers
+
+```{r msp}
+mtn.plot
+camtel.plot
+orange.plot
+nextel.plot
+otherMSP.plot
+```
+
+## OS
+
+```{r OS}
+android.plot
+blackberry.plot
+ios.plot
+windows.plot
+```
+
+## Internet Use
+
+Zero people used the internet on tablets.
+
+```{r internet}
+int.plot
+int_friend_rel.plot
+int_cafe.plot
+int_mobile.plot
+#int_tablet.plot # no one uses this
+int_other.plot
+```
+
+## Media/Radio Listening
+
+Only 9 people listened to Dabalaye.  Only 3 people listened to Chabab.  0 people listened to Dandal_Kura.
+
+```{r radio programs}
+don_derkeen.plot
+dd_freq.plot
+dd_op.plot
+```
+
+## Arewa24 Plots
+
+```{r arewa}
+alawar.plot
+waiwaye.plot
+dadin.plot
+hhh.plot
+kundin.plot
+tauraruwa.plot
+gari.plot
+matasa.plot
+other.plot
+```
+
+
+# Conclusion
+ 
+Sum up findings here.
+
+
+# Caveats
+
+Mass Agreement Bias.  Almost everyone just agrees or says yes to every question.  This is a call for reverse coding and maybe also for more professional enumerators.  The data quality appears quite low.  OR the radio programs of PDEV really worked and these people are all super tolerant and stuff.  Well, they might be tolerant.  Or they might just know how to respond to surveys like this.
+
+# Appendices
+
+## Appendix 1
+
+We attempted a randomization experiment to measure attitudes towards people from other religions.  In the randomization experiment, we asked respondents if they would live in a community that was __5%/25%/50%/75%__ members of a different religion.  The percentage is randomized, and we hypothesized that fewer people would be willing to live in a community as the percentage of outgroup members increased.  However, the randomization experiment did not work.  Virtually everyone said yes in all conditions.  This either indicates unprecedented levels of religious tolerance, the Hawthorne Effect wherein subjects learn the correct response to survey questions, or enumerator error in administering the survey experiment.
+
+
+# References

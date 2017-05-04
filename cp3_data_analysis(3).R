@@ -289,7 +289,7 @@ pos_change.plot<-plot.fun(outcome='pos_change',
 #tally(cp3$form.Confiance.personal_view_positive_change_ability)
 violence_problem.plot<-plot.fun(outcome='form.Attitudes.violence_problem',
                           dat=svy,title='Violence Not a Problem')
-violence_problem.plot<-plot.fun(outcome='form.Attitudes.pwr_against_violence',
+power_against.plot<-plot.fun(outcome='form.Attitudes.pwr_against_violence',
                                 dat=svy,title='Power Against Violence')
 
 # Justice System
