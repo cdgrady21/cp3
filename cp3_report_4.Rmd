@@ -294,24 +294,35 @@ In many contexts, good people feel helpless against the violence and crime they 
 - People in my community have the power to speak out against violence
 - I know how to seek legal recourse for myself or a loved one if a law is broken.
 
-These questions are not intended to measure separate concepts, not a single underlying psychological concept, and so are considered separately, not as an index.
+The first question about creating change uses binary response options, and the second, third, and fourth questions are all 4-point scales from strongly agree to strongly disagree.  These questions are not intended to measure separate concepts, not a single underlying psychological concept, and so are considered separately, not as an index.
 
 ### Power to Affect Positive Change
 
-Other language higher.
-
 ```{r pos change}
 pos_change.plot
+pos.tab<-mean(cpdf$pos_change~cpdf$adult,na.rm=T)
 #poschange.all.lm<-svylm.fun(outcome='pos_change',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
+
+When asked if they believed they had the power to create positive changes in their communities, or if the power to make positive changes rests with those who have more power than the respondent, 82% of respondents reported feeling empowered.  Empowerment of this type is relatively high for all groups in the data, but there are some differences.  Younger people were more likely to report empowerment than adults (`r pos.tab[2]` vs. `r pos.tab[1]`), and people who responded to the survey in languages other than French or Fulfulde reported more empowerment than French/Fulfulde speakers.
 
 ### Violence a Problem and Power to Speak Against Violence
 
 ```{r vio_change}
 violence_problem.plot
-power_against.plot
+#mean(cpdf$form.Attitudes.violence_problem,na.rm=T)
 
+power_against.plot
+#mean(cpdf$form.Attitudes.pwr_against_violence,na.rm=T)
+#pwr_against.all.lm<-svylm.fun(outcome='form.Attitudes.pwr_against_violence',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
+
+Respondents generally agreed that violence and insecurity were problems in their community.  On a scale from 0-1, the average score is `r mean(cpdf$form.Attitudes.violence_problem,na.rm=T)`, and `r round(table(cpdf$form.Attitudes.violence_problem)["0"]/nrow(cpdf)*100,1)`\% strongly agree that violence is a problem in their communities.  All subsets feel similarly, but people who responded in a language other than French/Fulfulde perceive less violence and insecurity in their communities than people who responded in French/Fulfulde.  Overall, this questions shows that most people in Cameroon are concerned about violence and insecurity.
+
+Though they are concerned about violence, respondents also generally feel that people in their communities are able to speak out against violence.  On a scale from 0-1, the average score is `r round(table(cpdf$form.Attitudes.pwr_against_violence)["0"]/nrow(cpdf)*100,1)`\%.  Over half of respondents strongly agree with that statement, and another `r round(183/nrow(cpdf),2)`\% somewhat agree.
+
+The take-away for these three questions is that respondents are concerned about violence, but feel empowered to speak against it and to make positive changes in their community.
+
 
 ### Knowledge of Legal Assistance
 

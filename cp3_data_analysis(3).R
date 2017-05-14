@@ -308,7 +308,7 @@ elders_understand.plot<-plot.fun(outcome='form.Attitudes.old_people_get_world',
 elders_applicable.plot<-plot.fun(outcome='form.Attitudes.older_problem_solving_methods_best',
                                  dat=svy,title='Elders Problem-Solving Applicable')
 youth_involved.plot<-plot.fun(outcome='form.Attitudes.youth_involvement',
-                                 dat=svy,title="Elders' Problem-Solving Applicable")
+                                 dat=svy,title="Youth Involved in Decisions")
 
 
 # Violence
