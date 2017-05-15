@@ -32,7 +32,7 @@ cpdf$french<-ifelse(cpdf$form.End.survey_language=="survey_lang_fr",1,0)
 cpdf$fulfulde<-ifelse(cpdf$form.End.survey_language=="survey_lang_ful",1,0)
 cpdf$other_lang<-ifelse(cpdf$form.End.survey_language=="survey_lang_other",1,0)
 cpdf$youth<-ifelse(cpdf$age<30,1,0)
-cpdf$adult<-ifelse(cpdf$age<=30,"Adult","Youth")
+cpdf$adult<-ifelse(cpdf$age>=30,"Adult","Youth")
 
 region.vars<-c('int_num','form.Demographiques_introduction.region_no',
                   'form.Demographiques_introduction.region_exno')
@@ -210,19 +210,19 @@ cpdf$youth.index<-rowSums(cpdf[,youth.vars])
 #alpha(youth.index)
 
 #cpdf$youth.index1<-rowSums(cpdf[,c('form.Attitudes.old_people_get_it',
-                                   'form.Attitudes.old_people_get_world'
-                                   )])
+#                                   'form.Attitudes.old_people_get_world'
+#                                   )])
 #youth.index1<-data.frame(cpdf[,c('form.Attitudes.old_people_get_it',
-                                'form.Attitudes.old_people_get_world'
-)])
+#                                'form.Attitudes.old_people_get_world'
+#)])
 #psych::alpha(youth.index1)
 
 #cpdf$youth.index2<-rowSums(cpdf[,c('form.Attitudes.youth_listen',
-                                   'form.Attitudes.older_problem_solving_methods_best',
-                                   'form.Attitudes.youth_involvement')])
+#                                   'form.Attitudes.older_problem_solving_methods_best',
+#                                   'form.Attitudes.youth_involvement')])
 #youth.index2<-data.frame(cpdf[,c('form.Attitudes.youth_listen',
-                                'form.Attitudes.older_problem_solving_methods_best',
-                                'form.Attitudes.youth_involvement')])
+#                                'form.Attitudes.older_problem_solving_methods_best',
+#                                'form.Attitudes.youth_involvement')])
 #psych::alpha(youth.index2)
 
 

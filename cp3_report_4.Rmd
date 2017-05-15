@@ -282,7 +282,7 @@ The first question measures their belief in using ethnicity as a reason to vote 
 
 For the first question, about `r paste(round(mean(cpdf$vote_ethnic,na.rm=T),2)*100)`\% of respondents do not believe ethnicity should be important when deciding an elected candidate.  This is roughly the same proportion for all subsets of the data, but Fulfulde speakers are ever so slightly more likely to believe ethnic voting is acceptable.  For the second question asking if people in the respondent's community overcome ethnic divides, about `r paste(round(mean(cpdf$ethnic_divide,na.rm=T),2)*100)`\% say yes, with no meaningful differences between subgroups.  
 
-For the final question asking if people in the respondent's community overcome religious divides, about `r paste(round(mean(cpdf$religious_divide,na.rm=T),2)*100)`\% of people say yes.  There are small but significant differences by subgroup.  Importantly, Christians are less likely to perceive religious differences as overcome than Muslims^[this is also true for people who are neither Christian or Muslim, but since these are only 2/11 people we should not place too much weight in this conclusion.].  Adults are also less likely to think their communities overcome religious differences than youth, as are northerners compared to extreme northerners.  However, even for the subgroups who are less likely to perceive religious divides as overcome, the vast majority of people in those subgroups _do_ perceive the divides as overcome.
+For the final question asking if people in the respondent's community overcome religious divides, about `r paste(round(mean(cpdf$religious_divide,na.rm=T),2)*100)`\% of people say yes.  There are small but significant differences by subgroup.  Importantly, Christians are less likely to perceive religious differences as overcome than Muslims^[this is also true for people who are neither Christian or Muslim, but since these are only 2/11 people we should not place too much weight in this conclusion.].  Youth are also less likely to think their communities overcome religious differences than adults, as are northerners compared to extreme northerners.  However, even for the subgroups who are less likely to perceive religious divides as overcome, the vast majority of people in those subgroups _do_ perceive the divides as overcome.
 
 
 ## Efficacy and Empowerment
@@ -304,7 +304,7 @@ pos.tab<-mean(cpdf$pos_change~cpdf$adult,na.rm=T)
 #poschange.all.lm<-svylm.fun(outcome='pos_change',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
 
-When asked if they believed they had the power to create positive changes in their communities, or if the power to make positive changes rests with those who have more power than the respondent, 82% of respondents reported feeling empowered.  Empowerment of this type is relatively high for all groups in the data, but there are some differences.  Younger people were more likely to report empowerment than adults (`r pos.tab[2]` vs. `r pos.tab[1]`), and people who responded to the survey in languages other than French or Fulfulde reported more empowerment than French/Fulfulde speakers.
+When asked if they believed they had the power to create positive changes in their communities, or if the power to make positive changes rests with those who have more power than the respondent, 82% of respondents reported feeling empowered.  Empowerment of this type is relatively high for all groups in the data, but there are some differences.  Older people were more likely to report empowerment than youth (`r pos.tab[2]` vs. `r pos.tab[1]`), and people who responded to the survey in languages other than French or Fulfulde reported more empowerment than French/Fulfulde speakers.
 
 ### Violence a Problem and Power to Speak Against Violence
 
@@ -334,7 +334,7 @@ legal_recourse.plot
 #legal.recourse.lm<-svylm.fun(outcome='form.Attitudes.legal_recourse',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
 
-Respondents generally knew how to seek legal recourse if a law is broken, with an average score of `r round(mean(cpdf$form.Attitudes.legal_recourse),1)` on a 0-1 scale where 1 corresponds to "strongly agree" and 0 with "strongly disagree".  The modal response is "strongly agree", with over 60% of respondents answering that way.  However, there is a stark difference by region: in the extreme north, `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[4,1]*100`\% strongly agree and another `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[3,1]*100`\% somewhat agree, but in the north only `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[4,2]*100`\% agree, and `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[3,2]*100`\% somewhat agree.  Muslims also report more knowledge of legal recourse than Christians, as do youth compared to adults. 
+Respondents generally knew how to seek legal recourse if a law is broken, with an average score of `r round(mean(cpdf$form.Attitudes.legal_recourse,na.rm=T),2)` on a 0-1 scale where 1 corresponds to "strongly agree" and 0 with "strongly disagree".  The modal response is "strongly agree", with over 60% of respondents answering that way.  However, there is a stark difference by region: in the extreme north, `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[4,1]*100`\% strongly agree and another `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[3,1]*100`\% somewhat agree, but in the north only `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[4,2]*100`\% agree, and `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[3,2]*100`\% somewhat agree.  Muslims also report more knowledge of legal recourse than Christians, as do adults compared to youth 
 
 ## Youth-Old
 
@@ -362,11 +362,13 @@ We use those three structures to analyze the youth-elder relations questions in 
 ```{r youth-old}
 old_respect.plot
 elders_understand.plot
+
+cpdf$old<-ifelse(as.numeric(as.character(cpdf$form.Demographiques_introduction.respondent_age))>49,1,0)
 ```
 
-Overall, perceptions of youth respect for elders is very high.  
+Overall, perceptions of youth respect for elders is very high.  Overall respondents score `r round(mean(cpdf$form.Attitudes.old_people_get_it,na.rm=T),2)` on a 0-1 scale when asked if old people understand young people, and score `r round(mean(cpdf$form.Attitudes.old_people_get_world,na.rm=T),2)` when asked if old people understand the world youth are growing up in.  However, for both of those questions, youth score significantly higher than people ove 30.
 
-<!--Elders think youth are very respectful.  Youth be like "meh"-->
+<!--Youth think youth are very respectful.  Elders be like "meh"-->
 
 ### Youth Respect for Elders
 
@@ -376,7 +378,7 @@ elders_applicable.plot
 
 ```
 
-Youth think elders respect them.  Elders be like "meh"
+Elders think elders get respect.  Youth be like "meh"
 
 ### Youth Involved in Community Decisions
 
@@ -416,7 +418,7 @@ electricity.plot
 
 ### Mobile phones
 
-Youth more than adults.  North more than Ex north.  Muslim more than Chrstian.  Fulfulde more than French, both _way_ more than other language.
+Adults more than youth.  North more than Ex north.  Muslim more than Chrstian.  Fulfulde more than French, both _way_ more than other language.
 
 ```{r mobile}
 mobile.plot
@@ -424,7 +426,7 @@ mobile.plot
 
 ### Smartphones
 
-French way more, men way more, North way more.  Christian more. Adults more.
+French way more, men way more, North way more.  Christian more. Youth more.
 
 ```{r smartph}
 smartphone.plot
