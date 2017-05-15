@@ -328,20 +328,61 @@ The take-away for these three questions is that respondents are concerned about 
 
 ```{r recourse}
 legal_recourse.plot
+#mean(cpdf$form.Attitudes.legal_recourse~cpdf$region, na.rm=T)
+#prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2)
+#prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$religion), 2)
+#legal.recourse.lm<-svylm.fun(outcome='form.Attitudes.legal_recourse',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
+
+Respondents generally knew how to seek legal recourse if a law is broken, with an average score of `r round(mean(cpdf$form.Attitudes.legal_recourse),1)` on a 0-1 scale where 1 corresponds to "strongly agree" and 0 with "strongly disagree".  The modal response is "strongly agree", with over 60% of respondents answering that way.  However, there is a stark difference by region: in the extreme north, `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[4,1]*100`\% strongly agree and another `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[3,1]*100`\% somewhat agree, but in the north only `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[4,2]*100`\% agree, and `r round(prop.table(tally(cpdf$form.Attitudes.legal_recourse~cpdf$region), 2),3)[3,2]*100`\% somewhat agree.  Muslims also report more knowledge of legal recourse than Christians, as do youth compared to adults. 
 
 ## Youth-Old
 
+We ask five questions about youth and elder relations in the survey.  These questions are not intended to measure an underlying attitude dimension, so we analyze each in turn rather than combine them into an index.  Four of the questions use a 4-point scale from strongly agree to strongly disagree.  One question -- if youth should be involved in community decisions or if they should follow the lead of their elders -- uses binary response options.  Two of these questions are about youth respect for elders, two are about elders' respect for youth, and one is about youth empowerment.  
+
+The four strongly agree-strongly disagree scale questions are:
+
+The two questions about youth respect for elders are on a strongly agree-strongly disagree scale.
+- Older people listen to and respect the desires and motivations of younger people.
+- Younger people listen to and respect the desires and motivations of their elders.
+- Older people understand the world that youth are growing up in.
+- The ways in which elders solve problems are still applicable today.
+
+The binary response option question is:
+- Do you think that youth should get involved in your community's leadership and decision-making, or would you say that youth should follow the lead of their elders? 
+
+We use those three structures to analyze the youth-elder relations questions in the next sections.
+
 ```{r youth-old}
-youth.plot
-old_respect.plot
-youth_respect.plot
-elders_understand.plot
-elders_applicable.plot
-youth_involved.plot
+#youth.plot # not an index
 ```
 
+### Elder Respect for Youth
 
+```{r youth-old}
+old_respect.plot
+elders_understand.plot
+```
+
+Overall, perceptions of youth respect for elders is very high.  
+
+<!--Elders think youth are very respectful.  Youth be like "meh"-->
+
+### Youth Respect for Elders
+
+```{r youth-old}
+youth_respect.plot
+elders_applicable.plot
+
+```
+
+Youth think elders respect them.  Elders be like "meh"
+
+### Youth Involved in Community Decisions
+
+```{r youth-old}
+youth_involved.plot
+```
 
 ## Violence
 

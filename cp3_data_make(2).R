@@ -209,6 +209,22 @@ cpdf$youth.index<-rowSums(cpdf[,youth.vars])
 #youth.index<-data.frame(cpdf[,youth.vars])
 #alpha(youth.index)
 
+#cpdf$youth.index1<-rowSums(cpdf[,c('form.Attitudes.old_people_get_it',
+                                   'form.Attitudes.old_people_get_world'
+                                   )])
+#youth.index1<-data.frame(cpdf[,c('form.Attitudes.old_people_get_it',
+                                'form.Attitudes.old_people_get_world'
+)])
+#psych::alpha(youth.index1)
+
+#cpdf$youth.index2<-rowSums(cpdf[,c('form.Attitudes.youth_listen',
+                                   'form.Attitudes.older_problem_solving_methods_best',
+                                   'form.Attitudes.youth_involvement')])
+#youth.index2<-data.frame(cpdf[,c('form.Attitudes.youth_listen',
+                                'form.Attitudes.older_problem_solving_methods_best',
+                                'form.Attitudes.youth_involvement')])
+#psych::alpha(youth.index2)
+
 
 ################
 # Violence (0.72)
