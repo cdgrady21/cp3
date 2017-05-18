@@ -322,6 +322,9 @@ criminals_justice.plot<-plot.fun(outcome='form.Attitudes.violence_justification_
 gov_change.plot<-plot.fun(outcome='form.Attitudes.violence_justification_list.force_govt_change',
                           dat=svy,title='Justified to Force Gov to Change')
 
+# Institutional Confidence
+conf.plot<-plot.fun(outcome='conf.index',dat=svy,title='Institutional Confidence Index by Group')
+
 # Others
 electricity.plot<-plot.fun(outcome='form.Technologie.regular_access_to_electricity',
                            dat=svy,title='Regular Access to Electricity')

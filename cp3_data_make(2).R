@@ -237,7 +237,7 @@ cpdf$vio.index<-rowSums(cpdf[,vio.vars])
 #psych::alpha(vio.index)
 
 ########################
-# Confidence in Institutions
+# Confidence in Institutions (alpha = 0.77)
 #grep("confiance", names(cp3),ignore.case=T) # cols 40:45, but not 40 because that's efficacy
 conf.vars<-names(cpdf)[grep("confiance", names(cpdf),ignore.case=T)][-1] # remove the efficacy question
 cpdf$conf.index<-rowSums(cpdf[,conf.vars])
