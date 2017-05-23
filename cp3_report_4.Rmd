@@ -1,19 +1,20 @@
 ---
 title: "Cameroon Peace Promotion Project"
-author: 
+author:
 - Christopher D. Grady
 - cdgrady2@illinois.edu
 - University of Illinois
-- \& 
+- \&
 - Rebecca Chapman
 - rchapman@equalaccess.org
 - Equal Access International
-
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
-    pdf_document:
-      number_sections: yes
-      toc: yes
+  html_document:
+    toc: yes
+  pdf_document:
+    number_sections: yes
+    toc: yes
 ---
 
 ```{r data, include=FALSE}
@@ -343,11 +344,13 @@ We ask five questions about youth and elder relations in the survey.  These ques
 The three questions about elders all use the strongly agree-strongly disagree scale:
 
 The three questions about elders and elders' feelings towards youth are on a strongly agree-strongly disagree scale.
+
 - Older people listen to and respect the desires and motivations of younger people.
 - Older people understand the world that youth are growing up in.
 - The ways in which elders solve problems are still applicable today.
 
 The two questions about youth are on different scales.  The first is on a strongly agree-strongly disagree scale, and the second uses binary response options:
+
 - Younger people listen to and respect the desires and motivations of their elders.
 - Do you think that youth should get involved in your community's leadership and decision-making, or would you say that youth should follow the lead of their elders? 
 
@@ -357,7 +360,7 @@ The two questions about youth are on different scales.  The first is on a strong
 
 ### Elder Respect for Youth
 
-```{r youth-old}
+```{r youth-old1}
 old_respect.plot
 elders_understand.plot
 elders_applicable.plot
@@ -384,7 +387,7 @@ Overall, respondents in the survey believe that older people respect and underst
 
 ### Youth Respect for Elders
 
-```{r youth-old}
+```{r youth-old2}
 youth_respect.plot
 youth_involved.plot
 
@@ -409,7 +412,8 @@ In terms of youth being more involved in community decisions, all subsets of the
 ## Violence
 
 We would like to know if people believe violence is a means to achieve goals, or if people generally eschew violence.  To learn about that in Cameroon, we measure attitudes about the use of violence.  We ask four questions about violence, and they conform to a cohesive index with an alpha of over 0.70.  Each question is a scenario in which the respondent might use violence.  For each scenario, we ask the respondent if the use of violence is justified always, sometimes, rarely, or never.  The four scenarios are:
-- to defend one’s religion
+
+- Defend one’s religion
 - Maintain culture and traditions
 - Bring criminals to justice when the government fails to act
 - Force the government to change their policies or actions
@@ -430,20 +434,22 @@ Overall there is strong support against the use of violence; the average score o
 
 ## Institutional Confidence
 
+```{r institutions}
+#psych::alpha(conf.index)
+conf.plot
+```
+
 We asked about respondent's confidence in institutions.  We asked about: 
+
 - Your local community radio station
 - Juidicial system
 - Religious leaders
 - Traditional leaders
 - Local government 
 
-Alpha 0.77.  Higher scores = more confidence in institutions.  Lowest for justice system.
+The alpha for these questions is 0.77, indicating a cohesive index.  The index is scaled so that higher scores mean more confidence in institutions.  
 
-
-```{r institutions}
-#psych::alpha(conf.index)
-conf.plot
-```
+Adults have more confidence in institutions than youth.  Muslims have more confidence than other religions.  People who answered the survey in Fulfulde have more confidence than people who answered the survey in other languages.  Confidence for these institutions is fairly high and the average score is above 0.75 for all institutions except the justice system.  The average score for the justice system is only about 0.67.
 
 # Media Access
 
