@@ -216,6 +216,24 @@ plot.fun<-function(outcome,dat,title)
 
 # demographics
 
+## Gender, Age, and Ethnicity
+table(cpdf$female)
+summary(cpdf$age)
+sort(table(cpdf$form.demographics_question_group.ethnic_background))
+
+# Format the data for ggplot
+demo.df<-
+mean.df<-reshape2::melt(demo.df,id.vars=c(outcome,'se','subset'))[,-4] # drop redundant "variable" column.
+mean.df$subset<-as.factor(mean.df$subset)
+levels(mean.df$subset)<-c('Age',"Language","Gender","Region","Religion")
+mean.df$subset<-factor(mean.df$subset, levels(mean.df$subset)[c(3,1,4,5,2)])
+#ggplot()
+cpdf[1:10,c('sara_kirdi', 'fulani', 'mundang', 'arab', 'kanuri', 'hausa', 'other_ethnic')]
+
+## Education, Literacy, Language, and Religion
+
+
+
 # social contact
 sc.plot<-plot.fun(outcome='sc.index',dat=svy,title='Social Contact Index by Group')
 sc.gen.lm<-svylm.fun(outcome='sc.index',treatment='gender',data=svy)

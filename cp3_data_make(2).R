@@ -343,9 +343,35 @@ cpdf$education<-car::recode(cpdf$form.demographics_question_group.respondent_hig
                             'university_higher_edu'=6;
                             else=NA")
 #prop.table(table(cpdf$education,cpdf$region),margin=2) # ex.north looks  lil poorer
- # employment
- # languages
- # ethnic group?
+
+# ethnic group
+sort(table(cpdf$form.demographics_question_group.ethnic_background))
+sara.ethnic<-c("sara", "guidar", "masa", "massa", "kirdi",
+               "gula", "kara", "kreish", "nduka", "ngama",
+               "kapsiki", "mada", "mafa", "matakam", "mofou", "m,oufou",
+               "mora", "mousgoum", "muyang", "mouyang", "ouldeme", "guiziga",
+               "podoko", "toupouri", "tupuri", "vame", "zulgo")
+cpdf$sara_kirdi<- ifelse(grepl(paste(sara.ethnic, collapse="|"), cpdf$form.demographics_question_group.ethnic_background, ignore.case=T),1,0)
+other.ethnic<-levels(cpdf$form.demographics_question_group.ethnic_background)[grepl(paste(sara.ethnic, collapse="|"), 
+                                                                                    levels(cpdf$form.demographics_question_group.ethnic_background),
+                                                                                    ignore.case=T) %in% 0]
+# failing to get a sorted table of ethnicities that are in other.ethnic
+#sort(table(tolower(cpdf$form.demographics_question_group.ethnic_background)))[names(table(tolower(cpdf$form.demographics_question_group.ethnic_background))) %in% tolower(other.ethnic)]
+sort(table(tolower(cpdf$form.demographics_question_group.ethnic_background)))
+
+cpdf$fulani<- ifelse(grepl("fulani", cpdf$form.demographics_question_group.ethnic_background, ignore.case=T), 1, 0)
+cpdf$mundang<- ifelse(grepl("mundang", cpdf$form.demographics_question_group.ethnic_background, ignore.case=T), 1, 0)
+cpdf$arab<- ifelse(grepl("arab", cpdf$form.demographics_question_group.ethnic_background, ignore.case=T), 1, 0)
+cpdf$kanuri<- ifelse(grepl("kanur", cpdf$form.demographics_question_group.ethnic_background, ignore.case=T), 1, 0)
+cpdf$hausa<- ifelse(grepl("haus", cpdf$form.demographics_question_group.ethnic_background, ignore.case=T), 1, 0)
+cpdf$other_ethnic<- ifelse(rowSums(cpdf[c('sara_kirdi', 'fulani', 'mundang', 'arab', 'kanuri', 'hausa')])>0, 0,1)
+
+#cpdf[1:10,c('sara_kirdi', 'fulani', 'mundang', 'arab', 'kanuri', 'hausa', 'other_ethnic')]
+
+
+# employment
+# languages
+
 
 ############
 # Aggregate Things?

@@ -74,9 +74,13 @@ In the next section, we summarize the findings of the survey, disaggregating ans
 
 # Demographics
 
+In this section, we summarize demographic characteristics of the sample.  First, we summarize the proportion of the sample who are male and female, the distribution of ages, and the main ethnicities in the sample.  Then we summarize the average amount of education in the sample, the languages people speak and read in the sample, and the main religions in the sample.
+
+## Gender, Age, and Ethnicity
 
 
-Ethnic, religion, languages, primary language, literacy, education, gender, age, 
+
+## Education, Literacy, Language, and Religion
 
 
 # Attitudes
