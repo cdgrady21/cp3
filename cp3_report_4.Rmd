@@ -10,10 +10,10 @@ author:
 - Equal Access International
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
-  html_document:
-    toc: yes
   pdf_document:
     number_sections: yes
+    toc: yes
+  html_document:
     toc: yes
 ---
 
@@ -71,6 +71,13 @@ This problem also does not detract from the usefulness of surveys as a tool to m
 ## Summarizing the Survey
 
 In the next section, we summarize the findings of the survey, disaggregating answers by gender, age, region, religion, and the language spoken for the survey.  We display a graph for each question group, disaggregating by (1) gender, (2) age, (3) region, (4) religion^[Though we display estimates for Christians, Muslims, and people from other religions, only 11 people responded with a religion other than Christianity or Islam.  As such, these estimates are extremely imprecise.], and (5) interview language^[An important point about interview language: people answering the survey in a language other than French/Fulfulde are only in the extreme north.].  The bars show the mean response of respondents in each group, and the error bars show the 95% confidence interval within which the mean _could_ be.
+
+# Demographics
+
+
+
+Ethnic, religion, languages, primary language, literacy, education, gender, age, 
+
 
 # Attitudes
 
@@ -447,89 +454,138 @@ We asked about respondent's confidence in institutions.  We asked about:
 - Traditional leaders
 - Local government 
 
-The alpha for these questions is 0.77, indicating a cohesive index.  The index is scaled so that higher scores mean more confidence in institutions.  
+The confidence that respondents have in these institutions measures the confidence people have generally in civil society and governance institutions.  The alpha for these questions is 0.77, indicating a cohesive index measuring one underlying concept.  The index is scaled so that higher scores mean more confidence in institutions.  
 
-Adults have more confidence in institutions than youth.  Muslims have more confidence than other religions.  People who answered the survey in Fulfulde have more confidence than people who answered the survey in other languages.  Confidence for these institutions is fairly high and the average score is above 0.75 for all institutions except the justice system.  The average score for the justice system is only about 0.67.
+Respondents have strong trust in institutions overall, with a mean score of `r round(mean(cpdf$conf.index,na.rm=T),2)` on the 0-1 scale.  Adults have more confidence in institutions than youth, and Muslims have more confidence than Christians.  People who answered the survey in Fulfulde have more confidence than people who answered the survey in other languages.  Confidence for these institutions is fairly high for all institutions except the justice system.  For each of the non-justice system institutions, the average score is above 0.75; the average score for the justice system is only about 0.67.
 
-# Media Access
+# Technology and Media Access
+
+The next section summarizes the survey results relating to technology and media access.  These questions ask about access to utilities like electricity, mobile phone use, and radio and televisin viewing.
 
 ## Utilities
 
 ```{r electricity}
 electricity.plot
+
+#mean(cpdf$form.Technologie.regular_access_to_electricity, na.rm=T)
+#prop.table(table(cpdf$region, cpdf$religion),2)
+#elec.lm<-svylm.fun(outcome='form.Technologie.regular_access_to_electricity',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
+
+About `r round(mean(cpdf$form.Technologie.regular_access_to_electricity,na.rm=T),2)*100`\% of respondents reported regular access to electricity, with people in the northern region (`r round(mean(cpdf$form.Technologie.regular_access_to_electricity~cpdf$region,na.rm=T),2)[2]*100`\%) reporting much more access to electricity than people in the extreme north (`r round(mean(cpdf$form.Technologie.regular_access_to_electricity~cpdf$region,na.rm=T),2)[1]*100`\%).  Muslims also report more access to electricity than Christians, but this is only because Muslims are more likely to live in the North, and people in the North are more likely to have electricity.  Muslims in the North and Christians in the North are equally likely to have access to electricity, as are Muslims and Christians in the Extreme North.  However, people who answered the survey in languages other than French/Fulfulde are _much_ less likely to have electrical access, even controlling for region.
 
 ## Phones/Tech Access
 
 ### Mobile phones
 
-Adults more than youth.  North more than Ex north.  Muslim more than Chrstian.  Fulfulde more than French, both _way_ more than other language.
-
 ```{r mobile}
 mobile.plot
+
+#mean(cpdf$mobile)
+#mobile.lm<-svylm.fun(outcome='mobile',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
+About `r round(mean(cpdf$mobile,na.rm=T),2)*100`\% report access to a simple mobile phone.  Adults are more likely to have access than youth, and people in the North more likely than people in the Extreme North.  Muslim are more likely to have simple mobile phone access than Chrstians, and people who answered the survey in Fulfulde more likely to have access than those who answered in French, but people who answered in French or Fulfulde are _much_ more likely to have access than people who answered in any other language.
+
 
 ### Smartphones
 
-French way more, men way more, North way more.  Christian more. Youth more.
-
 ```{r smartph}
 smartphone.plot
+#smart.lm<-svylm.fun(outcome='smartphone',treatment='gender*adult+region+religion+form.End.survey_language',data=svy) # chris: note interaction.  adult males/females own at same rate.
 ```
 
-### Computers
+About `r round(mean(cpdf$smartphone,na.rm=T),2)*100`\% report access to a smartphone.  Here we finally see age and gender differences, with males and young people much more likely to access smartphones than females or older people.  This difference by gender is slightly complex, and is only seen among young people -- adult males and females access smartphones at about the same rate.
 
-Only 53 people have access to a computer.  Males more likely than women to have access.  French speaking more likely than other languages.
+People in the North, who also reported more access to electricity, are much more likely to access smartphones than people in the Extreme North.  People who answered the survey in French are much more likely to access smartphones than people who answered in Fulfulde or another language.  And Christians are more likely to access smartphones than Muslims, but only because Christians are more likely to be young -- Christians and Muslims of the same age access smartphones at the same rate.
+
+### Computers and Tablets
 
 ```{r comp}
 computer.plot
 #tally(cpdf$computer) # 53 
-```
+#comp.lm<-svylm.fun(outcome='computer',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 
-### Tablets
-
-Only 14 people have tablets, so these numbers mean little.  Men more than women.  French more than other languages.
-
-```{r tab}
-tablet.plot
+#tablet.plot
 #tally(cpdf$tablet)
+#tablet.lm<-svylm.fun(outcome='tablet',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
+
+Only 53 people surveyed have access to a computer (about 5% of respondents), so it's very difficult to analyze subsets.  Based on the available data, people in the north are more likely than people in the extreme north to have computer access, and people who answered the survey in French are more likely to have access than people who answered in Fulfulde or another language.  It also appears that males are more likely than females to have computer access, and that Muslims are more likely to access computers than Christians, but these smaller differences are not statistically significant.
+
+Only 14 people in the survey have tablets, so we cannot say anything statistically about tablet ownership.  Of those 14 people, more are men (10) than women (4), and more are in the North (10) than Extreme North (4).  And more answered the survey in French (12) than answered in Fulfulde (2) or another language (0).
 
 ## Mobile Service Providers
 
-```{r msp}
-mtn.plot
-camtel.plot
-orange.plot
-nextel.plot
-otherMSP.plot
+We asked respondents who at least accessed a mobile phone which mobile service providers (MSP) they used.  The most popular MSPs are Orange, which 52% of the sample reported using, and MTN, which is used by about 46% of the sample.  The only other MSP used by a large proportion of the sample is Nextel, used by about 28% of respondents.  Only 2-3% of the sample used any other MSP.
+
+```{r msp, eval=F, include=F}
+#mtn.plot
+#camtel.plot
+#orange.plot
+#nextel.plot
+#otherMSP.plot
+
+summary(cpdf$mtn)
+summary(cpdf$camtel)
+summary(cpdf$orange)
+summary(cpdf$nextel)
+summary(cpdf$otherMSP)
 ```
 
 ## OS
 
+We asked respondents who access smartphones which operating system (OS) they used ^[We also asked tablet users about their OS, but the sample lacks enough tablet users to report any statistics about tablet operating systems.].  The most popular OS by far is Android, used by about 16% of the sample and about 80% of smartphones users.  Next is Blackberry, Windows, and Apple's iOS, but those are all used by about 1% or less of the population, and no more than 6% of the 203 smartphone users in the sample.
+
 ```{r OS}
-android.plot
-blackberry.plot
-ios.plot
-windows.plot
+#android.plot
+#blackberry.plot
+#ios.plot
+#windows.plot
+
+#summary(cpdf$android)
+#summary(cpdf$blackberry)
+#summary(cpdf$ios)
+#summary(cpdf$windows)
 ```
 
 ## Internet Use
 
-Zero people used the internet on tablets.
-
 ```{r internet}
 int.plot
-int_friend_rel.plot
-int_cafe.plot
-int_mobile.plot
+
+#int.lm<-svylm.fun(outcome='form.Technologie.access_to_internet',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+
+#int.vars<-names(cpdf)[grep("int_", names(cpdf),ignore.case=F)][-c(1,2)]
+#summary(cpdf[cpdf$form.Technologie.access_to_internet %in% 1,int.vars])
+#summary(cpdf[,int.vars])
+
+#int_home.plot
+#int_work.plot
+#int_friend_rel.plot
+#int_cafe.plot
+#int_mobile.plot
 #int_tablet.plot # no one uses this
-int_other.plot
+#int_other.plot
 ```
 
-## Media/Radio Listening
 
-Only 9 people listened to Dabalaye.  Only 3 people listened to Chabab.  0 people listened to Dandal_Kura.
+About `r round(mean(cpdf$form.Technologie.access_to_internet,na.rm=T),2)*100`\% of the sample report access to the internet.  Males, young people, northerners, and people who answered the surveys in French all access the internet much more than their comparison groups.  The difference between Muslims and Christians is fairly large, and in the sample 33% of Christians compared to 20% of Muslims access the internet, but this is completely due to more Christians being younger, and young people accessing the internet more often.  Muslims and Christians of the same age access the internet at the same rate.
+
+If respondents used the internet, we also asked respondents on what device he/she accessed the internet, and in what location he/she used the internet.  Accessing the internet on a mobile phone is by far the most popular method, and 16% of the sample/74% of internet users access the internet on their mobile device.  The most popular locations for computer access are at home (6%, 27%) or at an internet cafe (4.8%, 21%).  About 3% of the sample and 12%-13% of internet users access the internet either at work or on a friend or family member's computer/phone.  Zero people used the internet on tablets.
+
+## Social Media
+
+social_media_platforms, how_use_social_, radio_social_media_likely, 
+
+## Media Frequency
+
+Frequency of respondents listen to radio, watch television, use internet, download app, use social media, send/receive sms, bluetooth, phone call.
+
+# Equal Access Programs
+
+## Radio
+
+We asked respondents about their listening to: (1) Douniarou Derkeen, (2) Dabalate, (3) Chabab-al-Haye, and (4) Dandal Kura.  Only nine people listened to Dabalaye; only three people listened to Chabab, and zero people listened to Dandal_Kura.  As a result, here we show only the viewership of Douniarou Derkeen, which 296 respondents listened to (about 30% of the entire sample, and `r round(296/(296+440),2)*100`\% of radio listeners).
 
 ```{r radio programs}
 don_derkeen.plot
@@ -537,7 +593,7 @@ dd_freq.plot
 dd_op.plot
 ```
 
-## Arewa24 Plots
+## Arewa24
 
 ```{r arewa}
 alawar.plot

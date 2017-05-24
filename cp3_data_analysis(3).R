@@ -213,6 +213,9 @@ plot.fun<-function(outcome,dat,title)
 ######################
 # ggplot saved because takes a long time to run.
 ######################
+
+# demographics
+
 # social contact
 sc.plot<-plot.fun(outcome='sc.index',dat=svy,title='Social Contact Index by Group')
 sc.gen.lm<-svylm.fun(outcome='sc.index',treatment='gender',data=svy)
@@ -349,13 +352,20 @@ windows.plot<-plot.fun(outcome='windows',dat=svy,title='Windows OS by Group')
 
 # Internet Use
 int.plot<-plot.fun(outcome='form.Technologie.access_to_internet',dat=svy,title="Internet Access")
+
+int_home.plot<-plot.fun(outcome='int_home',dat=svy,title='Internet on Computer at Home')
+int_work.plot<-plot.fun(outcome='int_work',dat=svy,title='Internet on Computer at Work')
 int_friend_rel.plot<-plot.fun(outcome='int_friend_rel',dat=svy,title="Internet at Friend/Relative's House")
 int_cafe.plot<-plot.fun(outcome='int_cafe',dat=svy,title='Internet at Internet Cafe')
 int_mobile.plot<-plot.fun(outcome='int_mobile',dat=svy,title='Internet on Mobile Phone')
 #int_tablet.plot<-plot.fun(outcome='int_tablet',dat=svy,title='Internet on Tablet') # 0 said this
 int_other.plot<-plot.fun(outcome='int_other',dat=svy,title='Internet Some Other Way')
 
-# Media/Radio Listening
+# Social media # chris: do
+
+# Media Use # chris: do
+
+# Radio Program Listening
 don_derkeen.plot<-plot.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',
                          dat=svy,title='Listen to Douniarou Derkeen')
 dd_freq.plot<-plot.fun(outcome='form.radio_listener_group.frequecy_Douniarou',

@@ -291,6 +291,8 @@ cpdf$windows<-ifelse(grepl("windows", cpdf$form.Technologie.personal_smartphone_
 tally(cpdf$form.Technologie.access_to_internet)
 #table(cp3$form.Technologie.internet_access_locations)
 #levels(cpdf$form.Technologie.internet_access_locations)
+cpdf$int_home<- ifelse(grepl("home", cpdf$form.Technologie.internet_access_locations),1,0)
+cpdf$int_work<- ifelse(grepl("work", cpdf$form.Technologie.internet_access_locations),1,0)
 cpdf$int_friend_rel<-ifelse(grepl("friend_or_relative", cpdf$form.Technologie.internet_access_locations),1,0)
 cpdf$int_cafe<-ifelse(grepl("internet_cafe", cpdf$form.Technologie.internet_access_locations),1,0)
 cpdf$int_mobile<-ifelse(grepl("mobie", cpdf$form.Technologie.internet_access_locations),1,0)
