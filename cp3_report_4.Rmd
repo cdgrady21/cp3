@@ -10,10 +10,10 @@ author:
 - Equal Access International
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
+  html_document:
+    toc: yes
   pdf_document:
     number_sections: yes
-    toc: yes
-  html_document:
     toc: yes
 ---
 
@@ -589,28 +589,45 @@ Frequency of respondents listen to radio, watch television, use internet, downlo
 
 ## Radio
 
-We asked respondents about their listening to: (1) Douniarou Derkeen, (2) Dabalate, (3) Chabab-al-Haye, and (4) Dandal Kura.  Only nine people listened to Dabalaye; only three people listened to Chabab, and zero people listened to Dandal_Kura.  As a result, here we show only the viewership of Douniarou Derkeen, which 296 respondents listened to (about 30% of the entire sample, and `r round(296/(296+440),2)*100`\% of radio listeners).
+We asked respondents about their listening to: (1) Douniarou Derkeen, (2) Dabalaye, (3) Chabab-al-Haye, and (4) Dandal Kura.  Dabalaye, Chabab-al-Haye, and Dandal Kura are all aired in minority languages spoken by very few people in this sample^[Dabalaye and Chabab-al-Haye are aired in Arabic, spoken by 121 people in the areas airing the program.  Dandal Kura is aired in Kanuri, spoken by only 17 people in this sample.], so we have very few listeners of those progams.  Only nine people listened to Dabalaye; only three people listened to Chabab, and zero respondents listened to Dandal_Kura.  As a result, here we show only the viewership of Douniarou Derkeen, which is aired in Fulfulde, the language primarily spoken by a plurality of survey respondents (352 people, or about 35% of the sample).  296 respondents listened to Douniarou Derkeen -- about 30% of the entire sample, and `r round(296/(296+440),2)*100`\% of radio listeners.
 
 ```{r radio programs}
 don_derkeen.plot
 dd_freq.plot
 dd_op.plot
+
+#derkeen.lm<-svylm.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+#mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$form.demographics_question_group.primary_language_spoken,na.rm=T)
+#tally(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth) # young vs. old
+#mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T) # young vs old radio listeners
 ```
+
+Douniarou Derkeen is especially popular in the Northern region, where `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[2]*100`\% of radio listeners listen, compared to `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[1]*100`\% in the Extreme North.  Young people also listen with less frequency than older people, with `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[2]*100`\% of radio listeners under 30 listening and about `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[1]*100`\% of radio listeners 30 and over listening^[This is as a percentage of radio listeners.  We see the same trend looking at the whole population, where 24% of young people listen compared to 35% of older people.].  People who answered the survey in Fulfulde are also more likely to listen than people who answered in any other language, as expected.  If we look at listenership by primary language spoken, Douniarou Derkeen has popularity even among people who primarily speak other languages.  43% of people who primarily speak Fulfulde listen, but a full 39% of people who primarily speak French also listen, and even 11% of Arabic-primary speakers and 2 of the 9 Kanuri-primary speakers listen -- more than who listen to Dandal Kura.
+
+The people who listen to Douniarou Derkeen listen very frequently.
 
 ## Arewa24
 
 ```{r arewa}
-alawar.plot
-waiwaye.plot
-dadin.plot
-hhh.plot
-kundin.plot
-tauraruwa.plot
-gari.plot
-matasa.plot
-other.plot
+#arewa24.plot
+#alawar.plot
+#waiwaye.plot
+#dadin.plot
+#hhh.plot
+#kundin.plot
+#tauraruwa.plot
+#gari.plot
+#matasa.plot
+#other.plot
+
+#tally(cpdf$form.watched_arewa24)
+#mean(cpdf$form.watched_arewa24,na.rm=T)
+#mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T)
 ```
 
+Arewa24 is fairly popular in our sample, watched by 120 out of about 1,000 survey respondents, 12% of the sample and about `r round(mean(cpdf$form.watched_arewa24,na.rm=T),2)*100`\% of television viewers.  About round(mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T),2)[2]*100\% of Hausa speakers watch, but  round(mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T),2)[1]*100\% of people who did not report speaking Hausa also watch, which could indicate one of 3 things.  First, and most likely, many people who speak Hausa did not report Hausa in the open-ended question asking which languages they spoke.  Second, it could indicate communal viewing such that many non-Hausa speakers are exposed to the show while in a group with Hausa speakers.  And third, it could indicate an acuiescence bias wherein about 19% of the sample says yes to questions when the answer is actually no^[Acquiescence Bias, also called Agreement Bias, is a commonly observed bias in human communication and affects most forms of data collection, including surveys, interviews, and focus groups.].
+
+The survey also asks about viewership of specific Arewa24 programs.
 
 # Conclusion
  
@@ -619,7 +636,9 @@ Sum up findings here.
 
 # Caveats
 
-Mass Agreement Bias.  Almost everyone just agrees or says yes to every question.  This is a call for reverse coding and maybe also for more professional enumerators.  The data quality appears quite low.  OR the radio programs of PDEV really worked and these people are all super tolerant and stuff.  Well, they might be tolerant.  Or they might just know how to respond to surveys like this.
+This survey possesses some indicators of Agreement Bias.  Many of the questions do not generate variation and almost all respondents agrees or say yes, and so we cannot differentiate between "agreement" as an attitude vs. "agreement" as a habitual survey response.  This is a call for reverse coding, survey experiments, and maybe for more professional enumerators, since mass Agreement Bias could indicate that the data quality is below average.
+
+It's also possible that the past radio programs of PDEV worked extremely well and we actually observe a "ceiling effect", wherein people already exhibit very positive attitudes, making it difficult to make these attitudes better^[Another possibility is that the respondents _express_ but do not _hold_ positive attitudes.  Instead of being more tolerant due to PDEV programs, they may instead have learned how to respond to surveys like this.].  In that case, the goal of the Cameroon Peace Promotion Project should be the maintenance of positive attitudes, rather than persuasion of people with negative attitudes. 
 
 # Appendices
 

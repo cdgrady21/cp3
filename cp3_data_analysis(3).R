@@ -187,6 +187,12 @@ plot.fun<-function(outcome,dat,title)
                   size=.3,    # Thinner lines
                   width=.2,
                   position=position_dodge(.9)) +
+    #geom_text(aes(label=round(mean.df[[outcome]],2), 
+    #              group= value,
+    #              y= subset,
+    #              vjust=-0.15,
+    #              position = position_dodge(width=0.9)))+
+    #theme_minimal() + 
     xlab("Respondent Subsets") +
     ylab("Outcome Score") +
     scale_fill_hue(name="Group", # Legend label, use darker colors
@@ -222,13 +228,27 @@ summary(cpdf$age)
 sort(table(cpdf$form.demographics_question_group.ethnic_background))
 
 # Format the data for ggplot
-demo.df<-
-mean.df<-reshape2::melt(demo.df,id.vars=c(outcome,'se','subset'))[,-4] # drop redundant "variable" column.
-mean.df$subset<-as.factor(mean.df$subset)
-levels(mean.df$subset)<-c('Age',"Language","Gender","Region","Religion")
-mean.df$subset<-factor(mean.df$subset, levels(mean.df$subset)[c(3,1,4,5,2)])
+demo.df<-cpdf[,c('sara_kirdi', 'fulani', 'mundang', 'arab', 'kanuri', 'hausa', 'other_ethnic')]
+demo.df[nrow(demo.df)+1,]<-colSums(demo.df)/nrow(demo.df)
+demo.df<-demo.df[nrow(demo.df),]
+colnames(demo.df)<-c("Sara/Kirdi","Fulani","Mundang","Arab","Kanuri","Hausa","Other")
+dem.df<-melt(demo.df)
+
 #ggplot()
-cpdf[1:10,c('sara_kirdi', 'fulani', 'mundang', 'arab', 'kanuri', 'hausa', 'other_ethnic')]
+ethnic.plot<-ggplot(dem.df, aes(x=variable, y=value)) + 
+  geom_bar(position=position_dodge(0.9), stat="identity",
+           colour="black", # Use black outlines,
+           fill=c('red',"blue","green","orange","yellow", "black","purple"),
+           size=.5) +      # Thinner black lines
+  xlab("Ethnic Groups") +
+  ylab("Proportion of Sample") +
+  ggtitle("Ethnic Groups in Northern Cameroon") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank()) +
+  theme(plot.title = element_text(size=18)) +
+  geom_text(aes(label=round(value,2), vjust=-0.15))+
+  theme_minimal()
+
 
 ## Education, Literacy, Language, and Religion
 
@@ -392,6 +412,7 @@ dd_op.plot<-plot.fun(outcome='form.radio_listener_group.Douniarou_opinion',
                        dat=svy,title='Douniarou Derkeen Opinion')
 
 # Arewa24 Plots
+arewa24.plot<-plot.fun(outcome='form.watched_arewa24', dat=svy, title= "Watch Arewa24")
 alawar.plot<-plot.fun(outcome='alawar',dat=svy,title="Watch Alawar Yara")
 waiwaye.plot<-plot.fun(outcome='waiwaye',dat=svy,title="Watch Waiwaye")
 dadin.plot<-plot.fun(outcome='dadin_kowa',dat=svy,title="Watch Dadin Kowa")

@@ -302,7 +302,7 @@ cpdf$int_other<-ifelse(grepl("Other", cpdf$form.Technologie.internet_access_loca
 #cpdf$form.Technologie.other_internet_access_point_specified # no responses
 
 # media listening
-table(cpdf$form.radio_listener_group.Dabalaye) # only 9 people listened to Dabalaye
+tally(cpdf$form.radio_listener_group.Dabalaye) # only 9 people listened to Dabalaye
 tally(cpdf$form.radio_listener_group.frequecy_dabalaye)
 ##table(cpdf$form.radio_listener_group.dabalaye_opinion) # only 9 people listened to Dabalaye
 
@@ -371,7 +371,10 @@ cpdf$other_ethnic<- ifelse(rowSums(cpdf[c('sara_kirdi', 'fulani', 'mundang', 'ar
 
 # employment
 # languages
-
+cpdf$lang_arabic<-ifelse(grepl("arab", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
+cpdf$lang_fulfulde<-ifelse(grepl("ful", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
+cpdf$lang_kanuri<-ifelse(grepl("kanu", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
+cpdf$lang_hausa<-ifelse(grepl("hau", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
 
 ############
 # Aggregate Things?
