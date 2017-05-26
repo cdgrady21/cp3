@@ -10,10 +10,10 @@ author:
 - Equal Access International
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
-  html_document:
-    toc: yes
   pdf_document:
     number_sections: yes
+    toc: yes
+  html_document:
     toc: yes
 ---
 
@@ -30,9 +30,26 @@ library(ggplot2)
 library(reshape2)
 ```
 
-# Overview
+# Executive Summary
 
-Some executive summary.
+```{r things}
+#mean(cpdf$education~cpdf$region, na.rm=T)
+#mean(cpdf$conf.index~cpdf$region,na.rm=T)
+```
+
+This report summarizes the findings of a 998 person survey in the North and Extreme North regions of Cameroon.  The survey used random sampling techniques so that this sample of about 1,000 respondents will represent the entire target population of about 5.5 million people living in these two regions.  Here we summarize key findings about that population's demographic characteristics, psychological attitudes, and media use.
+
+Demographically, there over 50 ethnic groups represented in the survey.  The largest single ethnic group in the regions is the Fulani, encompassing about 18% of people in the survey's enumeration areas.  But about 20 ethnic groups can be classified as Sara/Kirdi, and together those groups make up about 45% of the survey.  Fulfulde, the Fulani language, seems to be the lingua franca.  It is spoken by 80% of respondents and by over 1/3 of respondents as their primary language.  The 20% of the population who do not speak Fulfulde speak Arabic as their primary language, and primarily reside in the Extreme North.  French is widely spoken by educated people of all regions and ethnic groups.
+
+Christians and Muslims live side by side in all communities in the survey, and interact amicably.  Tolerance towards outgroups, both ethnic and religious, is extremely high by every survey measurement, and acceptance of violence is generally very low, though there is acceptance of vigilante violence against criminals.  This acceptance of violence against criminals is perhaps because respondents perceive violence to be a major problem in their communities.
+
+Political efficacy sticks out as the primary problem for people in these areas.  Nearly everyone believe corruption is a problem, and and trust in institutions, while fairly high overall, is lowest for government institutions like the justice system.  In the Extreme North this could be driven by lower socio-economic status, as the Extreme North is generally less affluent and has less access to utilities like electricity and mobile/smartphones.   In the North, this could be fed by a lack of perceived citizen engagement, political transparency, and knowledge of legal recourse.  The North is also slightly more violence-accepting than the Extreme North.  
+
+In terms of media, radio is the dominant media form in these areas, and most respondents listen to the radio everyday.  Other forms of media are less common, but television and the internet are very popular among young people.  Social media is also popular among some young people, mainly among educated young men.  Facebook is by far the most popular social media, but WhatsApp is very popular.  
+
+Equal Access radio program Douniarou Derkeen is very popular, as is the Arewa24 television channel.  Douniarou Derkeen is aired in Fulfulde and Arewa24 in Hausa.  Douniarou Derkeen is listened to by about 30% of the entire sample and 40% of radio listeners; Arewa24 is watched by about 12% of the entire sample and 21% of television viewers.  For the entire survey region of 5.5 million people, we estimate that 1,632,881 people listen to Douniarou Derkeen and that 1,179,741 watch Arewa24.  For the Northern region of about 1.7 million people, we estimate that 702,277 listen to Douniarou Derkeen 564,453 watch Arewa24.  For the Extreme Northern region of about 3.8 million people, we estimate that about 935,736 people listen to Douniarou Derkeen and 585,889 people watch Arewa24.
+
+The other three Equal Access radio programs -- Dabalaye, Chabab-al-Haye, and Dandal Kura -- registered very low listenership in these areas.  For Dandal Kura we have no listeners, and this seems to be because the show is in Kanuri, a language spoken by very few people in these regions.  For Dabalaye and Chabab-al-Haye, the two Arabic-language programs, the low listenership is both because Arabic is a minority language and because those programs are only aired in a few towns in this survey.
 
 # Methodology
 
@@ -40,15 +57,15 @@ Some executive summary.
 
 We often combine individual questions into one index that summarizes the results of those individual questions.  This is done for questions that are intended to measure the same concept -- for instance, acceptance of violence as a means to achieve goals.  Individual questions can be combined into an index when they have _internal cosistency_; that is, when a high score on one question correlates to a high score on every other question in the index.  High internal consistency indicates that the questions are all measuring one cohesive concept.  The internal consistency of the index is measure by an alpha value, with higher values meaning more internal consistency.  When an index has a high alpha value (0.7 and above), we will generally report only the index score to avoid redundancy.
 
-The survey questions mainly use modified Likert scales.  On our modified Likert scales, respondents are presented with a statement and asked the extent of their agreement or disagreement with that question.  The options we use are (1) strongly agree, (2) somewhat agree, (3) somewhat disagree, and (4) strongly disagree.  We do not enumerate a "don't know" option to respondents, since research shows that certain demographic groups are systematically more likely to use don't know responses, even when they are fairly certain of the answer (Krosnick 2002).  Primarily, introverted people and people from disadvantaged groups (i.e. people with low education, women, etc...).  Offering a "don't know" response systematically decreases the representation of these people in the survey and increases the representation of people who are not afraid to guess even when they do not know the answer.  These extroverted people tend to be older men, and so enumerating a "don't know" response results in a survey that overrepresents older men.  We instruct enumerators not to enumerate a "don't know" response and only utilize "don't know" if the respondent asserts that they cannot or do not wish to answer.
+The survey questions mainly use modified Likert scales.  On our modified Likert scales, respondents are presented with a statement and asked the extent of their agreement or disagreement with that question.  The options we use are (1) strongly agree, (2) somewhat agree, (3) somewhat disagree, and (4) strongly disagree.  We do not enumerate a "don't know" option to respondents, since research shows that certain demographic groups are systematically more likely to use don't know responses, even when they are fairly certain of the answer (Krosnick et al 2002).  Primarily, introverted people and people from disadvantaged groups (i.e. people with low education, women, etc...).  Offering a "don't know" response systematically decreases the representation of these people in the survey and increases the representation of people who are not afraid to guess even when they do not know the answer.  These extroverted people tend to be older men, and so enumerating a "don't know" response results in a survey that over-represents older men.  We instruct enumerators not to enumerate a "don't know" response and only utilize "don't know" if the respondent asserts that they cannot or do not wish to answer.
 
 We also report survey-corrected statistics.  In a survey, each respondent is not an independent data observation.  Respondents are embedded in a social context (their neighborhood) with other respondents.  Respondents in the same neighborhood tend to have similar attitudes, and so 100 respondents in one neighborhood tells us far less about an area than 100 respondents evenly spread throughout ten neighborhoods.  The 100 respondents from one neighborhood will more accurately reflect the attitudes of that particular neighborhood, but not the wider area we wish to describe.  
 
-In this study, we surveyed 70 neighborhoods within 12 towns, or departments, in the north and extreme north regions of Cameroon.  The number of neighborhoods surveyed per town was proportional to population, so that larger towns like Garoua (11 neighborhoods) have more representation than smaller towns like Maga (2 neighborhoods).  Each neighborhood was meant to have 15 survey respondents, but due to enumerator errors the PSU sizes range from `r min(tally(cpdf$psu))` to `r max(tally(cpdf$psu))`.  We account for that by weighting responses such that respondents in PSUs with greater than 15 respondents are downweighted proportionally and respondents in PSUs with fewer than 15 respondents are upweighted proportionally.  That method ensures that each PSU has equal weight when calculating the town characteristics.
+In this study, we surveyed 70 neighborhoods within 12 towns, or departments, in the north and extreme north regions of Cameroon.  The number of neighborhoods surveyed per town was proportional to population, so that larger towns like Garoua (11 neighborhoods) have more representation than smaller towns like Maga (2 neighborhoods).  Each neighborhood was meant to have 15 survey respondents, but due to enumerator errors the PSU sizes range from `r min(tally(cpdf$psu))` to `r max(tally(cpdf$psu))`.  We account for that by weighting responses such that respondents in PSUs with greater than 15 respondents are down-weighted proportionally and respondents in PSUs with fewer than 15 respondents are up-weighted proportionally.  That method ensures that each PSU has equal weight when calculating the town characteristics.
 
 We also report the error of our survey statistics (i.e. means and medians) based on bootstrap replicates.  When we conduct a survey, we randomly select respondents from each neighborhood to answer survey questions.  We know the survey responses could look a little different if random selection had generated different survey respondents.  That difference is the error.  We simulate how the survey responses _might have_ looked if we conducted the survey again in the same neighborhood with a bootstrap procedure.  The bootstrap procedure is to create new hypothetical surveys by randomly selecting with replacement the respondents from our actual survey.  By conducting this bootstrapping procedure 1,000 times, we see what could have happened if we conducted 1,000 other surveys in the same locations.  That creates a distribution of possible survey statistics -- for example, a distribution of means.  We use that distribution to specify the standard error of the mean.
 
-For example, imagine that the average score on the violence index in our survevy is 0.7.  We could imagine finding a mean of 0.65 or 0.75 if we talked to different people in that neighborhood.  However, we could _not_ imagine finding a mean of 0.2.  No combination of people in the neighborhoods would yield so low an average.  Bootstrapping quantifies the other means we could find and with what probability we would find them.
+For example, imagine that the average score on the violence index in our survey is 0.7.  We could imagine finding a mean of 0.65 or 0.75 if we talked to different people in that neighborhood.  However, we could _not_ imagine finding a mean of 0.2.  No combination of people in the neighborhoods would yield so low an average.  Bootstrapping quantifies the other means we could find and with what probability we would find them.
 
 ## Survey Sampling Methodology
 
@@ -64,13 +81,13 @@ First, we must put ourselves in the mind of the respondent and think how the res
 
 Problems of question interpretation do not detract from the usefulness of a survey, it just forces the survey researcher to think about the meaning of the question.  If large differences occur between subgroups in the population, it could be that subgroups have very different opinions about the same concept (the typical interpretation).  But it could also mean that one subgroup interprets the question in a very different way than another subgroup.  That is not the typical interpretation, but that is also extremely valuable information.  If respondents interpret the question differently when asked the same question, with the same wording, in the same survey context, we learn a great deal about their worldview and outlook.  It is important for survey researchers to theorize about _why_ a respondent answered the way they did.
 
-Second, we must keep in mind the "random noise" caveat.  Every survey response contains some element of randomness^[This is also true for interviews and focus groups.  Those methods mitigate the problem by extensive probing and respondent interaction.  Surveys tend to mitigate this problem by using an index and asking many questions to measure the same underlying concept.].  Some respondents have not thought about these topics or otherwise do not know what they think, and are being asked to form an opinion on the spot.  Their responses hint at their underlying opinion, but may only reflect their attitude that is currently most salient, not their strongest attitude^[for example, on a cold and rainy day people tend to give more pessimistic answers, whereas on a warm and sunny day people tend to give more optimistic answers (Schwartz cite)].  The goal of a good survey question is to minimize the amount that randomness influences responses and maximize the amount that the concept of interest influences responses, but no questions is perfect.
+Second, we must keep in mind the "random noise" caveat.  Every survey response contains some element of randomness^[This is also true for interviews and focus groups.  Those methods mitigate the problem by extensive probing and respondent interaction.  Surveys tend to mitigate this problem by using an index and asking many questions to measure the same underlying concept.].  Some respondents have not thought about these topics or otherwise do not know what they think, and are being asked to form an opinion on the spot.  Their responses hint at their underlying opinion, but may only reflect their attitude that is currently most salient, not their strongest attitude^[for example, on a cold and rainy day people tend to give more pessimistic answers, whereas on a warm and sunny day people tend to give more optimistic answers (Schwartz and Clore 1983)].  The goal of a good survey question is to minimize the amount that randomness influences responses and maximize the amount that the concept of interest influences responses, but no questions is perfect.
 
-This problem also does not detract from the usefulness of surveys as a tool to measure opinion.  Problems of randomness are overcome by large numbers of survey respondents.  Purely random responses will not show systematic preferences for  differences and will center around the mean response.  Think about a coin flip: if you flip a coin ten times and receive four heads and six tails, the evidence suggests the coin random.  But if you flip a coin 1,000 times and receive 400 heads and 600 tails, evidence suggests that the coin is rigged.  The underlying pattern shows through with large numberes.  Likewise, if we ask 10 people who they will vote for and 6 say candidate A and 4 say candidate B, evidence suggests that candidate A and candidate B have about an equal amount of support.  But if we ask 1,000 people and 400 say candidate A and 600 say candidate B, we should conclude that candidate B has much more support in the population^[This assumes random sampling; supporters of candidate A and candidate B must be equally likely to answer the survey.].  The increasing precision of large numbers is also the logic to using an index: individual questions have some measurement error, but even if the questions are 50% error and 50% concept measurement, that error is overwhelmed by the use of multiple questions to measure a single concept.  The error is by definition random, whereas the concept measurement is directed.
+This problem also does not detract from the usefulness of surveys as a tool to measure opinion.  Problems of randomness are overcome by large numbers of survey respondents.  Purely random responses will not show systematic preferences for  differences and will center around the mean response.  Think about a coin flip: if you flip a coin ten times and receive four heads and six tails, the evidence suggests the coin random.  But if you flip a coin 1,000 times and receive 400 heads and 600 tails, evidence suggests that the coin is rigged.  The underlying pattern shows through with large numbers.  Likewise, if we ask 10 people who they will vote for and 6 say candidate A and 4 say candidate B, evidence suggests that candidate A and candidate B have about an equal amount of support.  But if we ask 1,000 people and 400 say candidate A and 600 say candidate B, we should conclude that candidate B has much more support in the population^[This assumes random sampling; supporters of candidate A and candidate B must be equally likely to answer the survey.].  The increasing precision of large numbers is also the logic to using an index: individual questions have some measurement error, but even if the questions are 50% error and 50% concept measurement, that error is overwhelmed by the use of multiple questions to measure a single concept.  The error is by definition random, whereas the concept measurement is directed.
 
 ## Summarizing the Survey
 
-In the next section, we summarize the findings of the survey, disaggregating answers by gender, age, region, religion, and the language spoken for the survey.  We display a graph for each question group, disaggregating by (1) gender, (2) age, (3) region, (4) religion^[Though we display estimates for Christians, Muslims, and people from other religions, only 11 people responded with a religion other than Christianity or Islam.  As such, these estimates are extremely imprecise.], and (5) interview language^[An important point about interview language: people answering the survey in a language other than French/Fulfulde are only in the extreme north.].  The bars show the mean response of respondents in each group, and the error bars show the 95% confidence interval within which the mean _could_ be.
+In the next section, we summarize the findings of the survey.  First we summarize the demographic characteristics of the survey.  Then we present attitudes of the respondents, disaggregating answers by sub-populations of interest.  Those sub-populations are: (1) gender, (2) age, (3) region, (4) religion^[Though we display estimates for Christians, Muslims, and people from other religions, only 11 people responded with a religion other than Christianity or Islam.  As such, these estimates are extremely imprecise.], and (5) interview language^[An important point about interview language: people answering the survey in a language other than French/Fulfulde are only in the extreme north.].  The bars show the mean response of respondents in each group, and the error bars show the 95% confidence interval within which the mean _could_ be.  Answering the survey in French is also a proxy for education.  Almost all of the respondents with a high school education or higher answered the survey in French.
 
 # Demographics
 
@@ -78,13 +95,77 @@ In this section, we summarize demographic characteristics of the sample.  First,
 
 ## Gender, Age, and Ethnicity
 
+```{r age}
+#gender.plot
+#prop.table(table(cpdf$female))
+#gender.lm<-svylm.fun(outcome='female',treatment='adult+region+religion+form.End.survey_language',data=svy)
+age.plot
+#mean(cpdf$age~cpdf$gender)
+```
 
+Our first histogram shows the age distribution of the survey.  Each bar, called a "bin" of the histogram, contains a 5 year age range.  The first bin contains everyone aged 15-20, the second contains everyone aged 20-25, and so on.  The minimum age in the survey is 16 and the maximum is 90, with an average age of 33 years.  The median age is 30, so about half of our sample is above 30 and have is below 30.  For the sake of this report, we define youth as anyone under the age of 30, and adults as everyone at least 30 years old.  
+
+The survey is gender balanced; 51% of respondents are female and 49% are male.  The proportion female is identical for the North and Extreme North regions and for different religious groups.  Females are equally likely to be youth (below 30) and adult (30 and above), but males are more likely to be adults (53%) than youth (47%), so the average age of the females (31.6) is slightly younger than the average of of the males (34.5).  Males are also a bit more likely than women to answer the survey in French than women, who are more likely than men to use Fulfulde or another language.
+
+```{r ethnic}
+ethnic.plot
+```
+
+There are over 50 distinct ethnic groups in the survey, but here we present the most prominent groups.  A great number of groups^[The groups are: `r paste(sara.ethnic, sep=",")`] are some form of Sara/Kirdi, and we collapse them into one here, making Sara/Kirdi the plurality ethnicity.  After that Fulani are by far the largest single ethnic group as over 18% of our sample, and Mundang the third largest at 10% of the sample.  Arabs, Kanuri, and Hausa follow, with 5%, 3%, and 3% of the survey, respectively.  No other single ethnic group is even 3% of the sample, but the collection of other ethnic groups make up about 21% of respondents^[Note that the sum of these percentages exceeds 100% because some respondents listed two of these ethnicities.].
 
 ## Education, Literacy, Language, and Religion
 
+```{r edu}
+edu.plot
+#edu.lm<-svylm.fun(outcome='education',treatment='adult+region+religion+form.End.survey_language',data=svy)
+#mean(cpdf$education~cpdf$gender,na.rm=T)
+#tally(cpdf$form.demographics_question_group.respondent_highest_education_level~cpdf$gender)
+
+#mean(cpdf$education~cpdf$region,na.rm=T)
+#prop.table(tally(cpdf$form.demographics_question_group.respondent_highest_education_level~cpdf$region),2)
+#prop.table(table(cpdf$region,cpdf$religion),1)
+
+#prop.table(tally(cpdf$form.demographics_question_group.respondent_highest_education_level~cpdf$religion),2)
+
+#prop.table(table(cpdf$form.demographics_question_group.respondent_can_read))
+
+#prop.table(table(cpdf$lang_french))
+#prop.table(table(cpdf$lang_fulfulde))
+#prop.table(table(cpdf$lang_arabic))
+#prop.table(table(cpdf$lang_kanuri))
+#prop.table(table(cpdf$lang_hausa))
+#table(cpdf$form.demographics_question_group.primary_language_spoken)
+
+#prop.table(table(cpdf$religion))
+#prop.table(table(cpdf$religion,cpdf$region),2)
+#rel.lm<-svylm.fun(outcome='muslim',treatment='adult+region+form.End.survey_language',data=svy)
+```
+
+The first five bars of the plot show formal education from low to high, from no formal education to a university education. The next three show proportions attending vocational school, Quranic school, and respondents who did not give an answer.  Most respondents have limited education levels.  The modal amount of education is middle school, with about 1/3 of respondents at that level.  Another 37% have less than a middle school education, with 18% of the sample having no formal education.  12% have a high school education or greater, but that is dwarfed by the 15% who received a Quranic education.
+
+Males have higher average levels of education than females due to a large number of females who have no formal education and fewer women with University degrees.  Northerners tend to be more educated than those in the Extreme North, again mainly due to more University attendees and fewer people with no formal education.  Because the Northern Region is more Islamic and less Christian than the Extreme North, the North also has a higher proportion of respondents in Quranic schools than the Extreme North.  Christians and Muslims have similar levels of education overall, but Christians are more likely to have middle school educations whereas Muslims are more likely to have Quranic school educations.  There is also more overall variability in Christian education, and Christians are more likely to have no formal education _and_ more likely to have a University degree.
+
+Looking at literacy we see a similar story (literacy plot in appendix).  Approximately 3/4 of survey respondents said they were literate.  Males and Northerners are more likely to be literate than women or people in the Extreme North.  People who answered the survey in French are more likely to be literate than those who answered in Fulfulde, who are more likely to be literate than those who answered in any other language.  Muslims and Christians have about identical rates of literacy.
+
+```{r languages spoken}
+lang.plot
+
+#table(cpdf$primary_lang, cpdf$lang_arabic)
+#table(cpdf$primary_lang, cpdf$lang_fulfulde)
+#table(cpdf$primary_lang, cpdf$lang_french)
+
+#table(cpdf$lang_arabic, cpdf$region)
+#table(cpdf$lang_fulfulde, cpdf$region)
+#table(cpdf$lang_fulfulde, cpdf$lang_arabic, cpdf$region) # Arabic in the extreme north used by non-fulfulde.
+```
+
+Fulfulde was by far the most common language in the survey, spoken by about 80% of the sample, and the primary language of over 1/3 of respondents.  French was next most common, spoken by about 60% of the sample.  The only other languages commonly spoken is Arabic, with about 15% of the sample.  However, Arabic is especially important as the primary language of the 20% of the population who do not speak Fulfulde.  It is common in the Extreme North region.  Other languages, such as Hausa and Mundang, are spoken by between 5-10% of the sample.  Kanuri, the language of one of the radio programs, is only spoken by 2% of the sample.  Readers should note that French -- especially answering the survey in French -- is a good proxy for education.  Almost all of the respondents with a high school education or higher answered the survey in French.
+
+The sample is pretty evenly split between Muslims (55%) and Christians (44%), with 1% of respondents practicing some other religion.  As mentioned earlier, the Extreme North has equal proportions of Muslims and Christians, while the North contains a higher percentage of Muslims (65%).  Muslims and Christians are intermixed in both regions, and, according to our attitude measurements, co-exist peacefully.  The major difference is that Muslims are also more likely to answer the survey in Fulfulde than in any other language, reflecting the fact that the Fulani ethnic group is almost uniformly Muslim.
 
 # Attitudes
 
+We now summarize the results of questions mainly measuring psychological attitudes of the respondents.  We measure (1) social contact with outgroups, (2) perceptions of cultural understanding, (3) support for women's empowerment, (4) religious tolerance, (5) political/civic engagement, (6) feelings towards religious and ethnic outgroups, (7) efficacy and empowerment, (8) youth and elder relations, (9) attitudes about the use of violence, and (10) confidence in institutions.
 
 ## Social Contact
 
@@ -97,7 +178,7 @@ sc.plot
 
 An important cause and consequence of intergroup tolerance is intergroup social contact.  Intergroup contact has been shown in numerous studies to increase intergroup tolerance, and more tolerant people are also more likely to seek out intergroup contact.  Here we measure social contact with three questions, combined into an index (alpha = 0.76).  The index is scaled from 0-1 and higher scores indicates more contact with outgroups.  The specific questions are about frequency of contact with (1) ethnic outgroups, (2) religious outgroups, and (3) foreigners.
 
-The mean score on the social context index is about 0.65, but there are some large differences The largest difference is between people in different regions, with people in the northern region reporting much more intergroup contact than people in the extreme northern region.  People who answered the survey in a language other than French or Fulfulde are also much less likely to report having intergroup contact.  The graph shows other differences, but these are small and either not statistically significant or not substantively meaningful.
+The mean score on the social context index is about 0.65, but there are some differences.  The largest difference is between people in different regions, with people in the northern region reporting much more intergroup contact than people in the extreme northern region.  People who answered the survey in a language other than French or Fulfulde are also much less likely to report having intergroup contact.  The graph shows other differences, but these are small and either not statistically significant or not substantively meaningful.
 
 ## Cultural Understanding
 
@@ -176,11 +257,11 @@ reltol.plot
 #reltol.all.lm<-svylm.fun(outcome='reltol.index',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
 
-We ask four questions to measure beliefs about an individual's religion and that individual's perceptions of other religions.  Taken together, these four questions measure <!--"religious tolerance" -- something something...Chris/Rebecca: come up with a better summary name-->.  The individual questions are (1) There is more than one valid interpretation of religion, (2) My religion promotes peace and tolerance for members of other religions, (3) Other religions promote peace and tolerance for members of my religion, and (4) People of different religions live together peacefully in my community.  For each question, higher scores are normatively desirable and indicate more religious tolerance.  These four questions form an internally cohesive index with an alpha of 0.73.
+We ask four questions to measure beliefs about an individual's religion and that individual's perceptions of other religions.  Taken together, these four questions measure "religious tolerance"<!--"religious tolerance" -- something something...Chris/Rebecca: come up with a better summary name-->.  The individual questions are (1) There is more than one valid interpretation of religion, (2) My religion promotes peace and tolerance for members of other religions, (3) Other religions promote peace and tolerance for members of my religion, and (4) People of different religions live together peacefully in my community.  For each question, higher scores are normatively desirable and indicate more religious tolerance.  These four questions form an internally cohesive index with an alpha of 0.73.
 
 All subsets of respondents score very highly on these measures of religious tolerance.  The average score on a 0-1 scale is `r round(mean(cpdf$reltol.index,na.rm=T),2)`, and all subsets analyzed score similarly high.  Overall there appears to be widespread religious tolerance in the north and extreme north regions of Cameroon.
 
-Though these questions for a reasonably strong index and "move together" (as the response to one question is more tolerant the likelihood of the others being tolerant increases strongly), the baseline values for these questions differ slightly by subgroug.  Additionally, these questions measure distinct outcomes in themselves, even if those outcomes fit under the umbrella of religious tolerance.  Therefore, we briefly discuss responses to each question.
+Though these questions for a reasonably strong index and "move together" (as the response to one question is more tolerant the likelihood of the others being tolerant increases strongly), the baseline values for these questions differ slightly by subgroup.  Additionally, these questions measure distinct outcomes in themselves, even if those outcomes fit under the umbrella of religious tolerance.  Therefore, we briefly discuss responses to each question.
 
 ### Valid Interpretations of Religion
 
@@ -212,7 +293,7 @@ otherrel_peace.plot
 #other.all.lm<-svylm.fun(outcome='form.Attitudes.other_rel_promte_peace',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
 
-However, we also asked respondents if they believed other religions promoted peace and tolerance towards people of their religions.  The mean score is about `r round(mean(cpdf$form.Attitudes.other_rel_promte_peace,na.rm=T),2)` on a 0-1 scale, indicating widespread support but not universal support.  People in the north are more likely to agree than people in the extreme north, and people who speak a language other than French/Fulfulde are again more likely toa gree.  In an interesting religious difference, Muslims are slightly more likely than Christians to agree that other religions promote peace towards their religion.
+However, we also asked respondents if they believed other religions promoted peace and tolerance towards people of their religions.  The mean score is about `r round(mean(cpdf$form.Attitudes.other_rel_promte_peace,na.rm=T),2)` on a 0-1 scale, indicating widespread support but not universal support.  People in the north are more likely to agree than people in the extreme north, and people who speak a language other than French/Fulfulde are again more likely to agree.  In an interesting religious difference, Muslims are slightly more likely than Christians to agree that other religions promote peace towards their religion.
 
 ### People of Different Religions Live Together Peacefully
 
@@ -223,7 +304,7 @@ diffrel_peace.plot
 #cpdf %>% dplyr::group_by(region) %>% dplyr::summarise(mean(form.Attitudes.dif_ppl_live_peace,na.rm=T)) %>% print(n=100)
 ```
 
-Respondents were also asked if people of different religions live together peacefully in their community, to which all subsets respondents overwhelingly agreed.  People in the northern region are slightly more likely to strongly agree than respondents in the extreme north, but the difference is between 0.97 and 0.94 on the 0-1 scale and so not substantively interesting.
+Respondents were also asked if people of different religions live together peacefully in their community, to which all subsets respondents overwhelmingly agreed.  People in the northern region are slightly more likely to strongly agree than respondents in the extreme north, but the difference is between 0.97 and 0.94 on the 0-1 scale and so not substantively interesting.
 
 ## Political/Civic Engagement
 
@@ -253,7 +334,7 @@ dont_vote.plot
 #vote.all.lm<-svylm.fun(outcome='form.Attitudes.ppl_not_vote',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
 
-We asked respondents if they believed people in their community do not vote and are not engaged in civic matters.  This question is scaled so that strong agreement is a 0 and strong disagreement a 1.  The mean score is about `r round(mean(cpdf$form.Attitudes.ppl_not_vote,na.rm=T),2)` on a 0-1 scale, indicating generally a belief that people are involved in civic matters, but some ambivalence on the part of many respondents.  The ambivalence is almost entirely from people in the northern region.  In the extreme north, about 66% of people strongly disagree that people do not vote and are not engaged civically.  But in the north only abotu 14% of people strongly disagree with that statement.  And we again see the pattern by language wherein French speakers are the most pessimistic about their community and non-French/Fulfulde speakers the most optimistic.
+We asked respondents if they believed people in their community do not vote and are not engaged in civic matters.  This question is scaled so that strong agreement is a 0 and strong disagreement a 1.  The mean score is about `r round(mean(cpdf$form.Attitudes.ppl_not_vote,na.rm=T),2)` on a 0-1 scale, indicating generally a belief that people are involved in civic matters, but some ambivalence on the part of many respondents.  The ambivalence is almost entirely from people in the northern region.  In the extreme north, about 66% of people strongly disagree that people do not vote and are not engaged civically.  But in the north only about 14% of people strongly disagree with that statement.  And we again see the pattern by language wherein French speakers are the most pessimistic about their community and non-French/Fulfulde speakers the most optimistic.
 
 ### Corruption
 
@@ -276,8 +357,7 @@ We asked respondents if they people in their community donated time/money to sol
 
 ```{r rel/ethnic feelings}
 vote_ethnic.plot
-ethnic_divide.plot
-religious_divide.plot
+#ethnic_divide.plot
 
 #reldiv.all.lm<-svylm.fun(outcome='religious_divide',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
@@ -290,7 +370,11 @@ We asked three questions to measure attitudes related to religious and ethnic ou
 
 - (3) Would you say that that religious differences tend to divide people in your village/neighborhood, or do people in your village/neighborhood tend to overcome their ethnic differences?
 
-The first question measures their belief in using ethnicity as a reason to vote for a political candidate, and the next two reflect the respondent's perception about acceptance of ethnic and religious outgroups in their communities.
+The first question measures their belief in using ethnicity as a reason to vote for a political candidate, and the next two reflect the respondent's perception about acceptance of ethnic and religious outgroups in their communities.  Responses to the questions about overcoming ethnic and religious divides are almost identical, so we only show the plot for the religious divide question.
+
+```{r rel divide}
+religious_divide.plot
+```
 
 For the first question, about `r paste(round(mean(cpdf$vote_ethnic,na.rm=T),2)*100)`\% of respondents do not believe ethnicity should be important when deciding an elected candidate.  This is roughly the same proportion for all subsets of the data, but Fulfulde speakers are ever so slightly more likely to believe ethnic voting is acceptable.  For the second question asking if people in the respondent's community overcome ethnic divides, about `r paste(round(mean(cpdf$ethnic_divide,na.rm=T),2)*100)`\% say yes, with no meaningful differences between subgroups.  
 
@@ -324,7 +408,7 @@ When asked if they believed they had the power to create positive changes in the
 violence_problem.plot
 #mean(cpdf$form.Attitudes.violence_problem,na.rm=T)
 
-power_against.plot
+#power_against.plot
 #mean(cpdf$form.Attitudes.pwr_against_violence,na.rm=T)
 #pwr_against.all.lm<-svylm.fun(outcome='form.Attitudes.pwr_against_violence',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
@@ -373,8 +457,8 @@ The two questions about youth are on different scales.  The first is on a strong
 
 ```{r youth-old1}
 old_respect.plot
-elders_understand.plot
-elders_applicable.plot
+#elders_understand.plot
+#elders_applicable.plot
 
 cpdf$old<-ifelse(as.numeric(as.character(cpdf$form.Demographiques_introduction.respondent_age))>49,1,0)
 
@@ -392,7 +476,7 @@ cpdf$old<-ifelse(as.numeric(as.character(cpdf$form.Demographiques_introduction.r
 #old_respect.lm<-svylm.fun(outcome='form.Attitudes.old_people_get_it',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
 
-Overall, respondents in the survey believe that older people respect and understand youth, with an average score of above `r round(mean(cpdf$form.Attitudes.old_people_get_it,na.rm=T),1)` on a 0-1 scale for all questions.  There is substantial heterogeneity in the data, especially by age: adults are much more likely than youth to believe that older people respect and understand youth.  When looking at people over 50 compared to people under 30 the different is even more stark, with between 57%-68% of people over 50 "strongly agreeing" with each statement, but only betwen 35%-40% of people under 30 strongly agree.  People who answered the survey in French score lower on these questions, while people in the extreme north region and Muslims score higher, though non-age differences are only significant for the question asking if older people respect youth.
+Overall, respondents in the survey believe that older people respect and understand youth, with an average score of above `r round(mean(cpdf$form.Attitudes.old_people_get_it,na.rm=T),1)` on a 0-1 scale for all questions.  There is substantial heterogeneity in the data, especially by age: adults are much more likely than youth to believe that older people respect and understand youth.  When looking at people over 50 compared to people under 30 the different is even more stark, with between 57%-68% of people over 50 "strongly agreeing" with each statement, but only between 35%-40% of people under 30 strongly agree.  People who answered the survey in French score lower on these questions, while people in the extreme north region and Muslims score higher, though non-age differences are only significant for the question asking if older people respect youth.
 
 <!--Elders think elders get respect.  Youth be like "meh"-->
 
@@ -400,7 +484,7 @@ Overall, respondents in the survey believe that older people respect and underst
 
 ```{r youth-old2}
 youth_respect.plot
-youth_involved.plot
+#youth_involved.plot
 
 #with(cpdf, prop.table(table(form.Attitudes.youth_listen,adult),2))
 #with(cpdf, prop.table(table(form.Attitudes.youth_listen,old),2))
@@ -429,8 +513,6 @@ We would like to know if people believe violence is a means to achieve goals, or
 - Bring criminals to justice when the government fails to act
 - Force the government to change their policies or actions
 
-All questions have been re-scaled so that higher scores are normatively desirable and lower scores are normatively undesirable.  An answer of "always" equates to a score of 0 and an answer of "never" equates to a score of 1.  The violence index is also scaled from 0-1, and would be 0 if a respondent answered "always" to each questions and would be a 1 if a respondent answered "never" to each question.
-
 ```{r vio}
 vio.plot
 #vio.lm<-svylm.fun(outcome='vio.index',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
@@ -441,7 +523,11 @@ vio.plot
 #gov_change.plot
 ```
 
+All questions have been re-scaled so that higher scores are normatively desirable and lower scores are normatively undesirable.  An answer of "always" equates to a score of 0 and an answer of "never" equates to a score of 1.  The violence index is also scaled from 0-1, and would be 0 if a respondent answered "always" to each questions and would be a 1 if a respondent answered "never" to each question.
+
 Overall there is strong support against the use of violence; the average score on the index is `r round(mean(cpdf$vio.index,na.rm=T),2)` out of 1.  All subsets express similar beliefs that violence is not generally acceptable, but people in the north are more accepting of violence than people in the extreme north, by about 7 points on this scale.  There are three differences by subsets: (1) women are less accepting of violence than men, (2) people who answered the survey in a language other than French/Fulfulde are less accepting of violence than French/Fulfulde speakers, and (3) people who answered with Fulfulde are less accepting of violence than people who answered in French.
+
+Anti-violence attitudes are extremely strong in all contexts save one: vigilante justice against criminals.  Most people in the survey still do not accept violence in this case, but about 25% of the sample say that violence is sometimes or always acceptable in this case.  More people believe this type of vigilante violence is "always" acceptable than believe every other type of violence is always acceptable.  This response hints that violence is a problem in these communities, and that people may resort to fighting violence with violence to defend themselves.
 
 ## Institutional Confidence
 
@@ -453,7 +539,7 @@ conf.plot
 We asked about respondent's confidence in institutions.  We asked about: 
 
 - Your local community radio station
-- Juidicial system
+- Judicial system
 - Religious leaders
 - Traditional leaders
 - Local government 
@@ -464,7 +550,7 @@ Respondents have strong trust in institutions overall, with a mean score of `r r
 
 # Technology and Media Access
 
-The next section summarizes the survey results relating to technology and media access.  These questions ask about access to utilities like electricity, mobile phone use, and radio and televisin viewing.
+The next section summarizes the survey results relating to technology and media access.  These questions ask about access to utilities like electricity, mobile phone use, and radio and television viewing.
 
 ## Utilities
 
@@ -488,7 +574,7 @@ mobile.plot
 #mean(cpdf$mobile)
 #mobile.lm<-svylm.fun(outcome='mobile',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
-About `r round(mean(cpdf$mobile,na.rm=T),2)*100`\% report access to a simple mobile phone.  Adults are more likely to have access than youth, and people in the North more likely than people in the Extreme North.  Muslim are more likely to have simple mobile phone access than Chrstians, and people who answered the survey in Fulfulde more likely to have access than those who answered in French, but people who answered in French or Fulfulde are _much_ more likely to have access than people who answered in any other language.
+About `r round(mean(cpdf$mobile,na.rm=T),2)*100`\% report access to a simple mobile phone.  Adults are more likely to have access than youth, and people in the North more likely than people in the Extreme North.  Muslim are more likely to have simple mobile phone access than Christians, and people who answered the survey in Fulfulde more likely to have access than those who answered in French, but people who answered in French or Fulfulde are _much_ more likely to have access than people who answered in any other language.
 
 
 ### Smartphones
@@ -559,6 +645,8 @@ int.plot
 
 #int.lm<-svylm.fun(outcome='form.Technologie.access_to_internet',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 
+#table(cpdf$form.Technologie.access_to_internet, cpdf$adult)
+
 #int.vars<-names(cpdf)[grep("int_", names(cpdf),ignore.case=F)][-c(1,2)]
 #summary(cpdf[cpdf$form.Technologie.access_to_internet %in% 1,int.vars])
 #summary(cpdf[,int.vars])
@@ -570,6 +658,13 @@ int.plot
 #int_mobile.plot
 #int_tablet.plot # no one uses this
 #int_other.plot
+
+
+#use_int.plot
+#mean(cpdf$form.media_frequency_question_group_broadcast.use_internet,na.rm=T)
+#table(cp3$form.media_frequency_question_group_broadcast.use_internet)
+#use_int.lm<-svylm.fun(outcome='form.media_frequency_question_group_broadcast.use_internet',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+
 ```
 
 
@@ -577,39 +672,175 @@ About `r round(mean(cpdf$form.Technologie.access_to_internet,na.rm=T),2)*100`\% 
 
 If respondents used the internet, we also asked respondents on what device he/she accessed the internet, and in what location he/she used the internet.  Accessing the internet on a mobile phone is by far the most popular method, and 16% of the sample/74% of internet users access the internet on their mobile device.  The most popular locations for computer access are at home (6%, 27%) or at an internet cafe (4.8%, 21%).  About 3% of the sample and 12%-13% of internet users access the internet either at work or on a friend or family member's computer/phone.  Zero people used the internet on tablets.
 
-## Social Media
-
-social_media_platforms, how_use_social_, radio_social_media_likely, 
+We also asked internet users how frequently he/she used the internet.  The vast majority of internet users use it daily or weekly, and there are no differences by sub-population.  If a respondent uses the internet, their gender, age, region, religion, or language do not affect how frequently they use the internet.
 
 ## Media Frequency
 
-Frequency of respondents listen to radio, watch television, use internet, download app, use social media, send/receive sms, bluetooth, phone call.
+### Radio
+```{r radio}
+radio.plot
+
+#mean(cpdf$form.media_frequency_question_group_broadcast.listen_to_the_radio,na.rm=T)
+#table(cp3$form.media_frequency_question_group_broadcast.listen_to_the_radio)
+#table(cpdf$form.media_frequency_question_group_broadcast.listen_to_the_radio)
+#table(cpdf$form.media_frequency_question_group_broadcast.listen_to_the_radio, cpdf$gender)
+#table(cp3$form.media_frequency_question_group_broadcast.listen_to_the_radio, cp3$form.Demographiques_introduction.respondent_sex)
+#tally(cpdf$form.media_frequency_question_group_broadcast.listen_to_the_radio~ cpdf$adult)
+
+
+#table(cp3$form.media_frequency_question_group_broadcast.download_smartphone_app)
+#table(cp3$form.media_frequency_question_group_broadcast.phone_call)
+
+#radio.lm<-svylm.fun(outcome='form.media_frequency_question_group_broadcast.listen_to_the_radio',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+```
+
+Radio listening is very common in northern Cameroon.  On a 0-1 scale where 1 means the respondent listens every day and 0 means the respondent listens rarely or never, the average score is 0.71.  Radio listening is bimodal -- most respondents either listen very frequently or not at all.  Almost half of respondents say they listen daily, and another quarter listen every week.  But about 20% of respondents report that they rarely or never listen to the radio.  Men listen with great frequency than women on average, and this is in part because a greater proportion of women simply do not listen to the radio.  Youth also tend to listen to the radio less frequently than adults listen, and Muslims listen slightly more frequently than Christians.
+
+### Television
+
+```{r tv freq}
+tv.plot
+
+#mean(cpdf$form.media_frequency_question_group_broadcast.watch_television,na.rm=T)
+#table(cp3$form.media_frequency_question_group_broadcast.watch_television)
+#radio.lm<-svylm.fun(outcome='form.media_frequency_question_group_broadcast.watch_television',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+
+```
+
+Television viewing is fairly common in northern Cameroon, but people watch with less frequency than they listen to the radio, and far more people do not watch television at all.  On a 0-1 scale, the average score is only 0.56, and roughly equal proportions watch daily (42%) as watch rarely/never (37%).  Here men and women watch at about the same frequency, but youth watch television _far_ more frequently than adults.  Television is also watched more frequently in the North than in the Extreme North.  Lastly, people who answered the survey in French watch more than people who answered in Fulfulde, who watch more than people who answered the survey in any other language.
+
+### Social Media
+
+```{r sm freq}
+online.plot
+#sm.lm<-svylm.fun(outcome='form.media_frequency_question_group_broadcast.use_online_social_media',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+
+#mean(cpdf$form.media_frequency_question_group_broadcast.use_online_social_media,na.rm=T)
+#table(cp3$form.media_frequency_question_group_broadcast.use_online_social_media)
+#mean(cpdf$form.media_frequency_question_group_broadcast.use_online_social_media[cpdf$gender %in% 'male' & cpdf$youth %in% 1 & cpdf$form.End.survey_language %in% "survey_lang_fr"],na.rm=T)
+#table(cpdf$form.demographics_question_group.respondent_highest_education_level,cpdf$form.End.survey_language)
+
+#sort(table(cpdf$form.social_media_questions_group.social_media_platforms_used))
+#sort(table(cpdf$form.social_media_questions_group.how_use_social_medida))
+#sort(table(cpdf$form.social_media_questions_group.radio_social_media_likely_uses))
+
+cpdf$sm_fbook<- ifelse(grepl("face", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+cpdf$sm_whats<- ifelse(grepl("whats", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+cpdf$sm_google<- ifelse(grepl("goog", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+cpdf$sm_imo<- ifelse(grepl("imo", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+cpdf$sm_youtube<- ifelse(grepl("youtube", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+cpdf$sm_twit<- ifelse(grepl("twit", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+cpdf$sm_skype<- ifelse(grepl("skyp", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+cpdf$sm_viber<- ifelse(grepl("viber", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+cpdf$sm_instagram<- ifelse(grepl("instagram", cpdf$form.social_media_questions_group.social_media_platforms_used, ignore.case = T),1,0)
+#
+#table(cpdf$sm_fbook)
+#table(cpdf$sm_whats)
+#table(cpdf$sm_google)
+#table(cpdf$sm_imo)
+
+#table(cpdf$sm_instagram)
+#table(cpdf$sm_skype)
+#table(cpdf$sm_twit)
+#table(cpdf$sm_viber)
+#table(cpdf$sm_youtube)
+```
+
+Social media use varies widely by age, gender, religion, and main language, though the average is fairly low.  The average score on a 0-1 scale is 0.22, and over 60% of the sample rarely/never use social media.  However, that low amount by no means describes the entire population.  About 1/3 of youth use social media, 37% of people who answered the survey in French use social media, and almost 30% of Christians.  Young, educated men use social media -- in this survey, about 45% of young men who answered the survey in French use social media.
+
+The dominant social media is Facebook.  Nearly every respondent who uses social media reports using Facebook.  The next most popular social media applications is WhatsApp (over 60% of social media users).  Google+ and Imo are both used by under 20% of social media users, and other social media applications (YouTube, Skype, Instagram, Viber, Twitter, etc...) are used by no more than 5% of social media users.
+
+### Phone Functions
+```{r int freq}
+#app.plot # few people answer, most people say weekly or never
+#sms.plot
+#bluetooth.plot
+#phonecall.plot  # basically everyone says everyday
+
+#table(cp3$form.media_frequency_question_group_broadcast.phone_call)
+#table(cp3$form.media_frequency_question_group_broadcast.bluetooth)
+#table(cp3$form.media_frequency_question_group_broadcast.download_smartphone_app)
+#table(cp3$form.media_frequency_question_group_broadcast.send_receive_sms_frequency)
+```
+
+The survey also asks respondents about the frequency of their use of various phone functions.  Specifically, making or receiving calls and SMS messages, downloading phone apps, and using Bluetooth.  Almost everyone in the sample uses their phone to make or take phone calls everyday, and this does not depend on subgroup.  Similarly, about 60% of the sample sent or received SMS messages, and 42% of the sample said they did this everyday, with the rest sending or receiving SMS messages weekly.  On the opposite end, only 10% of the sample report downloading smartphone apps, and this also does not depend on subgroup^[This is because few respondents had smartphones.].  About 1/3 of the sample reported using Bluetooth, and over 1/4 of the sample used Bluetooth at least once per week. Bluetooth use is high among youth, people who answered the survey in French, and among people in the Extreme North.
 
 # Equal Access Programs
 
 ## Radio
 
-We asked respondents about their listening to: (1) Douniarou Derkeen, (2) Dabalaye, (3) Chabab-al-Haye, and (4) Dandal Kura.  Dabalaye, Chabab-al-Haye, and Dandal Kura are all aired in minority languages spoken by very few people in this sample^[Dabalaye and Chabab-al-Haye are aired in Arabic, spoken by 121 people in the areas airing the program.  Dandal Kura is aired in Kanuri, spoken by only 17 people in this sample.], so we have very few listeners of those progams.  Only nine people listened to Dabalaye; only three people listened to Chabab, and zero respondents listened to Dandal_Kura.  As a result, here we show only the viewership of Douniarou Derkeen, which is aired in Fulfulde, the language primarily spoken by a plurality of survey respondents (352 people, or about 35% of the sample).  296 respondents listened to Douniarou Derkeen -- about 30% of the entire sample, and `r round(296/(296+440),2)*100`\% of radio listeners.
+We asked respondents about their listening to: (1) Douniarou Derkeen, (2) Dabalaye, (3) Chabab-al-Haye, and (4) Dandal Kura.  Dabalaye, Chabab-al-Haye, and Dandal Kura are all aired in minority languages spoken by very few people in this sample^[Dabalaye and Chabab-al-Haye are aired in Arabic, spoken by 121 people in the areas airing the program.  Dandal Kura is aired in Kanuri, spoken by only 17 people in this sample.], so we have very few listeners of those programs.  Only nine people listened to Dabalaye; only three people listened to Chabab, and zero respondents listened to Dandal_Kura.  As a result, here we show only the viewership of Douniarou Derkeen, which is aired in Fulfulde, the language primarily spoken by a plurality of survey respondents (352 people, or about 35% of the sample).  296 respondents listened to Douniarou Derkeen -- about 30% of the entire sample, and `r round(296/(296+440),2)*100`\% of radio listeners.
 
-```{r radio programs}
+```{r derkeen1}
 don_derkeen.plot
-dd_freq.plot
-dd_op.plot
+
+cpdf$listener<-ifelse(cpdf$form.radio_listener_group.Douniarou_Derkeen %in% 1, 1, 0)
 
 #derkeen.lm<-svylm.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 #mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$form.demographics_question_group.primary_language_spoken,na.rm=T)
 #tally(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth) # young vs. old
 #mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T) # young vs old radio listeners
+
+#mean(cpdf$listener~cpdf$region)
+#5505457*0.2965932 # total
+#3803138*0.2460432 # ex north
+#1702319*0.4125413 # north
+
+#mean(cpdf$listener~cpdf$towns)
+
+#area.lm<-svylm.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',treatment='towns',data=svy)
+#region.lm<-svylm.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',treatment='region',data=svy)
+
 ```
 
-Douniarou Derkeen is especially popular in the Northern region, where `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[2]*100`\% of radio listeners listen, compared to `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[1]*100`\% in the Extreme North.  Young people also listen with less frequency than older people, with `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[2]*100`\% of radio listeners under 30 listening and about `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[1]*100`\% of radio listeners 30 and over listening^[This is as a percentage of radio listeners.  We see the same trend looking at the whole population, where 24% of young people listen compared to 35% of older people.].  People who answered the survey in Fulfulde are also more likely to listen than people who answered in any other language, as expected.  If we look at listenership by primary language spoken, Douniarou Derkeen has popularity even among people who primarily speak other languages.  43% of people who primarily speak Fulfulde listen, but a full 39% of people who primarily speak French also listen, and even 11% of Arabic-primary speakers and 2 of the 9 Kanuri-primary speakers listen -- more than who listen to Dandal Kura.
+Extrapolating these numbers to the entire population area of about 5.5 million, we estimate that 1,632,881 people in the enumeration areas listen to Douniarou Derkeen.  Douniarou Derkeen is especially popular in the Northern region, where `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[2]*100`\% of radio listeners listen, compared to `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[1]*100`\% in the Extreme North.  By population, that means that about 935,736 of 3,803,138 people listen in the Extreme North and about 702,277 people out of 1,702,319 listen in the North.
 
-The people who listen to Douniarou Derkeen listen very frequently.
+Young people also listen with less frequency than older people, with `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[2]*100`\% of radio listeners under 30 listening and about `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[1]*100`\% of radio listeners 30 and over listening^[This is as a percentage of radio listeners.  We see the same trend looking at the whole population, where 24% of young people listen compared to 35% of older people.].  People who answered the survey in Fulfulde are also more likely to listen than people who answered in any other language, as expected.  If we look at listenership by primary language spoken, Douniarou Derkeen has popularity even among people who primarily speak other languages.  43% of people who primarily speak Fulfulde listen, but a full 39% of people who primarily speak French also listen, and even 11% of Arabic-primary speakers and 2 of the 9 Kanuri-primary speakers listen -- more than who listen to Dandal Kura.
+
+```{r derkeen2}
+dd_freq.plot
+#table(cp3$form.radio_listener_group.frequecy_Douniarou)
+#dd_op.plot # proportion who said very positive instead of just positive.  This is a silly graph, because this is a silly question.
+```
+
+The people who listen to Douniarou Derkeen listen very frequently -- 84% of listeners listen at least every week, and another 13% listen no less than once per month.  This is identical for all sub-populations in the data.  Most listeners listen to every broadcast, and that applies to men and women, youth and adults, Christians and Muslims, and all other subsets of the data.
 
 ## Arewa24
 
 ```{r arewa}
-#arewa24.plot
+arewa24.plot
+#arewa.lm<-svylm.fun(outcome='form.watched_arewa24',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+
+#tally(cpdf$form.watched_arewa24)
+#mean(cpdf$form.watched_arewa24,na.rm=T)
+#mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T)
+#mean(cpdf$form.watched_arewa24~cpdf$region,na.rm=T)
+
+#5505457*0.2142857 # total
+#3803138*0.1540541 # ex north
+#1702319*0.3315789 # north
+
+```
+
+Arewa24 is fairly popular in our sample, watched by 120 out of about 1,000 survey respondents, 12% of the sample and about `r round(mean(cpdf$form.watched_arewa24,na.rm=T),2)*100`\% of television viewers.  For the entire survey region of 5.5 million people, we estimate that 1,179,741 watch Arewa24.  The channel is much more likely to be watched by Muslims than Christians, and by people in the Northern region than the Extreme North, even controlling for religion (the North has a higher proportion of Muslims).  For the Northern region of about 1.7 million people, we estimate that 564,453 watch Arewa24.  For the Extreme Northern region of about 3.8 million people, we estimate that about 585,889 people watch Arewa24.
+
+About `r  round(mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T),2)[2]*100`\% of Hausa speakers watch, but `r round(mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T),2)[1]*100`\% of people who did not report speaking Hausa also watch, which could indicate one of 3 things.  First, and most likely, many people who speak Hausa did not report Hausa in the open-ended question asking which languages they spoke.  Second, it could indicate communal viewing such that many non-Hausa speakers are exposed to the show while in a group with Hausa speakers.  And third, it could indicate an acquiescence bias wherein about 19% of the sample says yes to questions when the answer is actually no^[Acquiescence Bias, also called Agreement Bias, is a commonly observed bias in human communication and affects most forms of data collection, including surveys, interviews, and focus groups.].
+
+```{r, include=F, eval=F}
+mean(cpdf$alawar)
+mean(cpdf$alawar~cpdf$region)
+mean(cpdf$waiwaye)
+mean(cpdf$dadin_kowa)
+mean(cpdf$hhh)
+mean(cpdf$hhh~cpdf$region)
+mean(cpdf$kundin)
+mean(cpdf$tauraruwa)
+mean(cpdf$tauraruwa~cpdf$region)
+mean(cpdf$gari)
+mean(cpdf$gari~cpdf$region)
+mean(cpdf$matasa)
+mean(cpdf$other)
+
 #alawar.plot
 #waiwaye.plot
 #dadin.plot
@@ -619,19 +850,19 @@ The people who listen to Douniarou Derkeen listen very frequently.
 #gari.plot
 #matasa.plot
 #other.plot
-
-#tally(cpdf$form.watched_arewa24)
-#mean(cpdf$form.watched_arewa24,na.rm=T)
-#mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T)
 ```
 
-Arewa24 is fairly popular in our sample, watched by 120 out of about 1,000 survey respondents, 12% of the sample and about `r round(mean(cpdf$form.watched_arewa24,na.rm=T),2)*100`\% of television viewers.  About round(mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T),2)[2]*100\% of Hausa speakers watch, but  round(mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T),2)[1]*100\% of people who did not report speaking Hausa also watch, which could indicate one of 3 things.  First, and most likely, many people who speak Hausa did not report Hausa in the open-ended question asking which languages they spoke.  Second, it could indicate communal viewing such that many non-Hausa speakers are exposed to the show while in a group with Hausa speakers.  And third, it could indicate an acuiescence bias wherein about 19% of the sample says yes to questions when the answer is actually no^[Acquiescence Bias, also called Agreement Bias, is a commonly observed bias in human communication and affects most forms of data collection, including surveys, interviews, and focus groups.].
-
-The survey also asks about viewership of specific Arewa24 programs.
+The survey also asks about viewership of specific Arewa24 programs.  The most popular individual show is Tauraruwa, viewed by 4.5% of the sample overall.  Every show is a bit more popular in the North than Extreme North, but Tauraruwa is _much_ more popular in the North (11%) than in the Extreme North (2%).  The next most popular is Hausa Hip Hop, watched by 4% of the respondents overall.  The next most popular are Dadin Kowa and Gari Ya Waye, each viewed by about 3% of the sample.  After that Alawar Yara, Matasa360, Waiwaye, and Kundin Kannywood,  are all viewed by between 1%-2% of the respondents.  In addition, about 1% of respondents said they watched some other show on Arewa24.
 
 # Conclusion
  
-Sum up findings here.
+This report summarized the findings of a 998 person survey in the North and Extreme North regions of Cameroon.
+
+Demographically, the largest single ethnic group in the regions is the Fulani.  Fulfulde, the Fulani language, is spoken by 80% of respondents and by over 1/3 of respondents as their primary language.  The main language of non-Fulfulde speakers appears to be Arabic in general and French for people with secondary school or University educations..
+
+Christians and Muslims both display high tolerance for other religious and ethnic groups.  Acceptance of violence is very low except for vigilante violence against criminals.  Political matters, especially corruption, and perceptions of violence and insecurity, seem to be the primary problems in these communities.  In the Extreme North this could be driven by lower socio-economic status, and in the North this could be fed by a lack of perceived citizen engagement, political transparency, and knowledge of legal recourse.
+
+In terms of media, radio is the dominant media form in these areas, but television and the internet are very popular among young people.  Equal Access radio program Douniarou Derkeen is quite popular, as is the Arewa24 television channel.  However, the other three Equal Access radio programs registered very low listenership in these areas, primarily because they are in minority languages.
 
 
 # Caveats
@@ -642,9 +873,16 @@ It's also possible that the past radio programs of PDEV worked extremely well an
 
 # Appendices
 
-## Appendix 1
+## Appendix 1: Randomization Exp
 
 We attempted a randomization experiment to measure attitudes towards people from other religions.  In the randomization experiment, we asked respondents if they would live in a community that was __5%/25%/50%/75%__ members of a different religion.  The percentage is randomized, and we hypothesized that fewer people would be willing to live in a community as the percentage of outgroup members increased.  However, the randomization experiment did not work.  Virtually everyone said yes in all conditions.  This either indicates unprecedented levels of religious tolerance, the Hawthorne Effect wherein subjects learn the correct response to survey questions, or enumerator error in administering the survey experiment.
 
-
+## Appendix 2: Other Plots
+```{r other plots}
+lit.plot
+```
 # References
+
+Krosnick, J. A., Holbrook, A. L., Berent, M. K., Carson, R. T., Hanemann, W. M., Kopp, R. J., ... & Moody, W. R. (2002). The impact of" no opinion" response options on data quality: non-attitude reduction or an invitation to satisfice?. Public Opinion Quarterly, 66(3), 371-403.
+
+Schwarz, N., & Clore, G. L. (1983). Mood, misattribution, and judgments of well-being: Informative and directive functions of affective states. Journal of personality and social psychology, 45(3), 513.

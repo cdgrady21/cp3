@@ -371,10 +371,13 @@ cpdf$other_ethnic<- ifelse(rowSums(cpdf[c('sara_kirdi', 'fulani', 'mundang', 'ar
 
 # employment
 # languages
+sort(table(cpdf$form.demographics_question_group.languages_spoken))
 cpdf$lang_arabic<-ifelse(grepl("arab", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
 cpdf$lang_fulfulde<-ifelse(grepl("ful", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
 cpdf$lang_kanuri<-ifelse(grepl("kanu", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
 cpdf$lang_hausa<-ifelse(grepl("hau", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
+cpdf$lang_french<-ifelse(grepl("french", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
+cpdf$lang_mundang<-ifelse(grepl("Mund", cpdf$form.demographics_question_group.languages_spoken, ignore.case=T), 1, 0)
 
 ############
 # Aggregate Things?

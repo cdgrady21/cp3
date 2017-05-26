@@ -250,7 +250,91 @@ ethnic.plot<-ggplot(dem.df, aes(x=variable, y=value)) +
   theme_minimal()
 
 
+gender.plot<-plot.fun(outcome='female',dat=svy,title='Proportion Female by Group')
+cpdf$age<- as.numeric(as.character(cpdf$form.Demographiques_introduction.respondent_age)) # accidentally was made 0-1
+age.plot<-qplot(cpdf$age,
+                geom="histogram",
+                binwidth = 5,
+                main = "Distribution of Respondent Ages - 5 Year Bins",
+                xlab = "Age",
+                fill=I("grey"),
+                col=I("black"),
+                alpha=I(.8),
+                xlim=c(15,90),
+                breaks=seq(15, 90, by = 5))
+
 ## Education, Literacy, Language, and Religion
+#table(cpdf$form.demographics_question_group.respondent_highest_education_level)
+# Format the data for ggplot
+edu.df<-cpdf[,'form.demographics_question_group.respondent_highest_education_level']
+school<-as.vector(names(table(edu.df)))
+school<-c("Secondary","Middle", "None","NA",
+          "Primary","Quranic","Higher Ed","Vocational")
+school_nums<-as.vector(table(edu.df))
+school_nums<-as.numeric(school_nums)/sum(as.numeric(school_nums))
+edu.df<-as.data.frame(cbind(school, school_nums))
+edu.df$school_nums<-as.numeric(as.character(edu.df$school_nums))
+x_order<-c("None","Primary","Middle","Secondary",
+           "Higher Ed", "Vocational","Quranic",  "NA")
+edu.df<- edu.df %>% slice(match(x_order,school))
+edu.df$school <- factor(edu.df$school, levels = edu.df$school)
+
+#ggplot()
+edu.plot<-ggplot(edu.df, aes(x=school, y=school_nums)) + 
+  geom_bar(position=position_dodge(0.9), stat="identity",
+           colour="black", # Use black outlines,
+           fill=c('red',"blue","green","orange","yellow", "light blue","purple", "black"),
+           size=.5) +      # Thinner black lines
+  xlab("Levels of Education") +
+  ylab("Proportion of Sample") +
+  ggtitle("Levels of Education in Northern Cameroon") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank()) +
+  theme(plot.title = element_text(size=18)) +
+  geom_text(aes(label=round(school_nums,2), vjust=-0.15))+
+  theme_minimal()
+
+
+#table(cpdf$form.demographics_question_group.respondent_can_read)
+lit.plot<-plot.fun(outcome='form.demographics_question_group.respondent_can_read',dat=svy,title='Literacy by Group')
+
+
+# primary language
+# Format the data for ggplot
+langs<-c("fulfulde", "french", "Arabe")
+cpdf$primary_lang<-ifelse(!cpdf$form.demographics_question_group.primary_language_spoken %in% langs, 
+                          "other", as.character(cpdf$form.demographics_question_group.primary_language_spoken))
+lang.df<-cpdf[,'primary_lang']
+lang<-as.vector(names(table(lang.df)))
+lang<-c("Arabic","French", "Fulfulde","Other")
+lang_nums<-as.vector(table(lang.df))
+lang_nums<-as.numeric(lang_nums)/sum(as.numeric(lang_nums))
+lang.df<-as.data.frame(cbind(lang, lang_nums))
+lang.df$lang_nums<-as.numeric(as.character(lang.df$lang_nums))
+x2_order<-c("Fulfulde","French","Arabic","Other")
+lang.df<- lang.df %>% slice(match(x2_order,lang))
+lang.df$lang <- factor(lang.df$lang, levels = lang.df$lang)
+
+#ggplot()
+lang.plot<-ggplot(lang.df, aes(x=lang, y=lang_nums)) + 
+  geom_bar(position=position_dodge(0.9), stat="identity",
+           colour="black", # Use black outlines,
+           fill=c('red',"blue","green","black"),
+           size=.5) +      # Thinner black lines
+  xlab("Primary Languages Spoken") +
+  ylab("Proportion of Sample") +
+  ggtitle("Primary Languages in Northern Cameroon") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank()) +
+  theme(plot.title = element_text(size=18)) +
+  geom_text(aes(label=round(lang_nums,2), vjust=-0.15))+
+  theme_minimal()
+
+
+#
+
+
+
 
 
 
@@ -266,16 +350,16 @@ wom.plot<-plot.fun(outcome='wom.index',dat=svy,title="Women's Empowerment Index 
 wom.rel.lm<-svylm.fun(outcome='wom.index',treatment='region',data=svy)
 
 wom_money.plot<-plot.fun(outcome='form.Attitudes.women_money',dat=svy,
-                         title="Women Should Have a Say in How Her Household Spends Money")
-wom_money.lm<-svylm.fun(outcome='form.Attitudes.women_money',treatment='region',data=svy)
+                         title="Women Have Say in Household Spending")
+#wom_money.lm<-svylm.fun(outcome='form.Attitudes.women_money',treatment='region',data=svy)
 
 wom_work.plot<-plot.fun(outcome='form.Attitudes.women_work_children_suffer',dat=svy,
                         title="Women Work Children Suffer")
-wom_work.lm<-svylm.fun(outcome='form.Attitudes.women_work_children_suffer',treatment='gender')
+#wom_work.lm<-svylm.fun(outcome='form.Attitudes.women_work_children_suffer',treatment='gender')
 
 eduboys.plot<-plot.fun(outcome='form.Attitudes.boy_edu_better',dat=svy,
-                       title="Education Boys Better")
-wom_money.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='region',data=svy)
+                       title="Education More Important for Boys")
+#wom_money.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='region',data=svy)
 
 earlymarriage.plot<-plot.fun(outcome='form.Attitudes.early_marriage_good',dat=svy,
                              title="Early Marriage Good")
@@ -284,7 +368,7 @@ earlymarriage.plot<-plot.fun(outcome='form.Attitudes.early_marriage_good',dat=sv
 reltol.plot<-plot.fun(outcome='reltol.index',dat=svy,title='Religious Tolerance Index by Group')
 
 valid.plot<-plot.fun(outcome='form.Attitudes.one_valid_interpret',dat=svy,
-                     title='More than One Valid Interpretation of Religious Teaching')
+                     title='More than One Valid Interpretation of Religion')
 myrel_peace.plot<-plot.fun(outcome='form.Attitudes.my_rel_promotes_peace',dat=svy,
                            title='My Religion Promotes Peace')
 otherrel_peace.plot<-plot.fun(outcome='form.Attitudes.other_rel_promte_peace',dat=svy,
@@ -298,7 +382,7 @@ pol_trans.plot<-plot.fun(outcome='form.Attitudes.good_pol_transparency',
 dont_vote.plot<-plot.fun(outcome='form.Attitudes.ppl_not_vote',
                          dat=svy,title="People Don't Vote")
 corruption.plot<-plot.fun(outcome='form.Attitudes.corruption_problem',
-                         dat=svy,title='Corruption a Problem')
+                         dat=svy,title='Corruption Not a Problem')
 comm_solve.plot<-plot.fun(outcome='form.Attitudes.community_solve_problems',
                           dat=svy,title='Community Solves Problems')
 
@@ -335,7 +419,7 @@ power_against.plot<-plot.fun(outcome='form.Attitudes.pwr_against_violence',
 
 # Justice System
 legal_recourse.plot<-plot.fun(outcome='form.Attitudes.legal_recourse',
-                              dat=svy,title='Legal Recourse')
+                              dat=svy,title='Knowledge of Legal Recourse')
 
 # Youth-Old
 youth.plot<-plot.fun(outcome='youth.index',
@@ -399,10 +483,6 @@ int_mobile.plot<-plot.fun(outcome='int_mobile',dat=svy,title='Internet on Mobile
 #int_tablet.plot<-plot.fun(outcome='int_tablet',dat=svy,title='Internet on Tablet') # 0 said this
 int_other.plot<-plot.fun(outcome='int_other',dat=svy,title='Internet Some Other Way')
 
-# Social media # chris: do
-
-# Media Use # chris: do
-
 # Radio Program Listening
 don_derkeen.plot<-plot.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',
                          dat=svy,title='Listen to Douniarou Derkeen')
@@ -423,8 +503,28 @@ gari.plot<-plot.fun(outcome='gari',dat=svy,title="Watch Gari Ya Waye")
 matasa.plot<-plot.fun(outcome='matasa',dat=svy,title="Watch Matasa")
 other.plot<-plot.fun(outcome='other',dat=svy,title="Watch Other A24 Program")
 
-# Other demographics
+# Added Later
 
+# Social media # chris: do
+
+
+# Media Use # chris: do
+radio.plot<-plot.fun(outcome='form.media_frequency_question_group_broadcast.listen_to_the_radio',
+                     dat=svy,title="Listen to Radio Frequency")
+tv.plot<-plot.fun(outcome='form.media_frequency_question_group_broadcast.watch_television',
+                     dat=svy,title="Watch Television Frequency")
+use_int.plot<-plot.fun(outcome='form.media_frequency_question_group_broadcast.use_internet',
+                  dat=svy,title="Use Internet Frequency")
+app.plot<-plot.fun(outcome='form.media_frequency_question_group_broadcast.download_smartphone_app',
+                       dat=svy,title="Download Smartphone App Frequency")
+online.plot<-plot.fun(outcome='form.media_frequency_question_group_broadcast.use_online_social_media',
+                   dat=svy,title="Online Social Media Use Frequency")
+sms.plot<-plot.fun(outcome='form.media_frequency_question_group_broadcast.send_receive_sms_frequency',
+                      dat=svy,title="Send/Receive SMS Frequency")
+bluetooth.plot<-plot.fun(outcome='form.media_frequency_question_group_broadcast.bluetooth',
+                   dat=svy,title="Bluetooth Use Frequency")
+phonecall.plot<-plot.fun(outcome='form.media_frequency_question_group_broadcast.phone_call',
+                         dat=svy,title="Send/Receive Phone Call Frequency")
 
 #####################
 # Save it!
