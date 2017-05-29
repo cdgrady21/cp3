@@ -21,6 +21,7 @@ output:
 # Scan in Workspace/load libraries
 knitr::opts_chunk$set(echo = F, message=F)
 load("cp3_report_dat.Rdata")
+load("cp3_cities.rda")
 library(mosaic)
 library(survey)
 library(lmtest)
@@ -35,9 +36,49 @@ library(reshape2)
 ```{r things}
 #mean(cpdf$education~cpdf$region, na.rm=T)
 #mean(cpdf$conf.index~cpdf$region,na.rm=T)
+
+# SE= sqr(p(1-p)/n).  p= the proportion, n=sample size.
+# 95% ME = 0.98/sqr(n)
+#table(cpdf$psu, cpdf$towns)
+# garoua=11, 3 gashiga, guider=8, kaele=6, kousseri=8, maroua=11 (#+5 from meskine), mokolo=11, mora=5, yagoua=3, +2, tchatibali, +2 maga 
+
+thecities<-thecities[order(thecities$pop2005),]
+thecities[,"psus"]<-c(2,3, 2, 3, 8, 6, 5, 8, 11, 11, 11)
+thecities<-thecities[order(thecities$city),]
+
+cpdf$towns2<-cpdf$towns
+cpdf$towns2[cpdf$towns2 %in% 'Meskine']<-'Maroua'
+cpdf<-droplevels(cpdf)
+tab1<-tally(cpdf$towns2~cpdf$form.radio_listener_group.Douniarou_Derkeen)
+totals<-rowSums(tab1)
+viewers<-tab1[,2]
+nonviewers<-tab1[,1]
+nonradio<-tab1[,3]
+numbers<-cbind(totals, viewers, nonviewers, nonradio)
+thecities<-cbind(thecities, numbers)
+
+thecities$prop_total<-thecities$viewers/thecities$totals
+thecities$prop_radio<-thecities$viewers/(thecities$viewers+thecities$nonviewers)
+thecities$dd_viewers<-thecities$pop2017*thecities$prop_total
+#thecities$total_ME<-0.98/sqrt(thecities$totals)
+#thecities$lb<-thecities$prop_total-thecities$total_ME
+#thecities$ub<-thecities$prop_total+thecities$total_ME
+# SE= sqr(p(1-p)/n).  p= the proportion, n=sample size.
+# 95% ME = 0.98/sqr(n) #chris: not taking into account PSUs...
+
+tab2<-tally(cpdf$towns2~cpdf$form.watched_arewa24)
+a24viewers<-tab2[,2]
+a24nonviewers<-tab2[,1]
+nontv<-tab2[,3]
+numbers2<-cbind(a24viewers, a24nonviewers, nontv)
+thecities<-cbind(thecities, numbers2)
+
+thecities$a24prop_total<-thecities$a24viewers/thecities$totals
+thecities$a24prop_tv<-thecities$a24viewers/(thecities$a24viewers+thecities$a24nonviewers)
+thecities$a24_viewers<-thecities$pop2017*thecities$a24prop_total
 ```
 
-This report summarizes the findings of a 998 person survey in the North and Extreme North regions of Cameroon.  The survey used random sampling techniques so that this sample of about 1,000 respondents will represent the entire target population of about 5.5 million people living in these two regions.  Here we summarize key findings about that population's demographic characteristics, psychological attitudes, and media use.
+This report summarizes the findings of a 998 person survey in the North and Extreme North regions of Cameroon.  The survey includes towns in which Equal Access airs radio programs -- Garoua, Gashiga, and Guider in the North, and Maroua, Meskine, Kousseri, Yagoua, Tchati-bali, Maga, Kaele, Mora, and Mokolo in the Extreme North.  The survey used random sampling techniques so that this sample of about 1,000 respondents will represent the entire target population of these 12 towns -- approximately `r format(sum(thecities$pop2017),big.mark=",")` people^[We arrive at 2,204,671 by taking the 2005 Census numbers for these towns (which totals 1,707,439) and multiplying it by the average growth rate, about 2.5\%, for each year in the 2005 to 2017 period.].  Here we summarize key findings about that population's demographic characteristics, psychological attitudes, and media use.
 
 Demographically, there over 50 ethnic groups represented in the survey.  The largest single ethnic group in the regions is the Fulani, encompassing about 18% of people in the survey's enumeration areas.  But about 20 ethnic groups can be classified as Sara/Kirdi, and together those groups make up about 45% of the survey.  Fulfulde, the Fulani language, seems to be the lingua franca.  It is spoken by 80% of respondents and by over 1/3 of respondents as their primary language.  The 20% of the population who do not speak Fulfulde speak Arabic as their primary language, and primarily reside in the Extreme North.  French is widely spoken by educated people of all regions and ethnic groups.
 
@@ -47,9 +88,7 @@ Political efficacy sticks out as the primary problem for people in these areas. 
 
 In terms of media, radio is the dominant media form in these areas, and most respondents listen to the radio everyday.  Other forms of media are less common, but television and the internet are very popular among young people.  Social media is also popular among some young people, mainly among educated young men.  Facebook is by far the most popular social media, but WhatsApp is very popular.  
 
-Equal Access radio program Douniarou Derkeen is very popular, as is the Arewa24 television channel.  Douniarou Derkeen is aired in Fulfulde and Arewa24 in Hausa.  Douniarou Derkeen is listened to by about 30% of the entire sample and 40% of radio listeners; Arewa24 is watched by about 12% of the entire sample and 21% of television viewers.  For the entire survey region of 5.5 million people, we estimate that 1,632,881 people listen to Douniarou Derkeen and that 1,179,741 watch Arewa24.  For the Northern region of about 1.7 million people, we estimate that 702,277 listen to Douniarou Derkeen 564,453 watch Arewa24.  For the Extreme Northern region of about 3.8 million people, we estimate that about 935,736 people listen to Douniarou Derkeen and 585,889 people watch Arewa24.
-
-The other three Equal Access radio programs -- Dabalaye, Chabab-al-Haye, and Dandal Kura -- registered very low listenership in these areas.  For Dandal Kura we have no listeners, and this seems to be because the show is in Kanuri, a language spoken by very few people in these regions.  For Dabalaye and Chabab-al-Haye, the two Arabic-language programs, the low listenership is both because Arabic is a minority language and because those programs are only aired in a few towns in this survey.
+Equal Access radio program Douniarou Derkeen is very popular, as is the Arewa24 television channel.  Douniarou Derkeen is aired in Fulfulde and Arewa24 in Hausa.  Douniarou Derkeen is listened to by about `r round(mean(thecities$prop_total[!thecities$city %in% c("kousseri", "mora")]),2)*100`\% of respondents in the towns in which it is aired^[Garoua, Gashiga, Guider, Kaele, Maga, Maroua, Meskine, Mokolo, Tchati-Bali, and Yagoua -- every town except Kousseri and Mora] and `r round(mean(thecities$prop_radio[!thecities$city %in% c("kousseri", "mora")]),2)*100`\% of radio listeners; Arewa24 is watched by about 12% of the entire sample and 21% of television viewers.  For the entire survey region of ~2.2 million people, we estimate that `r format(round(296/nrow(cpdf)*sum(thecities$pop2017),0),big.mark=",")` people listen to Douniarou Derkeen and that `r format(round(120/nrow(cpdf)*sum(thecities$pop2017),0),big.mark=",")` watch Arewa24.  Douniarou Derkeen is most popular in Gashiga (76%), Yagoua (73%), and Kaele (55%).  Arewa24 is most popular in Gashiga (45%), Guider (24%), and Mora (20%).
 
 # Methodology
 
@@ -81,7 +120,7 @@ First, we must put ourselves in the mind of the respondent and think how the res
 
 Problems of question interpretation do not detract from the usefulness of a survey, it just forces the survey researcher to think about the meaning of the question.  If large differences occur between subgroups in the population, it could be that subgroups have very different opinions about the same concept (the typical interpretation).  But it could also mean that one subgroup interprets the question in a very different way than another subgroup.  That is not the typical interpretation, but that is also extremely valuable information.  If respondents interpret the question differently when asked the same question, with the same wording, in the same survey context, we learn a great deal about their worldview and outlook.  It is important for survey researchers to theorize about _why_ a respondent answered the way they did.
 
-Second, we must keep in mind the "random noise" caveat.  Every survey response contains some element of randomness^[This is also true for interviews and focus groups.  Those methods mitigate the problem by extensive probing and respondent interaction.  Surveys tend to mitigate this problem by using an index and asking many questions to measure the same underlying concept.].  Some respondents have not thought about these topics or otherwise do not know what they think, and are being asked to form an opinion on the spot.  Their responses hint at their underlying opinion, but may only reflect their attitude that is currently most salient, not their strongest attitude^[for example, on a cold and rainy day people tend to give more pessimistic answers, whereas on a warm and sunny day people tend to give more optimistic answers (Schwartz and Clore 1983)].  The goal of a good survey question is to minimize the amount that randomness influences responses and maximize the amount that the concept of interest influences responses, but no questions is perfect.
+Second, we must keep in mind the "random noise" caveat.  Every survey response contains some element of randomness^[This is also true for interviews and focus groups.  Those methods mitigate the problem by extensive probing and respondent interaction.  Surveys tend to mitigate this problem by using an index and asking many questions to measure the same underlying concept.].  Some respondents have not thought about these topics or otherwise do not know what they think, and are being asked to form an opinion on the spot.  Their responses hint at their underlying opinion, but may only reflect their attitude that is currently most salient, not their strongest attitude^[For example, on a cold and rainy day people tend to give more pessimistic answers, whereas on a warm and sunny day people tend to give more optimistic answers (Schwartz and Clore 1983)].  The goal of a good survey question is to minimize the amount that randomness influences responses and maximize the amount that the concept of interest influences responses, but no questions is perfect.
 
 This problem also does not detract from the usefulness of surveys as a tool to measure opinion.  Problems of randomness are overcome by large numbers of survey respondents.  Purely random responses will not show systematic preferences for  differences and will center around the mean response.  Think about a coin flip: if you flip a coin ten times and receive four heads and six tails, the evidence suggests the coin random.  But if you flip a coin 1,000 times and receive 400 heads and 600 tails, evidence suggests that the coin is rigged.  The underlying pattern shows through with large numbers.  Likewise, if we ask 10 people who they will vote for and 6 say candidate A and 4 say candidate B, evidence suggests that candidate A and candidate B have about an equal amount of support.  But if we ask 1,000 people and 400 say candidate A and 600 say candidate B, we should conclude that candidate B has much more support in the population^[This assumes random sampling; supporters of candidate A and candidate B must be equally likely to answer the survey.].  The increasing precision of large numbers is also the logic to using an index: individual questions have some measurement error, but even if the questions are 50% error and 50% concept measurement, that error is overwhelmed by the use of multiple questions to measure a single concept.  The error is by definition random, whereas the concept measurement is directed.
 
@@ -400,7 +439,7 @@ pos.tab<-mean(cpdf$pos_change~cpdf$adult,na.rm=T)
 #poschange.all.lm<-svylm.fun(outcome='pos_change',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
 ```
 
-When asked if they believed they had the power to create positive changes in their communities, or if the power to make positive changes rests with those who have more power than the respondent, 82% of respondents reported feeling empowered.  Empowerment of this type is relatively high for all groups in the data, but there are some differences.  Older people were more likely to report empowerment than youth (`r pos.tab[2]` vs. `r pos.tab[1]`), and people who responded to the survey in languages other than French or Fulfulde reported more empowerment than French/Fulfulde speakers.
+When asked if they believed they had the power to create positive changes in their communities, or if the power to make positive changes rests with those who have more power than the respondent, 82% of respondents reported feeling empowered.  Empowerment of this type is relatively high for all groups in the data, but there are some differences.  Older people were more likely to report empowerment than youth (`r round(pos.tab[2],2)` vs. `r round(pos.tab[1],2)`), and people who responded to the survey in languages other than French or Fulfulde reported more empowerment than French/Fulfulde speakers.
 
 ### Violence a Problem and Power to Speak Against Violence
 
@@ -769,10 +808,14 @@ The survey also asks respondents about the frequency of their use of various pho
 
 ## Radio
 
-We asked respondents about their listening to: (1) Douniarou Derkeen, (2) Dabalaye, (3) Chabab-al-Haye, and (4) Dandal Kura.  Dabalaye, Chabab-al-Haye, and Dandal Kura are all aired in minority languages spoken by very few people in this sample^[Dabalaye and Chabab-al-Haye are aired in Arabic, spoken by 121 people in the areas airing the program.  Dandal Kura is aired in Kanuri, spoken by only 17 people in this sample.], so we have very few listeners of those programs.  Only nine people listened to Dabalaye; only three people listened to Chabab, and zero respondents listened to Dandal_Kura.  As a result, here we show only the viewership of Douniarou Derkeen, which is aired in Fulfulde, the language primarily spoken by a plurality of survey respondents (352 people, or about 35% of the sample).  296 respondents listened to Douniarou Derkeen -- about 30% of the entire sample, and `r round(296/(296+440),2)*100`\% of radio listeners.
+We asked respondents about their listening to: (1) Douniarou Derkeen, (2) Dabalaye, (3) Chabab-al-Haye, and (4) Dandal Kura.  Dabalaye, Chabab-al-Haye, and Dandal Kura are all aired in minority languages spoken by very few people in this sample^[Dabalaye and Chabab-al-Haye are aired in Arabic, spoken by 121 people in the areas airing the program.  Dandal Kura is aired in Kanuri, spoken by only 17 people in this sample.], so we have very few listeners of those programs.  Only nine people listened to Dabalaye; only three people listened to Chabab, and zero respondents listened to Dandal_Kura^[Of the 73 Arabic speakers in Kousseri and Mora, 5 listen to Dabalaye and 1 listens to Chabab-al-Haye.].  As a result, here we show only the viewership of Douniarou Derkeen, which is aired in Fulfulde, the language primarily spoken by a plurality of survey respondents (352 people, or about 35% of the sample).  296 respondents listened to Douniarou Derkeen -- about 30% of the entire sample, and `r round(296/(296+440),2)*100`\% of radio listeners.  In areas where the program is aired (all towns except Kousseri and Mora), about `r round(mean(thecities$prop_total[!thecities$city %in% c("kousseri", "mora")]),2)*100`\% of people listen, and about `r round(mean(thecities$prop_radio[!thecities$city %in% c("kousseri", "mora")]),2)*100`\% of radio users listen.
 
 ```{r derkeen1}
 don_derkeen.plot
+
+arabic_kousseri<-cpdf[cpdf$lang_arabic %in% 1 & cpdf$towns %in% c('Kousseri', 'Mora'),]
+#table(arabic_kousseri$form.radio_listener_group.Dabalaye)
+#table(arabic_kousseri$form.radio_listener_group.chabab_frequency)
 
 cpdf$listener<-ifelse(cpdf$form.radio_listener_group.Douniarou_Derkeen %in% 1, 1, 0)
 
@@ -781,21 +824,27 @@ cpdf$listener<-ifelse(cpdf$form.radio_listener_group.Douniarou_Derkeen %in% 1, 1
 #tally(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth) # young vs. old
 #mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T) # young vs old radio listeners
 
-#mean(cpdf$listener~cpdf$region)
-#5505457*0.2965932 # total
-#3803138*0.2460432 # ex north
-#1702319*0.4125413 # north
-
 #mean(cpdf$listener~cpdf$towns)
 
 #area.lm<-svylm.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',treatment='towns',data=svy)
 #region.lm<-svylm.fun(outcome='form.radio_listener_group.Douniarou_Derkeen',treatment='region',data=svy)
 
+#thecities[order(thecities$dd_viewers),]
+#table(cpdf$lang_fulfulde, cpdf$primary_lang)
+cpdf$fulfulde_level<-NA
+cpdf$fulfulde_level[cpdf$primary_lang %in% "fulfulde"]<-"Primary"
+cpdf$fulfulde_level[cpdf$primary_lang != "fulfulde" & cpdf$lang_fulfulde %in% 1]<-"Secondary"
+cpdf$fulfulde_level[cpdf$primary_lang != "fulfulde" & cpdf$lang_fulfulde %in% 0]<-"Non-speaker"
+#prop.table(tally(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$fulfulde_level),2)
+
+# % of each primary language
+#prop.table(tally(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$primary_lang),2)
+#prop.table(tally(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$form.demographics_question_group.primary_language_spoken),2)
 ```
 
-Extrapolating these numbers to the entire population area of about 5.5 million, we estimate that 1,632,881 people in the enumeration areas listen to Douniarou Derkeen.  Douniarou Derkeen is especially popular in the Northern region, where `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[2]*100`\% of radio listeners listen, compared to `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[1]*100`\% in the Extreme North.  By population, that means that about 935,736 of 3,803,138 people listen in the Extreme North and about 702,277 people out of 1,702,319 listen in the North.
+Extrapolating these numbers to the 12-town target area area of about 2.2 million, we estimate that `r format(round(296/nrow(cpdf)*sum(thecities$pop2017),0),big.mark=",")` people listen to Douniarou Derkeen.  Douniarou Derkeen is especially popular in the Northern region, where `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[2]*100`\% of radio listeners listen, compared to `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$region, na.rm=T),2)[1]*100`\% in the Extreme North.  By town, we estimate that 127,290 listen in Guider (44%), 107,893 in Garoua (31%), 88,510 in Maroua (21%), 87,687 in Yagoua (73%), 75,839 in Kaele (55%), 57,849 in Mokolo (18%), 44,252 in Maga (40%), 38,158 in Gashiga (76%), and 15,283 in Tchati-bali (37%).  In the two areas where Douniarou Derkeen is not aired, 5/75 in Mora (6.7%) and 2/118 in Kousseri (1.7%) have still heard the program before.
 
-Young people also listen with less frequency than older people, with `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[2]*100`\% of radio listeners under 30 listening and about `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[1]*100`\% of radio listeners 30 and over listening^[This is as a percentage of radio listeners.  We see the same trend looking at the whole population, where 24% of young people listen compared to 35% of older people.].  People who answered the survey in Fulfulde are also more likely to listen than people who answered in any other language, as expected.  If we look at listenership by primary language spoken, Douniarou Derkeen has popularity even among people who primarily speak other languages.  43% of people who primarily speak Fulfulde listen, but a full 39% of people who primarily speak French also listen, and even 11% of Arabic-primary speakers and 2 of the 9 Kanuri-primary speakers listen -- more than who listen to Dandal Kura.
+Young people also listen with less frequency than older people, with `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[2]*100`\% of radio listeners under 30 listening and about `r round(mean(cpdf$form.radio_listener_group.Douniarou_Derkeen~cpdf$youth,na.rm=T),2)[1]*100`\% of radio listeners 30 and over listening^[This is as a percentage of radio listeners.  We see the same trend looking at the whole population, where 24% of young people listen compared to 35% of older people.].  People who answered the survey in Fulfulde are also more likely to listen than people who answered in any other language, as expected.  If we look at listenership by primary language spoken, Douniarou Derkeen has popularity even among people who primarily speak other languages.  34% of people who primarily speak Fulfulde listen, but a full 36% of people who speak Fulfulde as a secondary language listen, and about 8% of non-Fulfulde speakers have been exposed to the program.  From people who primarily speak other languages, 27% of primarily French speakers listen to Douniarou Derkeen, 8% of Arabic-primary speakers listen, and 2 of the 9 Kanuri-primary speakers listen.
 
 ```{r derkeen2}
 dd_freq.plot
@@ -816,13 +865,10 @@ arewa24.plot
 #mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T)
 #mean(cpdf$form.watched_arewa24~cpdf$region,na.rm=T)
 
-#5505457*0.2142857 # total
-#3803138*0.1540541 # ex north
-#1702319*0.3315789 # north
-
+#thecities[order(thecities$a24prop_total),]
 ```
 
-Arewa24 is fairly popular in our sample, watched by 120 out of about 1,000 survey respondents, 12% of the sample and about `r round(mean(cpdf$form.watched_arewa24,na.rm=T),2)*100`\% of television viewers.  For the entire survey region of 5.5 million people, we estimate that 1,179,741 watch Arewa24.  The channel is much more likely to be watched by Muslims than Christians, and by people in the Northern region than the Extreme North, even controlling for religion (the North has a higher proportion of Muslims).  For the Northern region of about 1.7 million people, we estimate that 564,453 watch Arewa24.  For the Extreme Northern region of about 3.8 million people, we estimate that about 585,889 people watch Arewa24.
+Arewa24 is fairly popular in our sample, watched by 120 out of about 1,000 survey respondents, 12% of the sample and about `r round(mean(cpdf$form.watched_arewa24,na.rm=T),2)*100`\% of television viewers.  For the entire survey region of ~2.2 million people, we estimate that `r format(round(120/nrow(cpdf)*sum(thecities$pop2017),0),big.mark=",")` watch Arewa24..  The channel is much more likely to be watched by Muslims than Christians, and by people in the Northern region than the Extreme North, even controlling for religion (the North has a higher proportion of Muslims).  By town, we estimate that 22,368 watch in Gashiga (45%), 69,180 in Guider (24%), 42,851 in Mora (20%), 21,257 in Yagoua (18%), 42,851 in Mokolo (14%), 45,315 in Garoua (13%), 23,429 in Maroua (5%), 4,840 in Kaele (4%), 3,688 in Maga (3%), and 1,115 in Kousseri (1%).
 
 About `r  round(mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T),2)[2]*100`\% of Hausa speakers watch, but `r round(mean(cpdf$form.watched_arewa24~cpdf$lang_hausa,na.rm=T),2)[1]*100`\% of people who did not report speaking Hausa also watch, which could indicate one of 3 things.  First, and most likely, many people who speak Hausa did not report Hausa in the open-ended question asking which languages they spoke.  Second, it could indicate communal viewing such that many non-Hausa speakers are exposed to the show while in a group with Hausa speakers.  And third, it could indicate an acquiescence bias wherein about 19% of the sample says yes to questions when the answer is actually no^[Acquiescence Bias, also called Agreement Bias, is a commonly observed bias in human communication and affects most forms of data collection, including surveys, interviews, and focus groups.].
 
@@ -862,7 +908,7 @@ Demographically, the largest single ethnic group in the regions is the Fulani.  
 
 Christians and Muslims both display high tolerance for other religious and ethnic groups.  Acceptance of violence is very low except for vigilante violence against criminals.  Political matters, especially corruption, and perceptions of violence and insecurity, seem to be the primary problems in these communities.  In the Extreme North this could be driven by lower socio-economic status, and in the North this could be fed by a lack of perceived citizen engagement, political transparency, and knowledge of legal recourse.
 
-In terms of media, radio is the dominant media form in these areas, but television and the internet are very popular among young people.  Equal Access radio program Douniarou Derkeen is quite popular, as is the Arewa24 television channel.  However, the other three Equal Access radio programs registered very low listenership in these areas, primarily because they are in minority languages.
+In terms of media, radio is the dominant media form in these areas, but television and the internet are very popular among young people.  Equal Access radio program Douniarou Derkeen is quite popular, as is the Arewa24 television channel.
 
 
 # Caveats
@@ -880,6 +926,15 @@ We attempted a randomization experiment to measure attitudes towards people from
 ## Appendix 2: Other Plots
 ```{r other plots}
 lit.plot
+```
+
+```{r other crap, include=F, eval=F}
+table(cpdf$towns, cpdf$form.radio_listener_group.Dabalaye)
+
+#Dabalate/Chabab by Kousseri Arabic 
+#Derkeen by primary Fulfulde speaker, fulfulde as any language, non fulfulde.
+#Listenership by town population.  Listenership across 12 viewing areas, not regions.
+#do mention that there were only 9 Kanuri speakers in the whole study, and 2 listen to DK
 ```
 # References
 
