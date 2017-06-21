@@ -84,7 +84,7 @@ Demographically, there over 50 ethnic groups represented in the survey.  The lar
 
 Christians and Muslims live side by side in all communities in the survey, and interact amicably.  Tolerance towards outgroups, both ethnic and religious, is extremely high by every survey measurement, and acceptance of violence is generally very low, though there is acceptance of vigilante violence against criminals.  This acceptance of violence against criminals is perhaps because respondents perceive violence to be a major problem in their communities.
 
-Political efficacy sticks out as the primary problem for people in these areas.  Nearly everyone believe corruption is a problem, and and trust in institutions, while fairly high overall, is lowest for government institutions like the justice system.  In the Extreme North this could be driven by lower socio-economic status, as the Extreme North is generally less affluent and has less access to utilities like electricity and mobile/smartphones.   In the North, this could be fed by a lack of perceived citizen engagement, political transparency, and knowledge of legal recourse.  The North is also slightly more violence-accepting than the Extreme North.  
+Political efficacy sticks out as the primary problem for people in these areas.  Nearly everyone believe corruption is a problem, and trust in institutions, while fairly high overall, is lowest for government institutions like the justice system.  In the Extreme North this could be driven by lower socio-economic status, as the Extreme North is generally less affluent and has less access to utilities like electricity and mobile/smartphones.   In the North, this could be fed by a lack of perceived citizen engagement, political transparency, and knowledge of legal recourse.  The North is also slightly more violence-accepting than the Extreme North.  
 
 In terms of media, radio is the dominant media form in these areas, and most respondents listen to the radio everyday.  Other forms of media are less common, but television and the internet are very popular among young people.  Social media is also popular among some young people, mainly among educated young men.  Facebook is by far the most popular social media, but WhatsApp is very popular.  
 
@@ -247,7 +247,7 @@ wom.plot
 
 Women are often denied empowerment over their lives.  Women are often denied the education of their male counterparts, a say in decisions that affect their communities, or even a choice in their marriage partner. The women's empowerment index measures the extent to which respondents believe that women should have be empowered to the same extent as men.  It contains four questions: (1) A woman should have a say in how her household spends money; (2) When a mother works for pay the children suffer; (3) An education is more important for a boy than a girl; and (4) It is not in the best interest of a girl to be married before she is 16 years old.  All questions are coded so that higher scores indicate more support for women's empowerment.
 
-The mean score for the index is about [number] on a scale from 0-1, indicating a good amount of support for women's empowerment.  Women score higher than men.  Extreme north scores higher than north.  People speaking languages other than French or Fulfulde score lower.
+The mean score for the index is about `r round(mean(cpdf$wom.index,na.rm=T),2)` on a scale from 0-1, indicating a good amount of support for women's empowerment.  Women score higher than men.  Extreme north scores higher than north.  People speaking languages other than French or Fulfulde score lower.
 
 Unlike our previous indices, the alpha for the women's empowerment index is only 0.58.  This is not enough internal consistency of us to consider these questions as measuring the same concept.  Therefore we now turn to analyses of the individual questions in the women's empowerment index.
 
@@ -271,21 +271,34 @@ The second question in the women's empowerment sequence asks if children suffer 
 
 ```{r eduboys}
 eduboys.plot
-#eduboy.all.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='gender+adult+region+religion+form.End.survey_language',data=svy)
+#eduboy.all.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='gender*adult+region+religion+form.End.survey_language',data=svy)
 #eduboy.gen.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='gender',data=svy) # no gender diff unless control for other things.
 ```
 
-The third question in the women's empowerment sequence asks respondents if education is more important for a boy than a girl.  Unlike previous questions, there are _no statistical differences_ between men and women.  Women score slightly higher, but differences this small occur frequently due to chance.  Differences appear by region and language spoken: people in the northern region and people answering the survey in Fulfulde are more likely to agree that education is more important for boys than girls.
+The third question in the women's empowerment sequence asks respondents if education is more important for a boy than a girl.  The question is scaled so that 1 is the desirable response -- disagreeing that education is more important for boys than girls.  Unlike previous questions, there are _no statistical differences_ between men and women.  Women score slightly higher, but differences this small occur frequently due to chance.  Differences appear by region and language spoken: people in the northern region and people answering the survey in Fulfulde are more likely to agree that education is more important for boys than girls.
 
 ### Early/Child Marriage
 
 ```{r earlymarriage}
 earlymarriage.plot
-#girlmarry.all.lm<-svylm.fun(outcome='form.Attitudes.boy_edu_better',treatment='gender*adult+form.End.survey_language',data=svy)
+#girlmarry.all.lm<-svylm.fun(outcome='form.Attitudes.early_marriage_good',treatment='gender*adult+region+religion+form.End.survey_language',data=svy)
+
+# older women vs younger women
+#with(cpdf[cpdf$youth %in% 1,],mean(form.Attitudes.early_marriage_good~gender,na.rm=T))
+#with(cpdf[cpdf$youth %in% 0,],mean(form.Attitudes.early_marriage_good~gender,na.rm=T))
+
+#with(cpdf[cpdf$youth %in% 1,],mean(form.Attitudes.boy_edu_better~gender,na.rm=T))
+#with(cpdf[cpdf$youth %in% 0,],mean(form.Attitudes.boy_edu_better~gender,na.rm=T))
 ```
 
 <!--Chris: come back to this.-->
-The fourth and final question in our women's empowerment index asks respondents if "It is _not_ in the best interest of a girl to be married before she is 16 years old."  No meaningful statistical differences.  Other religion significantly worse, but few people from that religion.
+The fourth and final question in our women's empowerment index asks respondents if "It is _not_ in the best interest of a girl to be married before she is 16 years old."  The question is scaled so that 1 is the desirable response -- agreeing that it is not in the best interest of girls to marry young.  There are no meaningful statistical differences.  People of religions other than Christianity or Islam score significantly worse, but ther are very few people from that religion.
+
+### Summary of Gender Differences on Women's Empowerment Questions
+
+The second two questions demonstrate no difference between women's and men's attitudes, but women score more highly on the first two questions.  There is a theme linking together these questions: the first two questions are both about _women_, whereas the second two questions are both about _girls_.  It seems that the older women in the sample do not extend their support for empowerment to girls.  When we just look at the subset of young women (below age 30), these young women are less likely than older women or men to believe early marriage is good, but older women and men have identical attitudes about early marriage.  However, there are still no statistical differences between young women and other respondents about the importance of education for males and females.  
+
+This seems to hint that attitudes about early marriage are changing for women, but it could also be interpreted as young women being "closer" to the question than older women.  Some of these young women may not be far removed from the prospect of early marriage.  Only time will tell if the young women maintain their anti-early marriage attitudes as they age.
 
 ## Religious Tolerance
 
@@ -407,7 +420,7 @@ We asked three questions to measure attitudes related to religious and ethnic ou
 
 - (2) Differences often exist between people living in the same village/neighborhood. Would you say that ethnic differences tend to divide people in your village/neighborhood, or do people in your village/neighborhood tend to overcome their ethnic differences?
 
-- (3) Would you say that that religious differences tend to divide people in your village/neighborhood, or do people in your village/neighborhood tend to overcome their ethnic differences?
+- (3) Would you say that religious differences tend to divide people in your village/neighborhood, or do people in your village/neighborhood tend to overcome their ethnic differences?
 
 The first question measures their belief in using ethnicity as a reason to vote for a political candidate, and the next two reflect the respondent's perception about acceptance of ethnic and religious outgroups in their communities.  Responses to the questions about overcoming ethnic and religious divides are almost identical, so we only show the plot for the religious divide question.
 
